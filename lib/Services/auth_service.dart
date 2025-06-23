@@ -1,45 +1,36 @@
-import 'package:projeto_cm/Model/users.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  User? _currentUser;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  User? get currentUser => _currentUser;
-
-  bool get isLoggedIn => _currentUser != null;
-
-  Future<User> login(String email, String password) async {
+  // Registar com e-mail e senha
+  Future<User?> registerWithEmailPassword(String email, String password) async {
     try {
-      _currentUser = User(name: "Test User", email: email);
-
-      return _currentUser!;
+      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      return result.user;
     } catch (e) {
-      throw Exception('Login failed: ${e.toString()}');
+      print('Erro no registo: $e');
+      return null;
     }
   }
 
-  Future<void> logout() async {
-    _currentUser = null;
-  }
-
-  Future<User> register(String name, String email, String password) async {
+  // Login com e-mail e senha
+  Future<User?> signInWithEmailPassword(String email, String password) async {
     try {
-      // Validate inputs
-      if (name.isEmpty || email.isEmpty || password.isEmpty) {
-        throw Exception('All fields are required');
-      }
-
-      // Here you would typically call your registration API
-
-      // For now we'll simulate successful registration
-      _currentUser = User(name: name, email: email);
-
-      return _currentUser!;
+      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return result.user;
     } catch (e) {
-      throw Exception('Registration failed: ${e.toString()}');
+      print('Erro no login: $e');
+      return null;
     }
   }
 
-  Future<User> recoverPassword(String email) async {
-    return _currentUser!;
+  // Logout
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
+
+  // Obter utilizador atual
+  User? get currentUser => _auth.currentUser;
+
 }
