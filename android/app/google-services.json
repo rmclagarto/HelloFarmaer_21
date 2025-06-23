@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259135107254",
+    "project_id": "hello-farmer-cm-2025-c2db6",
+    "storage_bucket": "hello-farmer-cm-2025-c2db6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259135107254:android:8a4f6ee1ba7023dc487617",
+        "android_client_info": {
+          "package_name": "com.example.projeto_cm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6VGQODQilzt28qaRhOkGXEibGSJii3tI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
