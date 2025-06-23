@@ -8,7 +8,6 @@ class LoginForm extends StatefulWidget {
   final bool isLoading;
   final String? errorMessage;
 
-
   const LoginForm({
     super.key,
     required this.onLogin,
@@ -26,7 +25,6 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -43,7 +41,6 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -57,7 +54,7 @@ class _LoginFormState extends State<LoginForm> {
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
-              children: <Widget> [
+              children: <Widget>[
                 _buildTitle(),
                 const SizedBox(height: Constants.spacingMedium),
                 _buildEmailField(),
@@ -92,7 +89,6 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-
   Widget _buildEmailField() {
     return TextFormField(
       controller: _emailController,
@@ -124,7 +120,6 @@ class _LoginFormState extends State<LoginForm> {
       },
     );
   }
-
 
   Widget _buildPasswordField() {
     return TextFormField(
@@ -166,7 +161,6 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-
   Widget _buildErrorText() {
     return Text(
       widget.errorMessage!,
@@ -174,15 +168,13 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-
   Widget _buildForgotPassword(BuildContext context) {
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => Navigator.pushReplacementNamed(
-          context,
-          Routes.recoverPassword,
-        ),
+        onPressed:
+            () =>
+                Navigator.pushReplacementNamed(context, Routes.recoverPassword),
         child: const Text(
           Constants.forgotPassword,
           style: TextStyle(color: Constants.textColor, fontSize: 14),
@@ -190,7 +182,6 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
-
 
   Widget _buildLoginButton() {
     return SizedBox(
@@ -206,22 +197,22 @@ class _LoginFormState extends State<LoginForm> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Constants.spacingLarge),
           ),
-          elevation: 5
+          elevation: 5,
         ),
-        child: widget.isLoading
-            ? const CircularProgressIndicator(color: Colors.white)
-            : const Text(
-                Constants.loginButton,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white
+        child:
+            widget.isLoading
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text(
+                  Constants.loginButton,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
       ),
     );
   }
-
 
   Widget _buildDivider() {
     return Row(
@@ -236,11 +227,10 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-
   Widget _buildSocialButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget> [
+      children: <Widget>[
         _socialBtn('Google'),
         const SizedBox(width: 8),
         _socialBtn('Facebook'),
@@ -249,7 +239,6 @@ class _LoginFormState extends State<LoginForm> {
       ],
     );
   }
-
 
   Widget _socialBtn(String name) {
     String assetPath;
@@ -273,9 +262,7 @@ class _LoginFormState extends State<LoginForm> {
         backgroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         minimumSize: const Size(48, 48),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       child: Image(
         image: AssetImage(assetPath),
@@ -286,20 +273,16 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-
   Widget _buildSignUp(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.pushReplacementNamed(
-        context, 
-        Routes.register,
-      ),
+      onPressed: () => Navigator.pushReplacementNamed(context, Routes.register),
       child: RichText(
         text: const TextSpan(
           style: TextStyle(color: Colors.black, fontSize: 16),
           children: [
             TextSpan(text: Constants.notAMember),
             TextSpan(
-              text: Constants.signUpNow, 
+              text: Constants.signUpNow,
               style: TextStyle(color: Colors.blue),
             ),
           ],

@@ -35,7 +35,7 @@ class _LoginState extends State<Login> {
     });
 
     try {
-      final user = await _authService.login(email, password);
+      final user = await _authService.signInWithEmailPassword(email, password);
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, Routes.home, arguments: user);
     } catch (e) {

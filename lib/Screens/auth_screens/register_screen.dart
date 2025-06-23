@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
 import 'package:projeto_cm/Widgets/auth_widgets/forms/register_from.dart';
+import 'package:projeto_cm/Services/auth_service.dart';
 
 
 class RegisterScreen extends StatefulWidget {
@@ -13,8 +14,26 @@ class RegisterScreen extends StatefulWidget {
 
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  void _handleRegister(String email, String password, String comfirmPassword){
-    debugPrint('Email: $email, Password: $password Comfirm-Password: $comfirmPassword');
+  final AuthService _authService = AuthService();
+
+  void _handleRegister(String email, String password, String confirmPassword) async {
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('As passwords não coincidem')),
+      );
+      return;
+    }
+
+    final user = await _authService.registerWithEmailPassword(email, password);
+
+    if (user != null) {
+      Navigator.pushReplacementNamed(context, '/home', arguments: user);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Falha ao criar a conta')),
+      );
+    }
+
   }
 
   Widget _buildLogoHeaderImage() {
