@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Model/users.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 import 'package:projeto_cm/Widgets/home_widgets/button_panel.dart';
 import 'package:projeto_cm/Widgets/home_widgets/drawer.dart';
 import 'package:projeto_cm/Widgets/home_widgets/map_widget.dart';
@@ -9,7 +9,8 @@ import 'package:projeto_cm/Widgets/home_widgets/notification_panel.dart';
 import 'package:projeto_cm/Widgets/home_widgets/seach_bar.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final CustomUser user;
+  const Home({super.key, required this.user});
 
   @override
   State<Home> createState() => _HomeState();
@@ -18,13 +19,27 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController searchController = TextEditingController();
 
-  User? user;
+  late CustomUser user;
 
   @override
-  void didChangeDependencies() {
-    user = ModalRoute.of(context)!.settings.arguments as User;
-    super.didChangeDependencies();
+  void initState(){
+    super.initState();
+    user = widget.user;
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+
+  //   final args = ModalRoute.of(context)?.settings.arguments;
+  //   if(args is CustomUser){
+  //     user = args;
+  //   }else{
+  //     Future.microtask((){
+  //       Navigator.of(context).pushReplacementNamed('/login');
+  //     });
+  //   }
+  // }
 
   // Simulando uma lista de notificações
   final List<String> _notifications = [
@@ -93,12 +108,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ModalRoute.of(context)!.settings.arguments as User;
+  //  if(user == null){
+  //   return Scaffold(
+  //     body: Center(child: CircularProgressIndicator(),),
+  //   );
+  //  }
 
     return Scaffold(
       appBar: AppBar(
         
-        title: Text(
+        title: const Text(
             'HelloFarmer',
             style:  TextStyle(
               color: Colors.white,

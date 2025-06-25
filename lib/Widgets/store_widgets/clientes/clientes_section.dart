@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Screens/store_screens/detalhes_clientes_page.dart';
-import 'package:projeto_cm/Model/users.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 
 class ClientesSection extends StatefulWidget {
   const ClientesSection({super.key});
@@ -11,26 +11,30 @@ class ClientesSection extends StatefulWidget {
 }
 
 class _ClientesSectionState extends State<ClientesSection> {
-  final List<User> clientes = [
-    User(
+  final List<CustomUser> clientes = [
+    CustomUser(
+      id: "1",
       name: 'Ana Silva',
       email: 'ana@email.com',
       grupo: 'VIP',
       historicoCompras: ['Compra 1: 2023-04-01', 'Compra 2: 2023-05-10'],
     ),
-    User(
+    CustomUser(
+      id: "2",
       name: 'Carlos Oliveira',
       email: 'carlos@email.com',
       grupo: 'Regular',
       historicoCompras: ['Compra 1: 2023-03-15'],
     ),
-    User(
+    CustomUser(
+      id: "3",
       name: 'Joana Mendes',
       email: 'joana@email.com',
       grupo: 'Novo',
       historicoCompras: [],
     ),
-    User(
+    CustomUser(
+      id: "4",
       name: 'Pedro Santos',
       email: 'pedro@email.com',
       grupo: 'VIP',
@@ -42,7 +46,7 @@ class _ClientesSectionState extends State<ClientesSection> {
 
   String grupoSelecionado = 'Todos';
 
-  List<User> get clientesFiltrados {
+  List<CustomUser> get clientesFiltrados {
     if (grupoSelecionado == 'Todos') return clientes;
     return clientes.where((c) => c.grupo == grupoSelecionado).toList();
   }

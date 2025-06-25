@@ -1,9 +1,81 @@
+// import 'package:flutter/material.dart';
+// import 'package:projeto_cm/Core/constants.dart';
+// import 'package:projeto_cm/Core/image_assets.dart';
+// import 'package:projeto_cm/Widgets/auth_widgets/forms/register_from.dart';
+// import 'package:projeto_cm/Services/auth_service.dart';
+
+
+// class RegisterScreen extends StatefulWidget {
+//   const RegisterScreen({super.key});
+
+//   @override
+//   State<RegisterScreen> createState() => _RegisterScreenState();
+// }
+
+
+// class _RegisterScreenState extends State<RegisterScreen> {
+//   final AuthService _authService = AuthService();
+
+//   void _handleRegister(String email, String password, String confirmPassword) async {
+//     if (password != confirmPassword) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text('As passwords não coincidem')),
+//       );
+//       return;
+//     }
+
+//     final user = await _authService.registerWithEmailPassword(email, password);
+
+//     if (user != null) {
+//       Navigator.pushReplacementNamed(context, '/home', arguments: user);
+//     } else {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text('Falha ao criar a conta')),
+//       );
+//     }
+
+//   }
+
+//   Widget _buildLogoHeaderImage() {
+//     return Center(
+//       child: Image(
+//         image: AssetImage(ImageAssets.logotipo),
+//         height: 120,
+//         fit: BoxFit.contain,
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Constants.primaryColor,
+//       body: Padding(padding: const EdgeInsets.only(top: 100),
+//       child: Column(
+//         children: <Widget> [
+//           _buildLogoHeaderImage(),
+//             Expanded(
+//               child: Center(
+//                 child: RegisterFrom(
+//                   onRegister: _handleRegister,
+//                 ),
+//               ),
+//             ),
+//         ],
+//       ),),
+//     );
+//   }
+// }
+
+
+
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Widgets/auth_widgets/forms/register_from.dart';
-import 'package:projeto_cm/Services/auth_service.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 
+import 'package:projeto_cm/Services/auth_service.dart';
+import 'package:projeto_cm/Widgets/auth_widgets/forms/register_from.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,19 +84,43 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-
 class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _authService = AuthService();
 
-  void _handleRegister(String email, String password, String confirmPassword) async {
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('As passwords não coincidem')),
-      );
-      return;
-    }
+  // void _handleRegister(String email, String password, String confirmPassword) async {
+  //   if (password != confirmPassword) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('As passwords não coincidem')),
+  //     );
+  //     return;
+  //   }
 
-    final user = await _authService.registerWithEmailPassword(email, password);
+  //   final CustomUser? user = await _authService.registerWithEmailPassword(email, password);
+
+  //   if(!mounted) return;
+
+  //   if (user != null) {
+  //     Navigator.pushReplacementNamed(context, '/home', arguments: user);
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Falha ao criar a conta')),
+  //     );
+  //   }
+  // }
+
+
+  void _handleRegister(String email, String password, String confirmPassword) async {
+  if (password != confirmPassword) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('As passwords não coincidem')),
+    );
+    return;
+  }
+
+  try {
+    final CustomUser? user = await _authService.registerWithEmailPassword(email, password);
+
+    if (!mounted) return;
 
     if (user != null) {
       Navigator.pushReplacementNamed(context, '/home', arguments: user);
@@ -33,13 +129,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const SnackBar(content: Text('Falha ao criar a conta')),
       );
     }
-
+  } catch (e) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Erro: ${e.toString()}')),
+    );
   }
+}
 
   Widget _buildLogoHeaderImage() {
     return Center(
-      child: Image(
-        image: AssetImage(ImageAssets.logotipo),
+      child: Image.asset(
+        ImageAssets.logotipo,
         height: 120,
         fit: BoxFit.contain,
       ),
@@ -50,19 +151,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.primaryColor,
-      body: Padding(padding: const EdgeInsets.only(top: 100),
-      child: Column(
-        children: <Widget> [
-          _buildLogoHeaderImage(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 100),
+        child: Column(
+          children: <Widget>[
+            _buildLogoHeaderImage(),
             Expanded(
               child: Center(
-                child: RegisterFrom(
-                  onRegister: _handleRegister,
-                ),
+                child: RegisterFrom(onRegister: _handleRegister),
               ),
             ),
-        ],
-      ),),
+          ],
+        ),
+      ),
     );
   }
 }

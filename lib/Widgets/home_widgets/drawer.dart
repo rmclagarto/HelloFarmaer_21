@@ -3,11 +3,11 @@ import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
 import 'package:projeto_cm/Core/routes.dart';
 import 'package:projeto_cm/Screens/store_screens/all_store_panel_screen.dart';
-import 'package:projeto_cm/Model/users.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 
 
 class AppDrawer extends StatelessWidget {
-  final User user;
+  final CustomUser user;
 
   const AppDrawer({super.key, required this.user});
 

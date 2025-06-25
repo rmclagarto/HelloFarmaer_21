@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 import 'package:projeto_cm/Screens/home_screen/home_screen.dart';
 import 'package:projeto_cm/Screens/auth_screens/login_screen.dart';
 // import 'package:projeto_cm/Screens/store_screens/main_strore_screen.dart';
@@ -26,7 +27,15 @@ class Routes {
     login: (context) => const Login(),
     register: (context) => const RegisterScreen(),
     recoverPassword: (context) => const RecoverPasswordScreen(),
-    home: (context) => const Home(),
+    home: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is CustomUser) {
+        return Home(user: args);
+      } else {
+        return const Login(); // fallback seguro
+      }
+    },
+
 
     // storePanel:
     //     (context) => ChangeNotifierProvider(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Services/encomenda_service.dart';
 import 'package:projeto_cm/Model/produtos.dart';
-import 'package:projeto_cm/Model/users.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 
 class EncomendasSection extends StatefulWidget {
   
@@ -52,7 +52,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
       orders.add(Encomenda(
         id: 'e1',
         produto: products[0],
-        comprador: User(name: 'Ana Silva', email: 'ana@email.com'),
+        comprador: CustomUser(id: "1",name: 'Ana Silva', email: 'ana@email.com'),
         quantidade: 2,
         dataPedido: DateTime.now().subtract(const Duration(days: 1)),
         status: StatusEncomenda.pendente,
@@ -64,7 +64,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
       orders.add(Encomenda(
         id: 'e2',
         produto: products[1],
-        comprador: User(name: 'Carlos', email: 'carlos@email.com'),
+        comprador: CustomUser(id: "2",name: 'Carlos', email: 'carlos@email.com'),
         quantidade: 1,
         dataPedido: DateTime.now().subtract(const Duration(days: 3)),
         status: StatusEncomenda.concluida,
@@ -75,7 +75,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
       orders.add(Encomenda(
         id: 'e3',
         produto: products[2],
-        comprador: User(name: 'Joana Mendes', email: 'joana@email.com'),
+        comprador: CustomUser(id:"3",name: 'Joana Mendes', email: 'joana@email.com'),
         quantidade: 1,
         dataPedido: DateTime.now().subtract(const Duration(days: 2)),
         status: StatusEncomenda.cancelada,

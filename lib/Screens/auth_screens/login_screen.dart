@@ -37,7 +37,16 @@ class _LoginState extends State<Login> {
     try {
       final user = await _authService.signInWithEmailPassword(email, password);
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, Routes.home, arguments: user);
+
+      if(user != null){
+        Navigator.pushReplacementNamed(context, Routes.home, arguments: user);
+      }else{
+        setState(() {
+          _errorMessage = "Credenciais invalidos";
+          _isLoading = false;
+        });
+      }
+      
     } catch (e) {
       setState(() {
         _errorMessage = e.toString().replaceFirst('Exception: ', '');

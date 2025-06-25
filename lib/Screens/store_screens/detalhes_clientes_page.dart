@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Model/users.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 
 class DetalhesClientePage extends StatelessWidget {
-  final User cliente;
+  final CustomUser cliente;
 
   const DetalhesClientePage({super.key, required this.cliente});
 

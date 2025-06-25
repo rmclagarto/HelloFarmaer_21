@@ -1,12 +1,12 @@
 import 'package:projeto_cm/Model/produtos.dart';
-import 'package:projeto_cm/Model/users.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 
 enum StatusEncomenda { pendente, concluida, cancelada }
 
 class Encomenda {
   final String id;               // ID única da encomenda
   final Produtos produto;        // Produto comprado
-  final User comprador;          // Quem comprou
+  final CustomUser comprador;          // Quem comprou
   final int quantidade;          // Quantidade comprada
   final DateTime dataPedido;     // Data da encomenda
   final StatusEncomenda status;  // Status da encomenda
@@ -43,7 +43,7 @@ class Encomenda {
     return Encomenda(
       id: map['id'],
       produto: produto,
-      comprador: User.fromMap(map['comprador']),
+      comprador: CustomUser.fromMap(map['comprador']),
       quantidade: map['quantidade'],
       dataPedido: DateTime.parse(map['dataPedido']),
       status: status,
