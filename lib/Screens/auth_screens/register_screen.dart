@@ -94,11 +94,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //     );
   //     return;
   //   }
-
   //   final CustomUser? user = await _authService.registerWithEmailPassword(email, password);
-
   //   if(!mounted) return;
-
   //   if (user != null) {
   //     Navigator.pushReplacementNamed(context, '/home', arguments: user);
   //   } else {

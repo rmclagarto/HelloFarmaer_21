@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class NotificationPanel extends StatelessWidget {
   final List<String> notifications;
 
-  const NotificationPanel({
-    super.key,
-    required this.notifications,
-  });
+  const NotificationPanel({super.key, required this.notifications});
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +20,21 @@ class NotificationPanel extends StatelessWidget {
           ),
           const Divider(),
           Expanded(
-            child: notifications.isEmpty
-                ? const Center(child: Text("Nenhuma notificação"))
-                : ListView.builder(
-                    itemCount: notifications.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: const Icon(
-                          Icons.notification_important,
-                          color: Colors.white,
-                        ),
-                        title: Text(notifications[index]),
-                      );
-                    },
-                  ),
+            child:
+                notifications.isEmpty
+                    ? const Center(child: Text("Nenhuma notificação"))
+                    : ListView.builder(
+                      itemCount: notifications.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: const Icon(
+                            Icons.notification_important,
+                            color: Colors.black,
+                          ),
+                          title: Text(notifications[index]),
+                        );
+                      },
+                    ),
           ),
         ],
       ),

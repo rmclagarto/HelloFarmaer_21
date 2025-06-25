@@ -3,9 +3,9 @@ import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/routes.dart';
 
 class RecoverPasswordForm extends StatefulWidget {
-  final Function()? onSuccess;
+  final void Function(String email)? onSendRecoveryEmail;
 
-  const RecoverPasswordForm({super.key, this.onSuccess});
+  const RecoverPasswordForm({super.key, this.onSendRecoveryEmail});
 
   @override
   State<RecoverPasswordForm> createState() => _RecoverPasswordFormState();
@@ -28,12 +28,9 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
     setState(() => _isLoading = true);
 
     try {
-      // Simular chamada à API
-      await Future.delayed(const Duration(seconds: 2));
+      if (widget.onSendRecoveryEmail != null) {
+        widget.onSendRecoveryEmail!(_emailController.text.trim());
 
-      // Se sucesso:
-      if (widget.onSuccess != null) {
-        widget.onSuccess!();
       }
     } catch (e) {
       if (mounted) {
@@ -73,7 +70,14 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _buildForgetPasswordTitleText(),
+                  const Text(
+                    'Recuperar Senha',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Constants.textColor,
+                    ),
+                  ),
                   const SizedBox(height: 40),
                   _buildEmailInputField(),
                   const SizedBox(height: 30),
@@ -89,17 +93,6 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
     );
   }
 
-  Widget _buildForgetPasswordTitleText() {
-    return const Text(
-      'Recuperar Senha',
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: Constants.textColor,
-      ),
-    );
-  }
-
   Widget _buildEmailInputField() {
     return TextFormField(
       controller: _emailController,
@@ -108,7 +101,6 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
       cursorColor: Colors.grey,
       decoration: InputDecoration(
         labelText: 'Email',
-        labelStyle: const TextStyle(color: Colors.grey),
         hintText: 'Digite seu email',
         prefixIcon: const Icon(Icons.email, color: Colors.grey),
         border: OutlineInputBorder(
@@ -116,10 +108,6 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
         ),
         filled: true,
         fillColor: Colors.white,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
-          borderSide: const BorderSide(color: Colors.grey),
-        )
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -139,22 +127,18 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
       child: ElevatedButton(
         onPressed: _isLoading ? null : _handleSendRecoveryLink,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.secondaryColor, // Cor azul
-          foregroundColor: Colors.white, // Cor do texto
+          backgroundColor: Constants.secondaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
           ),
-          elevation: 5, // Sombra do botão
+          elevation: 5,
         ),
         child: const Text(
           'ENVIAR LINK DE RECUPERAÇÃO',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
         ),
+        
       ),
     );
   }

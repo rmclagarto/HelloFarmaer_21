@@ -27,20 +27,7 @@ class _HomeState extends State<Home> {
     user = widget.user;
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-
-  //   final args = ModalRoute.of(context)?.settings.arguments;
-  //   if(args is CustomUser){
-  //     user = args;
-  //   }else{
-  //     Future.microtask((){
-  //       Navigator.of(context).pushReplacementNamed('/login');
-  //     });
-  //   }
-  // }
-
+ 
   // Simulando uma lista de notificações
   final List<String> _notifications = [
     "Notificação 1: Pedido enviado",
@@ -108,11 +95,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-  //  if(user == null){
-  //   return Scaffold(
-  //     body: Center(child: CircularProgressIndicator(),),
-  //   );
-  //  }
+
 
     return Scaffold(
       appBar: AppBar(
