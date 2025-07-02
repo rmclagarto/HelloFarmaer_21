@@ -3,7 +3,7 @@ import 'package:projeto_cm/Model/custom_user.dart';
 import 'package:projeto_cm/Screens/home_screen/home_screen.dart';
 import 'package:projeto_cm/Screens/auth_screens/login_screen.dart';
 // import 'package:projeto_cm/Screens/store_screens/main_strore_screen.dart';
-import 'package:projeto_cm/Screens/market_screens/main_market_screen.dart';
+// import 'package:projeto_cm/Screens/market_screens/main_market_screen.dart';
 import 'package:projeto_cm/Screens/ad_screens/publicar_anuncio_screnn.dart';
 import 'package:projeto_cm/Screens/auth_screens/recover_password_screen.dart';
 import 'package:projeto_cm/Screens/auth_screens/register_screen.dart';
@@ -20,7 +20,7 @@ class Routes {
   static const storeDetails = '/store-details';
   static const publicarAnuncio = '/publicar-anuncio';
   
-  static const market = '/market';
+  // static const market = '/market';
 
   static Map<String, WidgetBuilder> get routes => {
     splash: (context) => const Splash(),
@@ -58,6 +58,6 @@ class Routes {
 
     publicarAnuncio: (context) => const PublicarAnuncioScreen(),
 
-    market: (context) => const MarketScreen(),
+    // market: (context) => const MarketScreen(),
   };
 }

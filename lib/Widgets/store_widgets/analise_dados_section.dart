@@ -68,115 +68,97 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     super.dispose();
   }
 
-//   import 'package:file_picker/file_picker.dart';
-// import 'package:share_plus/share_plus.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'dart:io';
+  //   import 'package:file_picker/file_picker.dart';
+  // import 'package:share_plus/share_plus.dart';
+  // import 'package:path_provider/path_provider.dart';
+  // import 'dart:io';
 
-Future<void> _salvarOuCompartilharRelatorio() async {
-  final service = FinanceReportService(
-    faturamentoTotal: faturamentoTotal,
-    despesas: despesas,
-    lucro: lucro,
-    faturamentoMensal: faturamentoMensal,
-    canaisDeVendas: canaisDeVendas,
-  );
-
-  try {
-    // 1. Gerar PDF
-    final pdfBytes = await service.generatePDF();
-    
-    // 2. Mostrar opções ao usuário
-    final action = await _mostrarDialogoOpcoes(context);
-    
-    if (action == 'salvar') {
-      await _salvarEmLocalEscolhido(pdfBytes);
-    } else if (action == 'compartilhar') {
-      await _compartilharRelatorio(pdfBytes);
-    }
-
-  } catch (e) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro: ${e.toString()}')),
-      );
-    }
-  }
-}
-
-Future<String?> _mostrarDialogoOpcoes(BuildContext context) async {
-  return await showDialog<String>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Escolha uma ação'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'salvar'),
-          child: const Text('Salvar em dispositivo'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'compartilhar'),
-          child: const Text('Compartilhar'),
-        ),
-      ],
-    ),
-  );
-}
-
-Future<void> _salvarEmLocalEscolhido(Uint8List pdfBytes) async {
-  // Permitir que o usuário escolha o local
-  final String? directoryPath = await FilePicker.platform.getDirectoryPath();
-  
-  if (directoryPath != null) {
-    final file = File('$directoryPath/relatorio_financeiro_hellofarmer.pdf');
-    await file.writeAsBytes(pdfBytes);
-    
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Relatório salvo com sucesso!')),
-      );
-    }
-  }
-}
-
-Future<void> _compartilharRelatorio(Uint8List pdfBytes) async {
-  try {
-    // 1. Criar arquivo temporário
-    final tempDir = await getTemporaryDirectory();
-    final file = File('${tempDir.path}/relatorio_financeiro_hellofarmer.pdf');
-    await file.writeAsBytes(pdfBytes);
-    
-    // 2. Compartilhar usando o método CORRETO (shareXFiles)
-    await Share.shareXFiles(
-      [XFile(file.path)],  // Note o uso de XFile
-      text: 'Relatório Financeiro',
+  Future<void> _salvarOuCompartilharRelatorio() async {
+    final service = FinanceReportService(
+      faturamentoTotal: faturamentoTotal,
+      despesas: despesas,
+      lucro: lucro,
+      faturamentoMensal: faturamentoMensal,
+      canaisDeVendas: canaisDeVendas,
     );
-    
-  } catch (e) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao partilhar: ${e.toString()}')),
-      );
+
+    try {
+      // 1. Gerar PDF
+      final pdfBytes = await service.generatePDF();
+
+      // 2. Mostrar opções ao usuário
+      final action = await _mostrarDialogoOpcoes(context);
+
+      if (action == 'salvar') {
+        await _salvarEmLocalEscolhido(pdfBytes);
+      } else if (action == 'compartilhar') {
+        await _compartilharRelatorio(pdfBytes);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erro: ${e.toString()}')));
+      }
     }
   }
-}
 
+  Future<String?> _mostrarDialogoOpcoes(BuildContext context) async {
+    return await showDialog<String>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Escolha uma ação'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'salvar'),
+                child: const Text('Salvar em dispositivo'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'compartilhar'),
+                child: const Text('Compartilhar'),
+              ),
+            ],
+          ),
+    );
+  }
 
+  Future<void> _salvarEmLocalEscolhido(Uint8List pdfBytes) async {
+    // Permitir que o usuário escolha o local
+    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
 
+    if (directoryPath != null) {
+      final file = File('$directoryPath/relatorio_financeiro_hellofarmer.pdf');
+      await file.writeAsBytes(pdfBytes);
 
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Relatório salvo com sucesso!')),
+        );
+      }
+    }
+  }
 
+  Future<void> _compartilharRelatorio(Uint8List pdfBytes) async {
+    try {
+      // 1. Criar arquivo temporário
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/relatorio_financeiro_hellofarmer.pdf');
+      await file.writeAsBytes(pdfBytes);
 
-
-
-
-
-
-
-
-
-
-
-
+      // 2. Compartilhar usando o método CORRETO (shareXFiles)
+      await Share.shareXFiles(
+        [XFile(file.path)], // Note o uso de XFile
+        text: 'Relatório Financeiro',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao partilhar: ${e.toString()}')),
+        );
+      }
+    }
+  }
 
   Widget _buildCard(String title, String subtitle, IconData icon, Color color) {
     return Card(

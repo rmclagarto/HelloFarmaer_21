@@ -1,30 +1,33 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
 import 'package:latlong2/latlong.dart';
+import 'package:projeto_cm/Core/image_assets.dart';
 import 'package:projeto_cm/Services/accelarometer_service.dart';
 import 'package:projeto_cm/Services/location_service.dart';
-
 
 class MapWidget extends StatefulWidget {
   final double initialZoom;
   const MapWidget({super.key, this.initialZoom = 16.0});
 
   @override
-  State<MapWidget> createState() => _MapWidgetState();
+  State<MapWidget> createState() => MapWidgetState();
 }
 
-class _MapWidgetState extends State<MapWidget> {
+class MapWidgetState extends State<MapWidget> {
   final _locationService = LocationService();
-  final _accelerometerService  = AccelerometerService();
+  final _accelerometerService = AccelerometerService();
   final _mapCtrl = MapController();
   LatLng? _pos;
   bool _mapReady = false;
 
   StreamSubscription? _movementSub;
   StreamSubscription? _positionSub;
+
+  final List<Marker> _markerPositions = [];
 
   @override
   void initState() {
@@ -40,8 +43,8 @@ class _MapWidgetState extends State<MapWidget> {
       if (mounted) setState(() {});
 
       _accelerometerService.startMovementDetection();
-      _movementSub = _accelerometerService.movementStream.listen((isMoving){
-        if(isMoving){
+      _movementSub = _accelerometerService.movementStream.listen((isMoving) {
+        if (isMoving) {
           _updatePosition(); // Ativa o GPS quando movimento é detectado
         }
       });
@@ -51,18 +54,106 @@ class _MapWidgetState extends State<MapWidget> {
     }
   }
 
-
   void _updatePosition() {
     _positionSub?.cancel();
-    _positionSub = _locationService.getPositionStream(highAccuracy: true)
+    _positionSub = _locationService
+        .getPositionStream(highAccuracy: true)
         .take(1) // Pega apenas uma atualização
         .listen((newPos) {
-      if (mounted) {
-        setState(() => _pos = newPos);
-        if (_mapReady) _mapCtrl.move(newPos, widget.initialZoom);
-      }
+          if (mounted) {
+            setState(() => _pos = newPos);
+            if (_mapReady) _mapCtrl.move(newPos, widget.initialZoom);
+          }
+        });
+  }
+
+  void addMarker(LatLng point) {
+    setState(() {
+      _markerPositions.add(
+        Marker(
+          point: point,
+          width: 30,
+          height: 30,
+          child: const Icon(Icons.location_on, size: 30, color: Colors.red),
+        ),
+      );
+      _mapCtrl.move(point, widget.initialZoom);
     });
   }
+
+ void addRandomMarker() {
+  final random = Random();
+  if (_pos == null) return;
+
+  final randomLat = _pos!.latitude + (random.nextDouble() - 0.5) * 0.01;
+  final randomLng = _pos!.longitude + (random.nextDouble() - 0.5) * 0.01;
+  final randomPoint = LatLng(randomLat, randomLng);
+
+  final marker = Marker(
+    point: randomPoint,
+    width: 80,
+    height: 60,
+    child: GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Loja XYZ'),
+            content: Text('Aqui vão os detalhes da loja...'),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4,
+              offset: Offset(2, 2),
+            ),
+          ],
+          border: Border.all(color: Colors.orange, width: 2),
+        ),
+        padding: EdgeInsets.all(4),
+        child: Row(
+          children: [
+            Image.asset(
+              ImageAssets.quinta,
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Loja XYZ', // LOja nome
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange[800],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
+  setState(() {
+    _markerPositions.add(marker);
+    _mapCtrl.move(randomPoint, widget.initialZoom);
+  });
+
+  // Remover o marcador depois de 5 segundos
+  Future.delayed(Duration(seconds: 5), () {
+    setState(() {
+      _markerPositions.remove(marker);
+    });
+  });
+}
+
 
   @override
   void dispose() {
@@ -103,6 +194,7 @@ class _MapWidgetState extends State<MapWidget> {
                 ),
               ),
             ),
+            ..._markerPositions,
           ],
         ),
       ],

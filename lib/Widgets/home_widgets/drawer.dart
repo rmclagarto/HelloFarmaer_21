@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
 import 'package:projeto_cm/Core/routes.dart';
+import 'package:projeto_cm/Screens/market_screens/main_market_screen.dart';
 import 'package:projeto_cm/Screens/store_screens/all_store_panel_screen.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
-
 
 class AppDrawer extends StatelessWidget {
   final CustomUser user;
@@ -24,7 +24,10 @@ class AppDrawer extends StatelessWidget {
         'title': 'Mercado',
         'onTap': () {
           navigator.pop();
-          // ação para Mercado
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>  MarketScreen(user: user,)),
+          );
         },
       },
       {
@@ -33,11 +36,11 @@ class AppDrawer extends StatelessWidget {
         'onTap': () {
           navigator.pop(context);
           Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ListStorePanelScreen(),
-      ),
-    );
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ListStorePanelScreen(),
+            ),
+          );
         },
       },
       {
@@ -93,7 +96,8 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
           ),
-          ...menuItems.map((Map<String, dynamic> item) => ListTile(
+          ...menuItems.map(
+            (Map<String, dynamic> item) => ListTile(
               leading: Icon(item['icon'] as IconData),
               title: Text(item['title'] as String),
               onTap: item['onTap'] as VoidCallback,

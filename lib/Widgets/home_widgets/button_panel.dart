@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 
-
 class BottomPanel extends StatelessWidget {
   final List<String> ads;
+  final void Function(String ad)? onAdTap;
 
-  const BottomPanel({super.key, required this.ads});
+  const BottomPanel({super.key, required this.ads, this.onAdTap});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,13 @@ class BottomPanel extends StatelessWidget {
         child: ListView.builder(
           controller: scrollController,
           itemCount: ads.length,
-          itemBuilder: (context, index) => _buildAdCard(ads[index]),
+          itemBuilder: (context, index) {
+            final ad = ads[index];
+            return GestureDetector(
+              onTap: () => onAdTap?.call(ad),
+              child: _buildAdCard(ad),
+            );
+          },
         ),
       ),
     );
@@ -74,9 +80,7 @@ class BottomPanel extends StatelessWidget {
       child: Card(
         elevation: 3,
         color: Constants.primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(

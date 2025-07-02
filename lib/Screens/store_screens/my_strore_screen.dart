@@ -202,12 +202,12 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
                 isActive: _currentIndex == 1,
                 onPressed: () => _scrollToSection(1),
               ),
-              _buildNavButton(
-                icon: Icons.support_agent,
-                label: "Suporte",
-                isActive: _currentIndex == 2,
-                onPressed: () => _scrollToSection(2),
-              ),
+              // _buildNavButton(
+              //   icon: Icons.support_agent,
+              //   label: "Suporte",
+              //   isActive: _currentIndex == 2,
+              //   onPressed: () => _scrollToSection(2),
+              // ),
 
               // _buildNavButton(
               //   icon:Icons.shopping_cart,

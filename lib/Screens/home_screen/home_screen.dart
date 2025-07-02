@@ -18,16 +18,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final TextEditingController searchController = TextEditingController();
+  final GlobalKey<MapWidgetState> _mapKey = GlobalKey<MapWidgetState>();
 
   late CustomUser user;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     user = widget.user;
   }
 
- 
   // Simulando uma lista de notificações
   final List<String> _notifications = [
     "Notificação 1: Pedido enviado",
@@ -35,52 +35,6 @@ class _HomeState extends State<Home> {
   ];
 
   final List<String> _ads = [
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
     "Anúncio 1: Vendo batatas biológicas",
     "Anúncio 2: Serviço de colheita disponível",
     "Anúncio 3: Aluguer de trator",
@@ -95,22 +49,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
-        
         title: const Text(
-            'HelloFarmer',
-            style:  TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: Constants.primaryColor,
-          elevation: 0,
-          centerTitle: true,
-          iconTheme: const IconThemeData(color: Colors.white),
+          'HelloFarmer',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Constants.primaryColor,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           NotificationButton(
             notificationCount: _notifications.length,
@@ -121,14 +69,19 @@ class _HomeState extends State<Home> {
       drawer: AppDrawer(user: user),
       body: Stack(
         children: [
-          MapWidget(),
+          MapWidget(key: _mapKey),
           Positioned(
             top: 16,
             left: 16,
             right: 16,
             child: CustomSearchBar(searchController: searchController),
           ),
-          BottomPanel(ads: _ads),
+          BottomPanel(
+            ads: _ads,
+            onAdTap: (ad) {
+              _mapKey.currentState?.addRandomMarker();
+            },
+          ),
         ],
       ),
     );
