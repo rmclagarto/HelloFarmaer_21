@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
 import 'package:projeto_cm/Core/routes.dart';
+import 'package:projeto_cm/Model/custom_user.dart';
 
 class LoginForm extends StatefulWidget {
   final Function(String email, String password) onLogin;
@@ -257,7 +258,23 @@ class _LoginFormState extends State<LoginForm> {
     }
 
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        if (name == "Google") {
+          final fakeUser = CustomUser(
+            id: 'anon',
+            email: 'anon@google.com',
+            name: 'Usuário Google',
+            // preencha os campos necessários no seu CustomUser
+          );
+
+          Navigator.pushReplacementNamed(
+            context,
+            Routes.home,
+            arguments: fakeUser,
+          );
+        }
+      },
+
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 8),

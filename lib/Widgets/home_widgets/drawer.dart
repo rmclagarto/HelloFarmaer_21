@@ -14,7 +14,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context); // Guarda o NavigatorState
-    final String userName = user.email;
+    final String userName = user.name;
     final String userPhotoUrl = ImageAssets.agricultor;
 
     // Lista dentro do build para poder usar o context nas funções onTap

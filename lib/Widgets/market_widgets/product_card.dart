@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+            // Remova mainAxisSize: MainAxisSize.min para permitir altura flexível
             children: [
               Container(
                 height: 80,
@@ -54,7 +54,7 @@ class ProductCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const Spacer(),
+              const SizedBox(height: 8), // Espaço manual no lugar do Spacer
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
