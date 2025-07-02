@@ -13,9 +13,6 @@ class CustomUser {
     required this.email,
     this.grupo = "regular",
     this.historicoCompras = const [],
-    //UUID
-    // telefone (op)
-    // 
   });
   
   // Convert user to map for storage

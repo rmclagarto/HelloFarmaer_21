@@ -1,6 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:projeto_cm/Core/constants.dart';
+import 'package:projeto_cm/Services/finance_report_service.dart';
 import 'package:share_plus/share_plus.dart';
 
 class AnalisesFinanceirasSection extends StatefulWidget {
@@ -62,26 +68,115 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     super.dispose();
   }
 
-  void _compartilharRelatorio() {
-    final buffer = StringBuffer();
-    buffer.writeln('--- Relatório Financeiro da Loja ---\n');
-    buffer.writeln(
-      'Faturamento Total:  ${faturamentoTotal.toStringAsFixed(2)} €',
-    );
-    buffer.writeln('Despesas:  ${despesas.toStringAsFixed(2)} €');
-    buffer.writeln('Lucro:  ${lucro.toStringAsFixed(2)} € \n');
-    buffer.writeln('Canais de Vendas:');
-    canaisDeVendas.forEach((canal, valor) {
-      buffer.writeln(' - $canal:  ${valor.toStringAsFixed(2)} €');
-    });
-    buffer.writeln('\nConversas:\n');
-    for (var conversa in conversasRelatorio) {
-      buffer.writeln(conversa);
-      buffer.writeln('---');
+//   import 'package:file_picker/file_picker.dart';
+// import 'package:share_plus/share_plus.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'dart:io';
+
+Future<void> _salvarOuCompartilharRelatorio() async {
+  final service = FinanceReportService(
+    faturamentoTotal: faturamentoTotal,
+    despesas: despesas,
+    lucro: lucro,
+    faturamentoMensal: faturamentoMensal,
+    canaisDeVendas: canaisDeVendas,
+  );
+
+  try {
+    // 1. Gerar PDF
+    final pdfBytes = await service.generatePDF();
+    
+    // 2. Mostrar opções ao usuário
+    final action = await _mostrarDialogoOpcoes(context);
+    
+    if (action == 'salvar') {
+      await _salvarEmLocalEscolhido(pdfBytes);
+    } else if (action == 'compartilhar') {
+      await _compartilharRelatorio(pdfBytes);
     }
 
-    Share.share(buffer.toString(), subject: 'Relatório Financeiro da Loja');
+  } catch (e) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro: ${e.toString()}')),
+      );
+    }
   }
+}
+
+Future<String?> _mostrarDialogoOpcoes(BuildContext context) async {
+  return await showDialog<String>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Escolha uma ação'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'salvar'),
+          child: const Text('Salvar em dispositivo'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'compartilhar'),
+          child: const Text('Compartilhar'),
+        ),
+      ],
+    ),
+  );
+}
+
+Future<void> _salvarEmLocalEscolhido(Uint8List pdfBytes) async {
+  // Permitir que o usuário escolha o local
+  final String? directoryPath = await FilePicker.platform.getDirectoryPath();
+  
+  if (directoryPath != null) {
+    final file = File('$directoryPath/relatorio_financeiro_hellofarmer.pdf');
+    await file.writeAsBytes(pdfBytes);
+    
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Relatório salvo com sucesso!')),
+      );
+    }
+  }
+}
+
+Future<void> _compartilharRelatorio(Uint8List pdfBytes) async {
+  try {
+    // 1. Criar arquivo temporário
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/relatorio_financeiro_hellofarmer.pdf');
+    await file.writeAsBytes(pdfBytes);
+    
+    // 2. Compartilhar usando o método CORRETO (shareXFiles)
+    await Share.shareXFiles(
+      [XFile(file.path)],  // Note o uso de XFile
+      text: 'Relatório Financeiro',
+    );
+    
+  } catch (e) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao partilhar: ${e.toString()}')),
+      );
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   Widget _buildCard(String title, String subtitle, IconData icon, Color color) {
     return Card(
@@ -356,7 +451,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.download, color: Colors.white),
         label: const Text('Relatório', style: TextStyle(color: Colors.white)),
-        onPressed: _compartilharRelatorio,
+        onPressed: _salvarOuCompartilharRelatorio,
         backgroundColor: Constants.primaryColor,
       ),
     );
