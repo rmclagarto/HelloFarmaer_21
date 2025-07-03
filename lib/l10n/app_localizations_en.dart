@@ -114,4 +114,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get myAccountTitle => 'My Account';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get email => 'Email';
 }

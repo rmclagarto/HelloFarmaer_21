@@ -114,4 +114,22 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get myAccountTitle => 'Minha Conta';
+
+  @override
+  String get saveChanges => 'Salvar Alterações';
+
+  @override
+  String get changePassword => 'Alterar Senha';
+
+  @override
+  String get deleteAccount => 'Excluir Conta';
+
+  @override
+  String get name => 'Nome';
+
+  @override
+  String get email => 'Email';
 }

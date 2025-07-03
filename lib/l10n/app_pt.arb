@@ -33,5 +33,11 @@
   "setLimit": "Definir limite (minutos)",
   "limitReached": "Limite Atingido",
   "limitMessage": "Você usou a app por {time} hoje!",
-  "ok": "OK"
+  "ok": "OK",
+  "myAccountTitle": "Minha Conta",
+  "saveChanges": "Salvar Alterações",
+  "changePassword": "Alterar Senha",
+  "deleteAccount": "Excluir Conta",
+  "name": "Nome",
+  "email": "Email"
 }
