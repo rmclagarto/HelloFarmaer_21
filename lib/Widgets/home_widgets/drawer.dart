@@ -8,8 +8,13 @@ import 'package:projeto_cm/Model/custom_user.dart';
 
 class AppDrawer extends StatelessWidget {
   final CustomUser user;
+  final ValueNotifier<ThemeMode> themeNotifier;
 
-  const AppDrawer({super.key, required this.user});
+  const AppDrawer({
+    super.key, 
+    required this.user,
+    required this.themeNotifier,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +25,21 @@ class AppDrawer extends StatelessWidget {
     // Lista dentro do build para poder usar o context nas funções onTap
     final List<Map<String, dynamic>> menuItems = [
       {
+        'icon':Icons.person,
+        'title':'Minha Conta',
+        'onTap': () {
+          navigator.pop();
+          Navigator.pushNamed(context, Routes.myAccount, arguments: user);
+        }
+      },
+      {
         'icon': Icons.shopping_basket,
         'title': 'Mercado',
         'onTap': () {
           navigator.pop();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  MarketScreen(user: user,)),
+            MaterialPageRoute(builder: (context) => MarketScreen(user: user)),
           );
         },
       },
@@ -56,7 +69,16 @@ class AppDrawer extends StatelessWidget {
         'title': 'Definições',
         'onTap': () {
           navigator.pop();
-          // ação para Definições
+          Navigator.pushNamed(
+            context,
+            Routes.setting,
+            arguments: {
+              'isDarkTheme': themeNotifier.value == ThemeMode.dark,
+              'onThemeChanged': (bool isDark) {
+                themeNotifier.value = isDark ? ThemeMode.dark : ThemeMode.light;
+              },
+            },
+          );
         },
       },
       {

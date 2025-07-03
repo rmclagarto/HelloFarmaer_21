@@ -7,6 +7,7 @@ import 'package:projeto_cm/Widgets/home_widgets/map_widget.dart';
 import 'package:projeto_cm/Widgets/ad_widgets/notification_botton.dart';
 import 'package:projeto_cm/Widgets/home_widgets/notification_panel.dart';
 import 'package:projeto_cm/Widgets/home_widgets/seach_bar.dart';
+import 'package:projeto_cm/main.dart';
 
 class Home extends StatefulWidget {
   final CustomUser user;
@@ -66,7 +67,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      drawer: AppDrawer(user: user),
+      drawer: AppDrawer(user: user, themeNotifier: themeNotifier,),
       body: Stack(
         children: [
           MapWidget(key: _mapKey),

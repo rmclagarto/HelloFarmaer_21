@@ -3,8 +3,7 @@ import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/routes.dart';
 
 class RegisterFrom extends StatefulWidget {
-  final Function(String email, String password, String comfirmPassword)
-  onRegister;
+  final Function(String nome,String email, String password, String telefone, String confirmPassword) onRegister;
 
   const RegisterFrom({super.key, required this.onRegister});
 
@@ -16,15 +15,16 @@ class _RegisterFromState extends State<RegisterFrom> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _telefoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmarPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmarPasswordController =TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void dispose() {
     _nomeController.dispose();
     _emailController.dispose();
+    _telefoneController.dispose();
     _passwordController.dispose();
     _confirmarPasswordController.dispose();
     super.dispose();
@@ -33,9 +33,10 @@ class _RegisterFromState extends State<RegisterFrom> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       widget.onRegister(
-        // _nomeController.text.trim(),
+        _nomeController.text.trim(),
         _emailController.text.trim(),
         _passwordController.text.trim(),
+        _telefoneController.text.trim(),
         _confirmarPasswordController.text.trim(),
       );
 
@@ -62,6 +63,8 @@ class _RegisterFromState extends State<RegisterFrom> {
                 _buildNomeField(),
                 const SizedBox(height: Constants.spacingSmall),
                 _buildEmailField(),
+                const SizedBox(height: Constants.spacingSmall),
+                _buildTelefoneFiled(),
                 const SizedBox(height: Constants.spacingSmall),
                 _buildPasswordField(),
                 const SizedBox(height: Constants.spacingSmall),
@@ -144,6 +147,37 @@ class _RegisterFromState extends State<RegisterFrom> {
         }
         return null;
       },
+    );
+  }
+
+  Widget _buildTelefoneFiled(){
+    return TextFormField(
+      controller: _telefoneController,
+      keyboardType: TextInputType.phone,
+      textInputAction: TextInputAction.next,
+      cursorColor: Colors.grey,
+      decoration: InputDecoration(
+        labelText: 'Senha',
+        labelStyle: const TextStyle(color: Colors.grey),
+        prefixIcon: const Icon(Icons.phone),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        
+      ),
+      validator: (value){
+        if(value == null || value.length < 9){
+          return 'Por favor, insira sua senha';
+        }
+        return null;
+      },
+      onFieldSubmitted: (_) => _submitForm(),
     );
   }
 

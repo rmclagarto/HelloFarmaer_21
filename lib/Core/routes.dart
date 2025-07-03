@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
 import 'package:projeto_cm/Screens/home_screen/home_screen.dart';
 import 'package:projeto_cm/Screens/auth_screens/login_screen.dart';
-// import 'package:projeto_cm/Screens/store_screens/main_strore_screen.dart';
-// import 'package:projeto_cm/Screens/market_screens/main_market_screen.dart';
 import 'package:projeto_cm/Screens/ad_screens/publicar_anuncio_screnn.dart';
 import 'package:projeto_cm/Screens/auth_screens/recover_password_screen.dart';
 import 'package:projeto_cm/Screens/auth_screens/register_screen.dart';
+import 'package:projeto_cm/Screens/my_account_screen.dart';
+import 'package:projeto_cm/Screens/setting_screen.dart';
 import 'package:projeto_cm/Screens/splash_screen.dart';
 
 class Routes {
@@ -19,7 +19,9 @@ class Routes {
   static const mainStore = '/main-store';
   static const storeDetails = '/store-details';
   static const publicarAnuncio = '/publicar-anuncio';
-  
+  static const setting = '/settings';
+  static const myAccount = '/my-account';
+
   // static const market = '/market';
 
   static Map<String, WidgetBuilder> get routes => {
@@ -36,7 +38,6 @@ class Routes {
       }
     },
 
-
     // storePanel:
     //     (context) => ChangeNotifierProvider(
     //       create: (context) => LojaProvider(),
@@ -49,15 +50,31 @@ class Routes {
     //   return MainStoreScreen(loja: loja);
     // },
 
-
     // storeDetails: (context) {
     //   final store = ModalRoute.of(context)!.settings.arguments as Store;
     //   return StoreDetailsScreen(store: store);
     // },
-
-
     publicarAnuncio: (context) => const PublicarAnuncioScreen(),
 
     // market: (context) => const MarketScreen(),
+    setting: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+
+      return SettingsScreen(
+        isDarkTheme: args?['isDarkTheme'] ?? false,
+        onThemeChanged: args?['onThemeChanged'] ?? (val) {},
+      );
+    },
+
+
+
+    myAccount: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is CustomUser) {
+        return MyAccountScreen(user: args);
+      } else {
+        return const Login(); // fallback caso não tenha user
+      }
+    },
   };
 }

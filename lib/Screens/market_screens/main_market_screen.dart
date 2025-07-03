@@ -3,7 +3,7 @@ import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
 import 'package:projeto_cm/Widgets/market_widgets/category_selector.dart';
 import 'package:projeto_cm/Widgets/market_widgets/product_card.dart';
-import 'package:projeto_cm/Widgets/market_widgets/searchBox.dart';
+import 'package:projeto_cm/Widgets/market_widgets/search_box.dart';
 import 'package:projeto_cm/Widgets/market_widgets/category_horizontal_list.dart';
 
 class MarketScreen extends StatefulWidget {
