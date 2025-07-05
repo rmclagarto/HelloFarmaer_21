@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
-import 'package:projeto_cm/Services/auth_service.dart';
+import 'package:projeto_cm/Services/firebase_auth_service.dart';
 import 'package:projeto_cm/Widgets/auth_widgets/forms/register_from.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,7 +13,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final AuthService _authService = AuthService();
+  final FirebaseAuthService _authService = FirebaseAuthService();
 
   // void _handleRegister(String email, String password, String confirmPassword) async {
   //   if (password != confirmPassword) {

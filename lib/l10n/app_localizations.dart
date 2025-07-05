@@ -339,6 +339,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email'**
   String get email;
+
+  /// No description provided for @gpsPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Location (GPS)'**
+  String get gpsPermission;
+
+  /// No description provided for @gpsPermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access to your location'**
+  String get gpsPermissionDescription;
+
+  /// No description provided for @galleryPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get galleryPermission;
+
+  /// No description provided for @galleryPermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access to your photos'**
+  String get galleryPermissionDescription;
+
+  /// No description provided for @cameraPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get cameraPermission;
+
+  /// No description provided for @cameraPermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access to camera'**
+  String get cameraPermissionDescription;
+
+  /// No description provided for @contactsPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get contactsPermission;
+
+  /// No description provided for @contactsPermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access to your contacts'**
+  String get contactsPermissionDescription;
 }
 
 class _AppLocalizationsDelegate

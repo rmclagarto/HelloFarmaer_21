@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_cm/Core/routes.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Core/routes.dart';
+
 
 class Splash extends StatefulWidget {
   const Splash({super.key});

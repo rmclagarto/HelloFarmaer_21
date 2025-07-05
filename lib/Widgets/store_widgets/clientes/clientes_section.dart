@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Screens/store_screens/detalhes_clientes_page.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
+import 'package:projeto_cm/Screens/store_screens/detalhes_clientes_page.dart';
+
 
 class ClientesSection extends StatefulWidget {
   const ClientesSection({super.key});

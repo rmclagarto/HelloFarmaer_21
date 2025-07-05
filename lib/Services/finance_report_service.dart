@@ -1,7 +1,7 @@
+import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-import 'dart:typed_data';
 
 class FinanceReportService {
   final double faturamentoTotal;

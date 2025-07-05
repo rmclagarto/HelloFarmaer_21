@@ -65,7 +65,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                        color: Theme.of(context).colorScheme.primary,
                         width: 3,
                       ),
                     ),

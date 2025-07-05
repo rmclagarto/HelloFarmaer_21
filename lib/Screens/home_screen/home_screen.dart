@@ -1,13 +1,15 @@
+import 'package:projeto_cm/main.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
-import 'package:projeto_cm/Widgets/home_widgets/button_panel.dart';
 import 'package:projeto_cm/Widgets/home_widgets/drawer.dart';
+import 'package:projeto_cm/Widgets/home_widgets/seach_bar.dart';
 import 'package:projeto_cm/Widgets/home_widgets/map_widget.dart';
+import 'package:projeto_cm/Widgets/home_widgets/button_panel.dart';
 import 'package:projeto_cm/Widgets/ad_widgets/notification_botton.dart';
 import 'package:projeto_cm/Widgets/home_widgets/notification_panel.dart';
-import 'package:projeto_cm/Widgets/home_widgets/seach_bar.dart';
-import 'package:projeto_cm/main.dart';
+
+
 
 class Home extends StatefulWidget {
   final CustomUser user;

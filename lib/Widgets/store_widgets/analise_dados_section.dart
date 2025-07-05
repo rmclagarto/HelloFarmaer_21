@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Services/finance_report_service.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:projeto_cm/Core/constants.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:projeto_cm/Services/finance_report_service.dart';
+
 
 class AnalisesFinanceirasSection extends StatefulWidget {
   const AnalisesFinanceirasSection({super.key});

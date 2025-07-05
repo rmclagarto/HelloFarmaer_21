@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
-import 'package:projeto_cm/Widgets/market_widgets/category_selector.dart';
-import 'package:projeto_cm/Widgets/market_widgets/product_card.dart';
+import 'package:projeto_cm/Screens/market_screens/cart_screen.dart';
 import 'package:projeto_cm/Widgets/market_widgets/search_box.dart';
+import 'package:projeto_cm/Widgets/market_widgets/product_card.dart';
+import 'package:projeto_cm/Widgets/market_widgets/category_selector.dart';
 import 'package:projeto_cm/Widgets/market_widgets/category_horizontal_list.dart';
 
 class MarketScreen extends StatefulWidget {
   final CustomUser user;
-  const MarketScreen({super.key, required this.user});
+  const MarketScreen({
+    super.key, 
+    required this.user
+  });
 
   @override
   State<MarketScreen> createState() => _MarketScreenState();
@@ -16,7 +20,7 @@ class MarketScreen extends StatefulWidget {
 
 class _MarketScreenState extends State<MarketScreen> {
   final TextEditingController _searchController = TextEditingController();
-  bool _isSearching = false;
+  final bool _isSearching = false;
   int _currentIndex = 0; // índice inicial
 
 
@@ -110,6 +114,7 @@ class _MarketScreenState extends State<MarketScreen> {
       }
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +230,10 @@ class _MarketScreenState extends State<MarketScreen> {
           icon: Icon(Icons.add_shopping_cart),
           label: 'Carrinho',
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite), 
+          label: 'Favoritos',
+        ),
       ],
       currentIndex: 0, // Mercado selecionado
       selectedItemColor: Constants.primaryColor,
@@ -233,6 +241,14 @@ class _MarketScreenState extends State<MarketScreen> {
       onTap: (index) {
         setState(() {
           _currentIndex = index;
+
+          switch(_currentIndex){
+            case 1: 
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  CartScreen())
+              );
+          }
           /*
             index = 1 -> carrinho
             index = 2 -> favoritos

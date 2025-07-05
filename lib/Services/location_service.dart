@@ -1,5 +1,6 @@
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class LocationService {
   Stream<LatLng> getPositionStream({bool highAccuracy = false}) {

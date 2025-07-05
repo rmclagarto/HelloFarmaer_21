@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/routes.dart';
+import 'package:projeto_cm/Core/constants.dart';
 
 class RegisterFrom extends StatefulWidget {
   final Function(String nome,String email, String password, String telefone, String confirmPassword) onRegister;

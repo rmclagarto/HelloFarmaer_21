@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Services/encomenda_service.dart';
 import 'package:projeto_cm/Model/produtos.dart';
+import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
+import 'package:projeto_cm/Services/encomenda_service.dart';
+
 
 class EncomendasSection extends StatefulWidget {
   

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_cm/Core/routes.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Core/routes.dart';
-import 'package:projeto_cm/Services/auth_service.dart';
+import 'package:projeto_cm/Services/firebase_auth_service.dart';
 import 'package:projeto_cm/Widgets/auth_widgets/forms/login_form.dart';
 
 class Login extends StatefulWidget {
@@ -16,7 +16,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final AuthService _authService = AuthService();
+  final FirebaseAuthService _firebaseAuthService = FirebaseAuthService();
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -35,7 +35,7 @@ class _LoginState extends State<Login> {
     });
 
     try {
-      final user = await _authService.signInWithEmailPassword(email, password);
+      final user = await _firebaseAuthService.signInWithEmailPassword(email, password);
       if (!mounted) return;
 
       if(user != null){

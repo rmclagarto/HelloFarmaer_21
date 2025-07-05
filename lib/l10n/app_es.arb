@@ -39,5 +39,15 @@
   "changePassword": "Cambiar Contraseña",
   "deleteAccount": "Eliminar Cuenta",
   "name": "Nombre",
-  "email": "Correo Electrónico"
+  "email": "Correo Electrónico",
+
+
+  "gpsPermission": "Ubicación (GPS)",
+  "gpsPermissionDescription": "Permitir acceso a tu ubicación",
+  "galleryPermission": "Galería",
+  "galleryPermissionDescription": "Permitir acceso a tus fotos",
+  "cameraPermission": "Cámara",
+  "cameraPermissionDescription": "Permitir acceso a la cámara",
+  "contactsPermission": "Contactos",
+  "contactsPermissionDescription": "Permitir acceso a tus contactos"
 }

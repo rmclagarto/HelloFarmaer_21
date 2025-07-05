@@ -1,13 +1,12 @@
 // main_store.dart
 import 'package:flutter/material.dart';
+import 'package:projeto_cm/Model/store.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Model/conversa.dart';
 import 'package:projeto_cm/Model/menssagens.dart';
-
-import 'package:projeto_cm/Model/store.dart';
-import 'package:projeto_cm/Screens/store_screens/lista_conversas_screen.dart';
-import 'package:projeto_cm/Widgets/store_widgets/gestao_section.dart';
 import 'package:projeto_cm/Widgets/store_widgets/store_details.dart';
+import 'package:projeto_cm/Widgets/store_widgets/gestao_section.dart';
+import 'package:projeto_cm/Screens/store_screens/lista_conversas_screen.dart';
 
 class MainStoreScreen extends StatefulWidget {
   final Store loja;

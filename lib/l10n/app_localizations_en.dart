@@ -132,4 +132,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get email => 'Email';
+
+  @override
+  String get gpsPermission => 'Location (GPS)';
+
+  @override
+  String get gpsPermissionDescription => 'Allow access to your location';
+
+  @override
+  String get galleryPermission => 'Gallery';
+
+  @override
+  String get galleryPermissionDescription => 'Allow access to your photos';
+
+  @override
+  String get cameraPermission => 'Camera';
+
+  @override
+  String get cameraPermissionDescription => 'Allow access to camera';
+
+  @override
+  String get contactsPermission => 'Contacts';
+
+  @override
+  String get contactsPermissionDescription => 'Allow access to your contacts';
 }

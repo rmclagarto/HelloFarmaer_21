@@ -39,5 +39,14 @@
   "changePassword": "Change Password",
   "deleteAccount": "Delete Account",
   "name": "Name",
-  "email": "Email"
+  "email": "Email",
+
+  "gpsPermission": "Location (GPS)",
+  "gpsPermissionDescription": "Allow access to your location",
+  "galleryPermission": "Gallery",
+  "galleryPermissionDescription": "Allow access to your photos",
+  "cameraPermission": "Camera",
+  "cameraPermissionDescription": "Allow access to camera",
+  "contactsPermission": "Contacts",
+  "contactsPermissionDescription": "Allow access to your contacts"
 }

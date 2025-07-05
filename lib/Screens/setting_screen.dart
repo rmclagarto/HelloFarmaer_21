@@ -1,7 +1,10 @@
+import 'package:projeto_cm/main.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/main.dart';
 import 'package:projeto_cm/l10n/app_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+
 
 class SettingsScreen extends StatefulWidget {
   final bool isDarkTheme;
@@ -27,6 +30,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _limiteAtivo = false;
   int _limiteMinutos = 60;
 
+  bool _gpsEnabled = false;
+  bool _galleryEnabled = false;
+  bool _cameraEnabled = false;
+  // bool _microphoneEnabled = false;
+  bool _contactsEnabled = false;
+
+  Future<void> _checkPermissions() async {
+    final gpsStatus = await Permission.location.status;
+    final galleryStatus = await Permission.photos.status;
+    final cameraStatus = await Permission.camera.status;
+    // final microphoneStatus = await Permission.microphone.status;
+    final contactStatus = await Permission.contacts.status;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,12 +65,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return '${duracao.inHours}h ${duracao.inMinutes.remainder(60)}min';
   }
 
-  void _changeLanguage(String? languageCode) {
-    if (languageCode == null) return;
+  // void _changeLanguage(String? languageCode) {
+  //   if (languageCode == null) return;
 
-    setState(() {
-      _selectedLanguage = languageCode;
-    });
+  //   setState(() {
+  //     _selectedLanguage = languageCode;
+  //   });
+  // }
+
+  Future<void> _requestPermission(
+    Permission permission,
+    Function(bool) setStateCallbeck,
+  ) async {
+    final status = await permission.request();
+    setStateCallbeck(status.isGranted);
+
+    if (!status.isGranted && status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
   }
 
   @override
@@ -140,16 +169,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
             leading: const Icon(Icons.vpn_key, color: Colors.orange),
             title: Text(l10n.access),
             children: [
-              ListTile(
-                title: Text(l10n.managePermissions),
-                trailing: ElevatedButton(
-                  child: Text(l10n.open),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.openAccessManagement)),
-                    );
-                  },
-                ),
+              SwitchListTile(
+                title: Text(l10n.gpsPermission),
+                subtitle: Text(l10n.gpsPermissionDescription),
+                value: _gpsEnabled,
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.location,
+                      (enabled) => setState(() => _gpsEnabled = enabled),
+                    ),
+              ),
+              SwitchListTile(
+                title: Text(l10n.galleryPermission),
+                subtitle: Text(l10n.galleryPermissionDescription),
+                value: _galleryEnabled,
+
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.photos,
+                      (enabled) => setState(() => _galleryEnabled = enabled),
+                    ),
+              ),
+              SwitchListTile(
+                title: Text(l10n.cameraPermission),
+                subtitle: Text(l10n.cameraPermissionDescription),
+                value: _cameraEnabled,
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.camera,
+                      (enabled) => setState(() => _cameraEnabled = enabled),
+                    ),
+              ),
+              SwitchListTile(
+                title: Text(l10n.contactsPermission),
+                subtitle: Text(l10n.contactsPermissionDescription),
+                value: _contactsEnabled,
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.contacts,
+                      (enabled) => setState(() => _contactsEnabled = enabled),
+                    ),
               ),
             ],
           ),

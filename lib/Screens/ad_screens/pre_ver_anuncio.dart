@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Widgets/ad_widgets/add_to_cart_button.dart';
-import 'package:projeto_cm/Widgets/ad_widgets/delivery_option.dart';
-import 'package:projeto_cm/Widgets/ad_widgets/description_section.dart';
-import 'package:projeto_cm/Widgets/ad_widgets/price_quantity_low.dart';
-import 'package:projeto_cm/Widgets/ad_widgets/product_header.dart';
 import 'package:projeto_cm/Widgets/ad_widgets/product_image.dart';
 import 'package:projeto_cm/Widgets/home_widgets/seller_info.dart';
+import 'package:projeto_cm/Widgets/ad_widgets/product_header.dart';
+import 'package:projeto_cm/Widgets/ad_widgets/delivery_option.dart';
+import 'package:projeto_cm/Widgets/ad_widgets/price_quantity_low.dart';
+import 'package:projeto_cm/Widgets/ad_widgets/add_to_cart_button.dart';
+import 'package:projeto_cm/Widgets/ad_widgets/description_section.dart';
+
 
 
 class PreviewAd extends StatelessWidget {
