@@ -27,7 +27,7 @@ class CartItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeaderRow(),
-                _buildDescription(),
+                // _buildDescription(),
                 const SizedBox(height: 4),
                 if (!inStock)
                   Text(
@@ -61,30 +61,38 @@ class CartItemWidget extends StatelessWidget {
   }
 
   Widget _buildHeaderRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            item['name'],
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        Text(
-          '${item['price'].toStringAsFixed(2)} €',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
+  double priceDouble = 0.0;
+  if (item['price'] is String) {
+    priceDouble = double.tryParse(item['price'].replaceAll(',', '.')) ?? 0.0;
+  } else if (item['price'] is double) {
+    priceDouble = item['price'];
   }
 
-  Widget _buildDescription() {
-    return Text(
-      item['description'],
-      style: TextStyle(color: Colors.grey[600], fontSize: 14),
-    );
-  }
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Expanded(
+        child: Text(
+          item['name'],
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      Text(
+        '${priceDouble.toStringAsFixed(2)} €',
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      ),
+    ],
+  );
+}
+
+
+  // Widget _buildDescription() {
+  //   return Text(
+  //     item['description'],
+  //     style: TextStyle(color: Colors.grey[600], fontSize: 14),
+  //   );
+  // }
 
   Widget _buildQuantityAndDeleteRow(bool inStock) {
     return Row(

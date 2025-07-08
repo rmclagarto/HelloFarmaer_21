@@ -22,7 +22,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
-  bool _timeManagementEnabled = false;
+  // bool _timeManagementEnabled = false;
   String _selectedLanguage = 'pt';
 
   DateTime? _entradaApp;

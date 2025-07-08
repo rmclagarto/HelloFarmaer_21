@@ -1,4 +1,6 @@
+import 'package:projeto_cm/Providers/cart_provider.dart';
 import 'package:projeto_cm/Services/notification_service.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,11 @@ class MainApp extends StatelessWidget {
         return ValueListenableBuilder<Locale>(
           valueListenable: localeNotifier,
           builder: (_, Locale currentLocale, _) {
-            return MaterialApp(
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (_) => CartProvider()),
+              ],
+          child: MaterialApp(
               theme: ThemeData.light(),
               darkTheme: ThemeData.dark(),
               themeMode: currentMode,
@@ -50,6 +56,7 @@ class MainApp extends StatelessWidget {
 
               routes: Routes.routes,
               initialRoute: Routes.splash,
+            ),
             );
           },
         );

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
+import 'package:projeto_cm/Model/cart.dart';
+
+
 import 'package:projeto_cm/Screens/market_screens/checkout_screen.dart';
 
 class CartTotalWidget extends StatelessWidget {
+  
+  final List<CartItem> cartItems;
   final double subtotal;
-  final List<Map<String, dynamic>> cartItems;
 
   const CartTotalWidget({
     super.key,

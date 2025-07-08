@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
 import 'package:projeto_cm/Core/image_assets.dart';
+import 'package:projeto_cm/Model/produtos.dart';
+import 'package:projeto_cm/Providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
-  final Map<String, String> product;
+  final Produtos product;
 
   const ProductCard({super.key, required this.product});
 
@@ -11,9 +14,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
@@ -36,7 +37,7 @@ class ProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                product['name'] ?? '',
+                product.title,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -44,23 +45,14 @@ class ProductCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
-              Text(
-                product['store'] ?? '',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              
               const SizedBox(height: 8), // Espaço manual no lugar do Spacer
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
                     child: Text(
-                      product['price'] ?? '',
+                      product.price,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Constants.primaryColor,
@@ -71,19 +63,26 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(
-                      Icons.add_shopping_cart,
-                      size: 20,
-                    ),
+                    icon: const Icon(Icons.add_shopping_cart, size: 20),
                     color: Constants.primaryColor,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                     onPressed: () {
-                      // Adicionar ao carrinho
+                      final cartProvider = Provider.of<CartProvider>(context, listen: false);
+
+                      cartProvider.addProduct(
+                        product
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Produto adicionado ao carrinho!'),
+                        ),
+                      );
                     },
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

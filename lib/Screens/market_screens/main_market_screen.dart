@@ -1,18 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
+import 'package:projeto_cm/Core/image_assets.dart';
 import 'package:projeto_cm/Model/custom_user.dart';
+import 'package:projeto_cm/Model/produtos.dart';
+import 'package:projeto_cm/Providers/cart_provider.dart';
 import 'package:projeto_cm/Screens/market_screens/cart_screen.dart';
-import 'package:projeto_cm/Widgets/market_widgets/search_box.dart';
-import 'package:projeto_cm/Widgets/market_widgets/product_card.dart';
-import 'package:projeto_cm/Widgets/market_widgets/category_selector.dart';
 import 'package:projeto_cm/Widgets/market_widgets/category_horizontal_list.dart';
+import 'package:projeto_cm/Widgets/market_widgets/category_selector.dart';
+import 'package:projeto_cm/Widgets/market_widgets/product_card.dart';
+import 'package:projeto_cm/Widgets/market_widgets/search_box.dart';
+import 'package:provider/provider.dart';
 
 class MarketScreen extends StatefulWidget {
   final CustomUser user;
-  const MarketScreen({
-    super.key, 
-    required this.user
-  });
+
+  const MarketScreen({super.key, required this.user});
 
   @override
   State<MarketScreen> createState() => _MarketScreenState();
@@ -20,65 +23,46 @@ class MarketScreen extends StatefulWidget {
 
 class _MarketScreenState extends State<MarketScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final bool _isSearching = false;
-  int _currentIndex = 0; // índice inicial
 
-
-  final List<Map<String, String>> products = [
-    {
-      'name': 'Tomate',
-      'price': '€1.50/kg',
-      'image': 'assets/img/fruta.jpg',
-      'store': 'Agrícola Silva',
-      'category': 'Vegetais',
-    },
-    {
-      'name': 'Batata',
-      'price': '€0.90/kg',
-      'image': 'assets/img/fruta.jpg',
-      'store': 'Horta Fresca',
-      'category': 'Vegetais',
-    },
-    {
-      'name': 'Maçã',
-      'price': '€2.00/kg',
-      'image': 'assets/img/fruta.jpg',
-      'store': 'Frutas Sabor',
-      'category': 'Frutas',
-    },
-    {
-      'name': 'Serviço X',
-      'price': '€15',
-      'image': 'assets/img/servico.jpg',
-      'store': 'Serviços Y',
-      'category': 'Serviços',
-    },
-    {
-      'name': 'Oferta y',
-      'price': '€15',
-      'image': 'assets/img/servico.jpg',
-      'store': 'Oferta Y',
-      'category': 'Ofertas',
-    },
-  ];
-
-  List<Map<String, String>> _filteredProducts = [];
-
+  int _currentIndex = 0;
   int _selectedCategory = 0;
-  final List<String> categories = [
-    'Todos',
-    'Ofertas',
-    'Vegetais',
-    'Frutas',
-    'Serviços',
-    'Bancas',
+
+  // Substitua por streams do Firestore
+  late Stream<QuerySnapshot> _productsStream;
+
+  final List<String> categories = ['Todos', 'Ofertas', 'Vegetais', 'Frutas'];
+  List<Produtos> products = [
+    Produtos.simple(
+      title: "Alface",
+      price: "10.0",
+      image: ImageAssets.fruta,
+      categoria: "Ofertas",
+    ),
+    Produtos.simple(
+      title: "Alface 1",
+      price: "10.0",
+      image: ImageAssets.fruta,
+      categoria: "Vegetais",
+    ),
+    Produtos.simple(
+      title: "Alface 2",
+      price: "10.0",
+      image: ImageAssets.fruta,
+      categoria: "Vegetais",
+    ),
+    Produtos.simple(
+      title: "Alface 3",
+      price: "10.0",
+      image: ImageAssets.fruta,
+      categoria: "Vegetais",
+    ),
   ];
 
   @override
   void initState() {
     super.initState();
-    _filteredProducts = List.from(products);
     _searchController.addListener(_onSearchChanged);
+    _filteredProducts = List.from(products);
   }
 
   @override
@@ -87,6 +71,8 @@ class _MarketScreenState extends State<MarketScreen> {
     _searchController.dispose();
     super.dispose();
   }
+
+  List<Produtos> _filteredProducts = [];
 
   void _onSearchChanged() {
     final query = _searchController.text.toLowerCase();
@@ -97,122 +83,103 @@ class _MarketScreenState extends State<MarketScreen> {
             _selectedCategory == 0
                 ? List.from(products)
                 : products
-                    .where(
-                      (p) => p['category'] == categories[_selectedCategory],
-                    )
+                    .where((p) => p.categoria == categories[_selectedCategory])
                     .toList();
       } else {
         _filteredProducts =
             products.where((p) {
-              final name = p['name']!.toLowerCase();
-              final store = p['store']!.toLowerCase();
-              final category = p['category']!.toLowerCase();
-              return name.contains(query) ||
-                  store.contains(query) ||
-                  category.contains(query);
+              final title = p.title.toLowerCase();
+              final category = p.categoria?.toLowerCase() ?? '';
+              return title.contains(query) || category.contains(query);
             }).toList();
       }
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, String>> filteredProducts = _filteredProducts;
-
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Constants.primaryColor,
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
-        title:
-            _isSearching
-                ? TextField(
-                  controller: _searchController,
-                  autofocus: true,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: 'Pesquisar...',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    border: InputBorder.none,
-                  ),
-                  onSubmitted: (query) {
-                    print('Pesquisando por: $query');
-                  },
-                )
-                : const Text(
-                  'Mercado',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchBox(
-              controller: _searchController,
-              onSubmitted: (query) {
-                print('Pesquisa executada: $query');
-              },
-            ),
-            CategorySelector(
-              categories: categories,
-              selectedIndex: _selectedCategory,
-              onSelected: (index) {
-                setState(() {
-                  _selectedCategory = index;
-                  _onSearchChanged(); // Atualiza filtragem ao mudar categoria
-                });
-              },
-            ),
-            if (_selectedCategory == 0 && _searchController.text.isEmpty)
-              ...categories.skip(1).map((category) {
-                final catProducts =
-                    products.where((p) => p['category'] == category).toList();
-                if (catProducts.isEmpty) return const SizedBox.shrink();
-                return CategoryHorizontalList(
-                  categoryName: category,
-                  products: catProducts,
-                  onShowAll: () {
-                    print('Mostrar todos os produtos da categoria: $category');
+      body: Consumer<CartProvider>(
+        builder: (context, cartProvider, child) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SearchBox(
+                  controller: _searchController,
+                  onSubmitted: (pesquisa) {
+                    // Usar as query para pesquisar na loja
+                    debugPrint('Pesquisa executada: $pesquisa');
                   },
-                );
-              }).toList()
-            else
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child:
-                    filteredProducts.isEmpty
-                        ? const Center(
-                          child: Text(
-                            'Nenhum produto encontrado.',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        )
-                        : Wrap(
-                          spacing: 16,
-                          runSpacing: 16,
-                          children:
-                              filteredProducts
-                                  .map(
-                                    (product) => SizedBox(
-                                      width:
-                                          (MediaQuery.of(context).size.width /
-                                              2) -
-                                          24,
-                                      child: ProductCard(product: product),
-                                    ),
-                                  )
-                                  .toList(),
-                        ),
-              ),
-          ],
-        ),
+                ),
+
+                CategorySelector(
+                  categories: categories,
+                  selectedIndex: _selectedCategory,
+                  onSelected: (index) {
+                    setState(() {
+                      _selectedCategory = index;
+                      _onSearchChanged();
+                    });
+                  },
+                ),
+                if (_selectedCategory == 0 && _searchController.text.isEmpty)
+                  ...categories.skip(1).map((category) {
+                    final catProducts =
+                        products.where((p) => p.categoria == category).toList();
+
+                    if (catProducts.isEmpty) return const SizedBox.shrink();
+                    return CategoryHorizontalList(
+                      categoryName: category,
+                      products: catProducts,
+                      onShowAll: () {
+                        print(
+                          'Mostrar todos os produtos da categoria: $category',
+                        );
+                      },
+                    );
+                  }).toList()
+                else
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child:
+                        _filteredProducts.isEmpty
+                            ? const Center(
+                              child: Text(
+                                'Nenhum produto encontrado.',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            )
+                            : Wrap(
+                              spacing: 16,
+                              runSpacing: 16,
+                              children:
+                                  _filteredProducts
+                                      .map(
+                                        (product) => SizedBox(
+                                          width:
+                                              (MediaQuery.of(
+                                                    context,
+                                                  ).size.width /
+                                                  2) -
+                                              24,
+                                          child: ProductCard(product: product),
+                                        ),
+                                      )
+                                      .toList(),
+                            ),
+                  ),
+              ],
+            ),
+          );
+        },
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
@@ -230,30 +197,23 @@ class _MarketScreenState extends State<MarketScreen> {
           icon: Icon(Icons.add_shopping_cart),
           label: 'Carrinho',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite), 
-          label: 'Favoritos',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
       ],
-      currentIndex: 0, // Mercado selecionado
+      currentIndex: 0,
       selectedItemColor: Constants.primaryColor,
       unselectedItemColor: Colors.grey,
       onTap: (index) {
         setState(() {
           _currentIndex = index;
 
-          switch(_currentIndex){
-            case 1: 
+          switch (_currentIndex) {
+            case 1:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  CartScreen())
+                MaterialPageRoute(builder: (context) => CartScreen()),
               );
+              break;
           }
-          /*
-            index = 1 -> carrinho
-            index = 2 -> favoritos
-            index = 0 -> mercado(main store)
-           */
         });
       },
     );

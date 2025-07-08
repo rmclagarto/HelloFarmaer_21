@@ -53,6 +53,7 @@ class Produtos {
   String price; // <-- agora é mutável
   String date;
   String description;
+  String? categoria;
   Map<String, dynamic> stats;
 
   Produtos({
@@ -63,9 +64,19 @@ class Produtos {
     required this.date,
     required this.description,
     required this.stats,
+    this.categoria,
   });
 
 
+  Produtos.simple({
+    required this.title,
+    required this.price,
+    required this.image,
+    this.categoria,
+  }) : isAsset = true,
+    date = '',
+    description = '',
+    stats = {};
 
   static List<Produtos> sampleAds() => [
         Produtos(

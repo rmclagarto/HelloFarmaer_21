@@ -2,10 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:projeto_cm/Core/constants.dart';
+import 'package:projeto_cm/Model/cart.dart';
 import 'package:projeto_cm/Services/notification_service.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  final List<Map<String, dynamic>> cartItems;
+  final List<CartItem> cartItems;
   final double subtotal;
 
   const CheckoutScreen({
@@ -36,7 +37,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _checkAvailableItems() {
     for(var i = 0; i < widget.cartItems.length; i++){
-      if(widget.cartItems[i]['inStock'] == true){
+      if(widget.cartItems[i].inStock == true){
         hasAvailableItems = true;
         return;
       }
@@ -126,18 +127,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     
     
     for (var i = 0; i < widget.cartItems.length; i++) {
-      var item = widget.cartItems[i];
-      if (item['inStock'] != true) {
-        // outOfStockCount++;
-        continue;
-      }
-      
+      for (var item in widget.cartItems) {
+      if (!item.inStock) continue;
+
       widgets.add(ListTile(
-        contentPadding: EdgeInsets.zero,
-        title: Text(item['name']),
-        subtitle: Text('Qtd: ${item['quantity']}'),
-        trailing: Text('${(item['price'] * item['quantity']).toStringAsFixed(2)} €'),
+        title: Text(item.product.title),
+        subtitle: Text('Qtd: ${item.quantity}'),
+        trailing: Text('${(double.parse(item.product.price) * item.quantity).toStringAsFixed(2)} €'),
       ));
+    }
+
     }
     
     // if (outOfStockCount > 0) {

@@ -1,8 +1,10 @@
+import 'package:projeto_cm/Model/produtos.dart';
+
 import 'product_card.dart';
 import 'package:flutter/material.dart';
 
 class ProductsGrid extends StatelessWidget {
-  final List<Map<String, String>> products;
+  final List<Produtos> products;
 
   const ProductsGrid({super.key, required this.products});
 
