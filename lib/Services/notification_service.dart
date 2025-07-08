@@ -19,6 +19,7 @@ Future<void> mostrarNotificacao(String mensagem, BuildContext context) async {
     'pedidos_channel',
     'Notificações de Pedido',
     importance: Importance.max,
+    //  sound: UriAndroidNotificationSound('content://settings/system/notification_sound'),
     playSound: true,
   );
 
