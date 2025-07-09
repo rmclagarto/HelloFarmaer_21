@@ -1,15 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Model/custom_user.dart';
-import 'package:projeto_cm/Model/produtos.dart';
-import 'package:projeto_cm/Providers/cart_provider.dart';
-import 'package:projeto_cm/Screens/market_screens/cart_screen.dart';
-import 'package:projeto_cm/Widgets/market_widgets/category_horizontal_list.dart';
-import 'package:projeto_cm/Widgets/market_widgets/category_selector.dart';
-import 'package:projeto_cm/Widgets/market_widgets/product_card.dart';
-import 'package:projeto_cm/Widgets/market_widgets/search_box.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Providers/cart_provider.dart';
+import 'package:hellofarmer/Screens/market_screens/cart_screen.dart';
+import 'package:hellofarmer/Widgets/market_widgets/category_horizontal_list.dart';
+import 'package:hellofarmer/Widgets/market_widgets/category_selector.dart';
+import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';
+import 'package:hellofarmer/Widgets/market_widgets/search_box.dart';
 import 'package:provider/provider.dart';
 
 class MarketScreen extends StatefulWidget {
@@ -28,33 +29,37 @@ class _MarketScreenState extends State<MarketScreen> {
   int _selectedCategory = 0;
 
   // Substitua por streams do Firestore
-  late Stream<QuerySnapshot> _productsStream;
+  // late Stream<QuerySnapshot> _productsStream;
 
   final List<String> categories = ['Todos', 'Ofertas', 'Vegetais', 'Frutas'];
   List<Produtos> products = [
     Produtos.simple(
       title: "Alface",
       price: "10.0",
-      image: ImageAssets.fruta,
+      image: ImageAssets.alface,
       categoria: "Ofertas",
+      stock: 4,
     ),
     Produtos.simple(
       title: "Alface 1",
       price: "10.0",
       image: ImageAssets.fruta,
       categoria: "Vegetais",
+      stock: 2,
     ),
     Produtos.simple(
       title: "Alface 2",
       price: "10.0",
       image: ImageAssets.fruta,
       categoria: "Vegetais",
+      stock: 1,
     ),
     Produtos.simple(
       title: "Alface 3",
       price: "10.0",
       image: ImageAssets.fruta,
       categoria: "Vegetais",
+      stock: 0,
     ),
   ];
 
@@ -102,6 +107,7 @@ class _MarketScreenState extends State<MarketScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Constants.primaryColor,
+        title: Text("Mercado", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -145,7 +151,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         );
                       },
                     );
-                  }).toList()
+                  })
                 else
                   Padding(
                     padding: const EdgeInsets.all(16),

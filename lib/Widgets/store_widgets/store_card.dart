@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/store.dart';
+import 'package:hellofarmer/Model/store.dart';
+
 
 class StoreCard extends StatelessWidget {
   final Store store;

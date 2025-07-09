@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
 import 'app_localizations_pt.dart';
 
 // ignore_for_file: type=lint
@@ -97,6 +98,7 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('es'),
+    Locale('fr'),
     Locale('pt'),
   ];
 
@@ -109,7 +111,7 @@ abstract class AppLocalizations {
   /// No description provided for @languageAndTranslations.
   ///
   /// In en, this message translates to:
-  /// **'Language and Translations'**
+  /// **'Languages and Translations'**
   String get languageAndTranslations;
 
   /// No description provided for @currentLanguage.
@@ -121,7 +123,7 @@ abstract class AppLocalizations {
   /// No description provided for @languageDescription.
   ///
   /// In en, this message translates to:
-  /// **'Select your preferred language for the interface and translations.'**
+  /// **'Select the preferred language for the interface and translations.'**
   String get languageDescription;
 
   /// No description provided for @portuguese.
@@ -141,6 +143,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Spanish'**
   String get spanish;
+
+  /// No description provided for @french.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get french;
 
   /// No description provided for @access.
   ///
@@ -175,13 +183,13 @@ abstract class AppLocalizations {
   /// No description provided for @darkTheme.
   ///
   /// In en, this message translates to:
-  /// **'Dark theme'**
+  /// **'Dark Theme'**
   String get darkTheme;
 
   /// No description provided for @appearanceDescription.
   ///
   /// In en, this message translates to:
-  /// **'Switch between light and dark mode for better visual experience.'**
+  /// **'Switch between light and dark mode for a better visual experience.'**
   String get appearanceDescription;
 
   /// No description provided for @notifications.
@@ -295,7 +303,7 @@ abstract class AppLocalizations {
   /// No description provided for @limitMessage.
   ///
   /// In en, this message translates to:
-  /// **'You\'ve used the app for {time} today!'**
+  /// **'You have used the app for {time} today!'**
   String limitMessage(Object time);
 
   /// No description provided for @ok.
@@ -373,8 +381,20 @@ abstract class AppLocalizations {
   /// No description provided for @cameraPermissionDescription.
   ///
   /// In en, this message translates to:
-  /// **'Allow access to camera'**
+  /// **'Allow access to the camera'**
   String get cameraPermissionDescription;
+
+  /// No description provided for @microphonePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone'**
+  String get microphonePermission;
+
+  /// No description provided for @microphonePermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow access to the microphone'**
+  String get microphonePermissionDescription;
 
   /// No description provided for @contactsPermission.
   ///
@@ -387,6 +407,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Allow access to your contacts'**
   String get contactsPermissionDescription;
+
+  /// No description provided for @reportErrors.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Errors'**
+  String get reportErrors;
+
+  /// No description provided for @describeProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the problem here...'**
+  String get describeProblem;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @thankYouReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for reporting the error!'**
+  String get thankYouReport;
 }
 
 class _AppLocalizationsDelegate
@@ -400,7 +450,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'es', 'pt'].contains(locale.languageCode);
+      <String>['en', 'es', 'fr', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -413,6 +463,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'es':
       return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
     case 'pt':
       return AppLocalizationsPt();
   }

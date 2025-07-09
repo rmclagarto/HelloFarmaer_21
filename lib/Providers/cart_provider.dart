@@ -1,6 +1,7 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/cart.dart';
-import 'package:projeto_cm/Model/produtos.dart';
+import 'package:hellofarmer/Model/cart.dart';
+import 'package:hellofarmer/Model/produtos.dart';
 
 class CartProvider with ChangeNotifier {
   

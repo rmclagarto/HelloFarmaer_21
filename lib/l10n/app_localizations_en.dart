@@ -12,14 +12,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTitle => 'Settings';
 
   @override
-  String get languageAndTranslations => 'Language and Translations';
+  String get languageAndTranslations => 'Languages and Translations';
 
   @override
   String get currentLanguage => 'Current Language';
 
   @override
   String get languageDescription =>
-      'Select your preferred language for the interface and translations.';
+      'Select the preferred language for the interface and translations.';
 
   @override
   String get portuguese => 'Portuguese';
@@ -29,6 +29,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get spanish => 'Spanish';
+
+  @override
+  String get french => 'French';
 
   @override
   String get access => 'Access';
@@ -46,11 +49,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appearance => 'Appearance';
 
   @override
-  String get darkTheme => 'Dark theme';
+  String get darkTheme => 'Dark Theme';
 
   @override
   String get appearanceDescription =>
-      'Switch between light and dark mode for better visual experience.';
+      'Switch between light and dark mode for a better visual experience.';
 
   @override
   String get notifications => 'Notifications';
@@ -109,7 +112,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String limitMessage(Object time) {
-    return 'You\'ve used the app for $time today!';
+    return 'You have used the app for $time today!';
   }
 
   @override
@@ -149,11 +152,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cameraPermission => 'Camera';
 
   @override
-  String get cameraPermissionDescription => 'Allow access to camera';
+  String get cameraPermissionDescription => 'Allow access to the camera';
+
+  @override
+  String get microphonePermission => 'Microphone';
+
+  @override
+  String get microphonePermissionDescription =>
+      'Allow access to the microphone';
 
   @override
   String get contactsPermission => 'Contacts';
 
   @override
   String get contactsPermissionDescription => 'Allow access to your contacts';
+
+  @override
+  String get reportErrors => 'Report Errors';
+
+  @override
+  String get describeProblem => 'Describe the problem here...';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get thankYouReport => 'Thank you for reporting the error!';
 }

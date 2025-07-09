@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Model/produtos.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/produtos.dart';
+
 
 
 class ProdutosStats extends StatelessWidget {

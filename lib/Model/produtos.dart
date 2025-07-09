@@ -54,6 +54,7 @@ class Produtos {
   String date;
   String description;
   String? categoria;
+  int? stock;
   Map<String, dynamic> stats;
 
   Produtos({
@@ -65,6 +66,7 @@ class Produtos {
     required this.description,
     required this.stats,
     this.categoria,
+    this.stock,
   });
 
 
@@ -73,6 +75,7 @@ class Produtos {
     required this.price,
     required this.image,
     this.categoria,
+    this.stock,
   }) : isAsset = true,
     date = '',
     description = '',

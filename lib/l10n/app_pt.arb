@@ -7,6 +7,7 @@
   "portuguese": "Português",
   "english": "Inglês",
   "spanish": "Espanhol",
+  "french": "Francês",
   "access": "Acessos",
   "managePermissions": "Gerir permissões",
   "open": "Abrir",
@@ -49,5 +50,10 @@
   "microphonePermission": "Microfone",
   "microphonePermissionDescription": "Permitir acesso ao microfone",
   "contactsPermission": "Contatos",
-  "contactsPermissionDescription": "Permitir acesso aos seus contatos"
+  "contactsPermissionDescription": "Permitir acesso aos seus contatos",
+  "reportErrors": "Reportar Erros",
+  "describeProblem": "Descreve o problema aqui...",
+  "cancel": "Cancelar",
+  "send": "Enviar",
+  "thankYouReport": "Obrigado por reportar o erro!"
 }

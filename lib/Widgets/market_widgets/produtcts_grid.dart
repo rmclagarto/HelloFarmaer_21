@@ -1,4 +1,6 @@
-import 'package:projeto_cm/Model/produtos.dart';
+
+import 'package:hellofarmer/Model/produtos.dart';
+
 
 import 'product_card.dart';
 import 'package:flutter/material.dart';

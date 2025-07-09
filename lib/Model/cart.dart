@@ -1,4 +1,7 @@
-import 'package:projeto_cm/Model/produtos.dart';
+
+
+
+import 'package:hellofarmer/Model/produtos.dart';
 
 class CartItem{
   final Produtos product;

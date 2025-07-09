@@ -1,8 +1,10 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Model/produtos.dart';
-import 'package:projeto_cm/Widgets/store_widgets/produtos/produtos_stats.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Widgets/store_widgets/produtos/produtos_stats.dart';
+
 
 class ProdutoCard extends StatelessWidget {
   final Produtos produto;

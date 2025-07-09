@@ -31,6 +31,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get spanish => 'Espanhol';
 
   @override
+  String get french => 'Francês';
+
+  @override
   String get access => 'Acessos';
 
   @override
@@ -152,9 +155,30 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cameraPermissionDescription => 'Permitir acesso à câmera';
 
   @override
+  String get microphonePermission => 'Microfone';
+
+  @override
+  String get microphonePermissionDescription => 'Permitir acesso ao microfone';
+
+  @override
   String get contactsPermission => 'Contatos';
 
   @override
   String get contactsPermissionDescription =>
       'Permitir acesso aos seus contatos';
+
+  @override
+  String get reportErrors => 'Reportar Erros';
+
+  @override
+  String get describeProblem => 'Descreve o problema aqui...';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get send => 'Enviar';
+
+  @override
+  String get thankYouReport => 'Obrigado por reportar o erro!';
 }

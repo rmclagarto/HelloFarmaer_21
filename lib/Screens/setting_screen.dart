@@ -1,10 +1,8 @@
-import 'package:projeto_cm/main.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/l10n/app_localizations.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/l10n/app_localizations.dart';
+import 'package:hellofarmer/main.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-
 
 class SettingsScreen extends StatefulWidget {
   final bool isDarkTheme;
@@ -22,26 +20,23 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
-  // bool _timeManagementEnabled = false;
   String _selectedLanguage = 'pt';
 
   DateTime? _entradaApp;
   Duration _tempoTotal = Duration.zero;
-  bool _limiteAtivo = false;
-  int _limiteMinutos = 60;
+  final bool _limiteAtivo = false;
+  final int _limiteMinutos = 60;
 
   bool _gpsEnabled = false;
   bool _galleryEnabled = false;
   bool _cameraEnabled = false;
-  // bool _microphoneEnabled = false;
   bool _contactsEnabled = false;
 
   Future<void> _checkPermissions() async {
-    final gpsStatus = await Permission.location.status;
-    final galleryStatus = await Permission.photos.status;
-    final cameraStatus = await Permission.camera.status;
-    // final microphoneStatus = await Permission.microphone.status;
-    final contactStatus = await Permission.contacts.status;
+    await Permission.location.status;
+    await Permission.photos.status;
+    await Permission.camera.status;
+    await Permission.contacts.status;
   }
 
   @override
@@ -65,20 +60,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return '${duracao.inHours}h ${duracao.inMinutes.remainder(60)}min';
   }
 
-  // void _changeLanguage(String? languageCode) {
-  //   if (languageCode == null) return;
-
-  //   setState(() {
-  //     _selectedLanguage = languageCode;
-  //   });
-  // }
-
   Future<void> _requestPermission(
     Permission permission,
-    Function(bool) setStateCallbeck,
+    Function(bool) setStateCallback,
   ) async {
     final status = await permission.request();
-    setStateCallbeck(status.isGranted);
+    setStateCallback(status.isGranted);
 
     if (!status.isGranted && status.isPermanentlyDenied) {
       await openAppSettings();
@@ -95,17 +82,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder:
-              (ctx) => AlertDialog(
-                title: Text(l10n.limitReached),
-                content: Text(l10n.limitMessage(_formatarTempo(_tempoTotal))),
-                actions: [
-                  TextButton(
-                    child: const Text("OK"),
-                    onPressed: () => Navigator.pop(ctx),
-                  ),
-                ],
+          builder: (ctx) => AlertDialog(
+            title: Text(l10n.limitReached),
+            content: Text(l10n.limitMessage(_formatarTempo(_tempoTotal))),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () => Navigator.pop(ctx),
               ),
+            ],
+          ),
         );
       }
     });
@@ -118,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           l10n.settingsTitle,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -140,8 +126,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   value: _selectedLanguage,
                   items: [
                     DropdownMenuItem(value: 'pt', child: Text(l10n.portuguese)),
-                    DropdownMenuItem(value: 'en', child: Text(l10n.english)),
                     DropdownMenuItem(value: 'es', child: Text(l10n.spanish)),
+                    DropdownMenuItem(value: 'en', child: Text(l10n.english)),
+                    DropdownMenuItem(value: 'fr', child: Text(l10n.french)),
                   ],
                   onChanged: (value) {
                     setState(() {
@@ -154,10 +141,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                 child: Text(
                   l10n.languageDescription,
                   style: TextStyle(color: Colors.grey[600]),
@@ -173,42 +157,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: Text(l10n.gpsPermission),
                 subtitle: Text(l10n.gpsPermissionDescription),
                 value: _gpsEnabled,
-                onChanged:
-                    (value) => _requestPermission(
-                      Permission.location,
-                      (enabled) => setState(() => _gpsEnabled = enabled),
-                    ),
+                onChanged: (value) => _requestPermission(
+                  Permission.location,
+                  (enabled) => setState(() => _gpsEnabled = enabled),
+                ),
               ),
               SwitchListTile(
                 title: Text(l10n.galleryPermission),
                 subtitle: Text(l10n.galleryPermissionDescription),
                 value: _galleryEnabled,
-
-                onChanged:
-                    (value) => _requestPermission(
-                      Permission.photos,
-                      (enabled) => setState(() => _galleryEnabled = enabled),
-                    ),
+                onChanged: (value) => _requestPermission(
+                  Permission.photos,
+                  (enabled) => setState(() => _galleryEnabled = enabled),
+                ),
               ),
               SwitchListTile(
                 title: Text(l10n.cameraPermission),
                 subtitle: Text(l10n.cameraPermissionDescription),
                 value: _cameraEnabled,
-                onChanged:
-                    (value) => _requestPermission(
-                      Permission.camera,
-                      (enabled) => setState(() => _cameraEnabled = enabled),
-                    ),
+                onChanged: (value) => _requestPermission(
+                  Permission.camera,
+                  (enabled) => setState(() => _cameraEnabled = enabled),
+                ),
               ),
               SwitchListTile(
                 title: Text(l10n.contactsPermission),
                 subtitle: Text(l10n.contactsPermissionDescription),
                 value: _contactsEnabled,
-                onChanged:
-                    (value) => _requestPermission(
-                      Permission.contacts,
-                      (enabled) => setState(() => _contactsEnabled = enabled),
-                    ),
+                onChanged: (value) => _requestPermission(
+                  Permission.contacts,
+                  (enabled) => setState(() => _contactsEnabled = enabled),
+                ),
               ),
             ],
           ),
@@ -223,7 +202,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 activeTrackColor: Colors.grey[400],
                 inactiveThumbColor: Colors.grey,
                 inactiveTrackColor: Colors.grey[400],
-
                 onChanged: (value) {
                   setState(() {
                     themeNotifier.value =
@@ -232,10 +210,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
                   l10n.appearanceDescription,
                   style: TextStyle(color: Colors.grey[600]),
@@ -258,30 +233,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               if (_notificationsEnabled)
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
                     l10n.notificationsDescription,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ),
-            ],
-          ),
-          ExpansionTile(
-            leading: const Icon(Icons.timeline, color: Colors.green),
-            title: Text(l10n.myActivity),
-            children: [
-              ListTile(
-                title: Text(l10n.activitySummary),
-                subtitle: Text(l10n.last7Days),
-                onTap: () {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(l10n.viewActivity)));
-                },
-              ),
             ],
           ),
           ExpansionTile(
@@ -298,53 +255,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ],
           ),
-          ExpansionTile(
-            leading: const Icon(Icons.comment, color: Colors.teal),
-            title: Text(l10n.commentHistory),
-            children: [
-              ListTile(
-                title: Text(l10n.commentsMade),
-                onTap: () {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(l10n.viewComments)));
+
+          // BOTÃO PARA REPORTAR ERROS
+          ListTile(
+            leading: const Icon(Icons.bug_report, color: Colors.redAccent),
+            title: Text(l10n.reportErrors),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) {
+                  TextEditingController reportController = TextEditingController();
+                  return AlertDialog(
+                    title: Text(l10n.reportErrors),
+                    content: TextField(
+                      controller: reportController,
+                      maxLines: 4,
+                      decoration: InputDecoration(
+                        hintText: l10n.describeProblem,
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text(l10n.cancel),
+                        onPressed: () => Navigator.of(ctx).pop(),
+                      ),
+                      ElevatedButton(
+                        child: Text(l10n.send),
+                        onPressed: () {
+                          final reportText = reportController.text.trim();
+                          if (reportText.isNotEmpty) {
+                            Navigator.of(ctx).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.thankYouReport)),
+                            );
+                            // Aqui podes adicionar lógica para enviar o texto para backend/email/etc
+                          }
+                        },
+                      ),
+                    ],
+                  );
                 },
-              ),
-            ],
-          ),
-          ExpansionTile(
-            leading: const Icon(Icons.timer, color: Colors.indigo),
-            title: Text(l10n.timeManagement),
-            children: [
-              ListTile(
-                title: Text(l10n.totalTimeToday),
-                subtitle: Text(_formatarTempo(_tempoTotal)),
-              ),
-              SwitchListTile(
-                title: Text(l10n.enableLimit),
-                value: _limiteAtivo,
-                onChanged: (valor) {
-                  setState(() => _limiteAtivo = valor);
-                },
-              ),
-              if (_limiteAtivo)
-                ListTile(
-                  title: Text(l10n.setLimit),
-                  trailing: DropdownButton<int>(
-                    value: _limiteMinutos,
-                    items:
-                        [1, 30, 60, 90, 120].map((min) {
-                          return DropdownMenuItem(
-                            value: min,
-                            child: Text('$min min'),
-                          );
-                        }).toList(),
-                    onChanged: (val) {
-                      setState(() => _limiteMinutos = val!);
-                    },
-                  ),
-                ),
-            ],
+              );
+            },
           ),
         ],
       ),

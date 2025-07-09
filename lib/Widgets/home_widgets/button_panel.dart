@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
+import 'package:hellofarmer/Core/constants.dart';
+
 
 class BottomPanel extends StatelessWidget {
   final List<String> ads;

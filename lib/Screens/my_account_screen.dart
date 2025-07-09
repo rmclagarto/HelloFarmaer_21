@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/custom_user.dart';
-import 'package:projeto_cm/l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart'; // NOVO
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/l10n/app_localizations.dart';
 
 class MyAccountScreen extends StatefulWidget {
   final CustomUser user;
@@ -14,171 +17,214 @@ class MyAccountScreen extends StatefulWidget {
 class _MyAccountScreenState extends State<MyAccountScreen> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
-  
+  late TextEditingController _passwordController;
+  bool _obscurePassword = true;
+
+  File? _selectedImage; // NOVO
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.user.name);
     _emailController = TextEditingController(text: widget.user.email);
+    _passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  void _saveChanges() {
-    // Lógica para salvar alterações
-    print('Salvar nome: ${_nameController.text}');
+  void _togglePasswordVisibility() {
+    setState(() => _obscurePassword = !_obscurePassword);
+  }
+
+  // NOVO: Selecionar imagem da galeria
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+
+      // Aqui você pode fazer upload da imagem para o servidor, se quiser
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title:  Text(l10n.myAccountTitle),
+        title: Text(
+          l10n.myAccountTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Constants.primaryColor,
         centerTitle: true,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon:  Icon(Icons.check),
-            onPressed: _saveChanges,
-            tooltip: l10n.saveChanges,
-          ),
-        ],
+        elevation: 2,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
           children: [
-            // Seção do Avatar
+            // Avatar com botão editar
             Center(
               child: Stack(
+                alignment: Alignment.bottomRight,
                 children: [
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 3,
-                      ),
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/img/user_photo.jpg',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
-                          Icon(Icons.person, size: 60, color: Colors.grey[400]),
-                      ),
-                    ),
+                  CircleAvatar(
+                    radius: 60,
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(_selectedImage!)
+                        : const AssetImage('assets/img/user_photo.jpg') as ImageProvider,
                   ),
                   Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.edit, size: 20, color: Colors.white),
-                        onPressed: () {
-                          // Alterar foto
-                        },
+                    bottom: 4,
+                    right: 4,
+                    child: GestureDetector(
+                      onTap: _pickImage,
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Constants.primaryColor,
+                        child: const Icon(Icons.edit, color: Colors.white, size: 20),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+
             const SizedBox(height: 32),
 
-            // Formulário de dados
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: Colors.grey.shade200,
-                  width: 1,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: l10n.name,
-                        prefixIcon: Icon(Icons.person, color: Colors.grey[600]),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _emailController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: l10n.email,
-                        prefixIcon: Icon(Icons.email, color: Colors.grey[600]),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            // Campos nome, email, senha...
+            TextFormField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: l10n.name,
+                prefixIcon: Icon(Icons.person, color: Constants.primaryColor),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
-            // Botões de ação
+            TextFormField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: l10n.email,
+                prefixIcon: Icon(Icons.email, color: Constants.primaryColor),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 20),
+
+            TextFormField(
+              controller: _passwordController,
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
+                labelText: "l10n.password",
+                prefixIcon: Icon(Icons.lock, color: Constants.primaryColor),
+                suffixIcon: IconButton(
+                  icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                  onPressed: _togglePasswordVisibility,
+                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // Seções: mensagens, avaliações, encomendas
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildMenuIcon(icon: Icons.message, label: 'Mensagens', onTap: () {}),
+                _buildMenuIcon(icon: Icons.star, label: 'Avaliações', onTap: () {}),
+                _buildMenuIcon(icon: Icons.shopping_bag, label: 'Encomendas', onTap: () {}),
+              ],
+            ),
+
+            const SizedBox(height: 40),
+
+            // Botões: Histórico e Moradas
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.history, color: Colors.white),
+                    label: const Text('Histórico', style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Constants.primaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.location_on, color: Colors.white),
+                    label: const Text('Moradas', style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Constants.primaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 40),
+
+            // Botão para encerrar conta
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                icon: const Icon(Icons.lock_outline),
-                label: Text(l10n.changePassword),
-                onPressed: () {
-                  // Abrir tela para alterar senha
-                },
+                onPressed: () {},
+                icon: Icon(Icons.delete_outline, color: Colors.red.shade700),
+                label: Text('Encerrar Conta',
+                    style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold)),
                 style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.red.shade700),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: TextButton.icon(
-                icon: const Icon(Icons.delete_outline, color: Colors.red),
-                label:  Text(l10n.deleteAccount, style: TextStyle(color: Colors.red)),
-                onPressed: () {
-                  // Excluir conta
-                },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMenuIcon({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 28,
+            backgroundColor: Constants.primaryColor,
+            child: Icon(icon, size: 32, color: Colors.white),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+        ],
       ),
     );
   }

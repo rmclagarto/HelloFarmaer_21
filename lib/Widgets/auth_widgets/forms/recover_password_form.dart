@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/routes.dart';
-import 'package:projeto_cm/Core/constants.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/routes.dart' show Routes;
+
 
 
 class RecoverPasswordForm extends StatefulWidget {

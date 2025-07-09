@@ -1,7 +1,9 @@
 // category_horizontal_list.dart
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/produtos.dart';
-import 'package:projeto_cm/Widgets/market_widgets/product_card.dart';
+import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';
+
 
 class CategoryHorizontalList extends StatelessWidget {
   final String categoryName;

@@ -1,11 +1,13 @@
 import 'dart:math';
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Services/accelarometer_service.dart';
+import 'package:hellofarmer/Services/location_service.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Services/location_service.dart';
-import 'package:projeto_cm/Services/accelarometer_service.dart';
+
 
 
 class MapWidget extends StatefulWidget {

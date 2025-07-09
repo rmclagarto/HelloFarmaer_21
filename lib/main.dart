@@ -1,12 +1,12 @@
-import 'package:projeto_cm/Providers/cart_provider.dart';
-import 'package:projeto_cm/Services/notification_service.dart';
-import 'package:provider/provider.dart';
-
-import 'firebase_options.dart';
-import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:projeto_cm/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:hellofarmer/Core/routes.dart';
+import 'package:hellofarmer/Providers/cart_provider.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Services/notification_service.dart';
+import 'package:hellofarmer/firebase_options.dart';
+import 'package:hellofarmer/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
@@ -34,29 +34,31 @@ class MainApp extends StatelessWidget {
             return MultiProvider(
               providers: [
                 ChangeNotifierProvider(create: (_) => CartProvider()),
+                ChangeNotifierProvider(create: (_) => UserProvider()),
               ],
-          child: MaterialApp(
-              theme: ThemeData.light(),
-              darkTheme: ThemeData.dark(),
-              themeMode: currentMode,
+              child: MaterialApp(
+                theme: ThemeData.light(),
+                darkTheme: ThemeData.dark(),
+                themeMode: currentMode,
 
-              locale: currentLocale,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
+                locale: currentLocale,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
 
-              supportedLocales: const [
-                Locale('en'),
-                Locale('pt'),
-                Locale('es'),
-              ],
+                supportedLocales: const [
+                  Locale('en'),
+                  Locale('pt'),
+                  Locale('fr'),
+                  Locale('es'),
+                ],
 
-              routes: Routes.routes,
-              initialRoute: Routes.splash,
-            ),
+                routes: Routes.routes,
+                initialRoute: Routes.splash,
+              ),
             );
           },
         );

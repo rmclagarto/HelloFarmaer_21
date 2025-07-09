@@ -1,12 +1,10 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Model/cart.dart';
-
-
-import 'package:projeto_cm/Screens/market_screens/checkout_screen.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/cart.dart';
+import 'package:hellofarmer/Screens/market_screens/checkout_screen.dart';
 
 class CartTotalWidget extends StatelessWidget {
-  
   final List<CartItem> cartItems;
   final double subtotal;
 
@@ -38,8 +36,6 @@ class CartTotalWidget extends StatelessWidget {
       child: Column(
         children: [
           _buildSubtotal(subtotal),
-          const SizedBox(height: 8),
-          _buildDiscount(discount),
           const SizedBox(height: 12),
           const Divider(height: 1),
           const SizedBox(height: 12),
@@ -54,11 +50,6 @@ class CartTotalWidget extends StatelessWidget {
   // Widget para Subtotal
   Widget _buildSubtotal(double value) {
     return _buildTotalRow('Subtotal:', value);
-  }
-
-  // Widget para Desconto
-  Widget _buildDiscount(double discount) {
-    return _buildTotalRow('Discount (40%):', -discount, isDiscount: true);
   }
 
   // Widget para Total
@@ -79,13 +70,23 @@ class CartTotalWidget extends StatelessWidget {
           ),
         ),
         onPressed: () {
+          if (cartItems.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'O carrinho está vazio. Adicione produtos antes de continuar.',
+                ),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CheckoutScreen(
-                cartItems: cartItems, 
-                subtotal: subtotal
-              ),
+              builder:
+                  (context) =>
+                      CheckoutScreen(cartItems: cartItems, subtotal: subtotal),
             ),
           );
         },
@@ -101,8 +102,12 @@ class CartTotalWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTotalRow(String label, double value,
-      {bool isDiscount = false, bool isTotal = false}) {
+  Widget _buildTotalRow(
+    String label,
+    double value, {
+    bool isDiscount = false,
+    bool isTotal = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -121,9 +126,10 @@ class CartTotalWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 18 : 15,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isDiscount
-                  ? Colors.red
-                  : (isTotal ? Constants.primaryColor : Colors.black),
+              color:
+                  isDiscount
+                      ? Colors.red
+                      : (isTotal ? Constants.primaryColor : Colors.black),
             ),
           ),
         ],

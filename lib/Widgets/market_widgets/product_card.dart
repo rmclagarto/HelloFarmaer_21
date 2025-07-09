@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Model/produtos.dart';
-import 'package:projeto_cm/Providers/cart_provider.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Providers/cart_provider.dart';
+import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
+
 import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
@@ -19,6 +21,7 @@ class ProductCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () {
           // Navegar para detalhes do produto
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product)));
         },
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -30,7 +33,7 @@ class ProductCard extends StatelessWidget {
                 height: 80,
                 alignment: Alignment.center,
                 child: Image.asset(
-                  ImageAssets.fruta,
+                  product.image,
                   width: 80,
                   fit: BoxFit.cover,
                 ),

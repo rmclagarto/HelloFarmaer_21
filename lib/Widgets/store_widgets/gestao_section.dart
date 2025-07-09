@@ -1,10 +1,12 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/store.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Widgets/store_widgets/analise_dados_section.dart';
-import 'package:projeto_cm/Widgets/store_widgets/produtos/produtos_section.dart';
-import 'package:projeto_cm/Widgets/store_widgets/clientes/clientes_section.dart';
-import 'package:projeto_cm/Widgets/store_widgets/ecomendas/encomendas_section.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Widgets/store_widgets/analise_dados_section.dart';
+import 'package:hellofarmer/Widgets/store_widgets/clientes/clientes_section.dart';
+import 'package:hellofarmer/Widgets/store_widgets/ecomendas/encomendas_section.dart';
+import 'package:hellofarmer/Widgets/store_widgets/produtos/produtos_section.dart';
+
 
 
 class GestaoSection extends StatelessWidget {

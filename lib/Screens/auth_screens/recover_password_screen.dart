@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Core/image_assets.dart';
-import 'package:projeto_cm/Widgets/auth_widgets/forms/recover_password_form.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Widgets/auth_widgets/forms/recover_password_form.dart';
+
 
 class RecoverPasswordScreen extends StatefulWidget {
   const RecoverPasswordScreen({super.key});

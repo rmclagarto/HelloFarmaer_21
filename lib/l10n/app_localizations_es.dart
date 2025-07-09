@@ -19,7 +19,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageDescription =>
-      'Seleccione su idioma preferido para la interfaz y traducciones.';
+      'Seleccione el idioma preferido para la interfaz y las traducciones.';
 
   @override
   String get portuguese => 'Portugués';
@@ -29,6 +29,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get spanish => 'Español';
+
+  @override
+  String get french => 'Francés';
 
   @override
   String get access => 'Accesos';
@@ -60,7 +63,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get notificationsDescription =>
-      'Aquí aparecerán configuraciones detalladas de notificaciones.';
+      'Aquí vendrán las configuraciones detalladas de notificaciones.';
 
   @override
   String get myActivity => 'Mi Actividad';
@@ -102,18 +105,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get enableLimit => 'Activar límite';
 
   @override
-  String get setLimit => 'Establecer límite (minutos)';
+  String get setLimit => 'Definir límite (minutos)';
 
   @override
   String get limitReached => 'Límite Alcanzado';
 
   @override
   String limitMessage(Object time) {
-    return '¡Has usado la aplicación por $time hoy!';
+    return '¡Has usado la app por $time hoy!';
   }
 
   @override
-  String get ok => 'Aceptar';
+  String get ok => 'OK';
 
   @override
   String get myAccountTitle => 'Mi Cuenta';
@@ -131,7 +134,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get name => 'Nombre';
 
   @override
-  String get email => 'Correo Electrónico';
+  String get email => 'Correo electrónico';
 
   @override
   String get gpsPermission => 'Ubicación (GPS)';
@@ -152,8 +155,29 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cameraPermissionDescription => 'Permitir acceso a la cámara';
 
   @override
+  String get microphonePermission => 'Micrófono';
+
+  @override
+  String get microphonePermissionDescription => 'Permitir acceso al micrófono';
+
+  @override
   String get contactsPermission => 'Contactos';
 
   @override
   String get contactsPermissionDescription => 'Permitir acceso a tus contactos';
+
+  @override
+  String get reportErrors => 'Reportar Errores';
+
+  @override
+  String get describeProblem => 'Describe el problema aquí...';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get send => 'Enviar';
+
+  @override
+  String get thankYouReport => '¡Gracias por reportar el error!';
 }

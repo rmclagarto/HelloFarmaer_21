@@ -10,4 +10,6 @@ class ImageAssets {
   static const String quinta = "assets/img/quinta.jpg";
   static const String produto = "assets/img/baldeZinco.jpg";
   static const String fruta = "assets/img/fruta.jpg";
+
+   static const String alface = "assets/img/alface.png";
 }

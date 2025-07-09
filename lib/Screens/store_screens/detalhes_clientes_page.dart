@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Model/custom_user.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/custom_user.dart';
+
 
 class DetalhesClientePage extends StatelessWidget {
   final CustomUser cliente;

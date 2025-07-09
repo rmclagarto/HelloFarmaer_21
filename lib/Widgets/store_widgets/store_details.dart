@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/store.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Core/image_assets.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Model/store.dart';
+
 
 class StoreDetails extends StatelessWidget {
   final Store store;

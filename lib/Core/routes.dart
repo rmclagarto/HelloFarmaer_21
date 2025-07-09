@@ -1,13 +1,15 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/custom_user.dart';
-import 'package:projeto_cm/Screens/splash_screen.dart';
-import 'package:projeto_cm/Screens/setting_screen.dart';
-import 'package:projeto_cm/Screens/my_account_screen.dart';
-import 'package:projeto_cm/Screens/home_screen/home_screen.dart';
-import 'package:projeto_cm/Screens/auth_screens/login_screen.dart';
-import 'package:projeto_cm/Screens/auth_screens/register_screen.dart';
-import 'package:projeto_cm/Screens/ad_screens/publicar_anuncio_screnn.dart';
-import 'package:projeto_cm/Screens/auth_screens/recover_password_screen.dart';
+import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Screens/ad_screens/publicar_anuncio_screnn.dart';
+import 'package:hellofarmer/Screens/auth_screens/login_screen.dart';
+import 'package:hellofarmer/Screens/auth_screens/recover_password_screen.dart';
+import 'package:hellofarmer/Screens/auth_screens/register_screen.dart';
+import 'package:hellofarmer/Screens/home_screen/home_screen.dart';
+import 'package:hellofarmer/Screens/my_account_screen.dart';
+import 'package:hellofarmer/Screens/setting_screen.dart';
+import 'package:hellofarmer/Screens/splash_screen.dart';
+
 
 
 

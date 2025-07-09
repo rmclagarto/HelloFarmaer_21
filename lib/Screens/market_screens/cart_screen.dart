@@ -1,9 +1,12 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Providers/cart_provider.dart';
-import 'package:projeto_cm/Widgets/market_widgets/cart/cart_item_widget.dart';
-import 'package:projeto_cm/Widgets/market_widgets/cart/cart_total_widget.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Providers/cart_provider.dart';
+import 'package:hellofarmer/Widgets/market_widgets/cart/cart_item_widget.dart';
+import 'package:hellofarmer/Widgets/market_widgets/cart/cart_total_widget.dart';
 import 'package:provider/provider.dart';
+
+
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});

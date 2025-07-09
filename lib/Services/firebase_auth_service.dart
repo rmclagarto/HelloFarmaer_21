@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/custom_user.dart';
+
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:hellofarmer/Model/custom_user.dart';
 
 class FirebaseAuthService {
   final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;

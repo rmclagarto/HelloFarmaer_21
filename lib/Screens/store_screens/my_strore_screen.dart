@@ -1,12 +1,11 @@
 // main_store.dart
+
 import 'package:flutter/material.dart';
-import 'package:projeto_cm/Model/store.dart';
-import 'package:projeto_cm/Core/constants.dart';
-import 'package:projeto_cm/Model/conversa.dart';
-import 'package:projeto_cm/Model/menssagens.dart';
-import 'package:projeto_cm/Widgets/store_widgets/store_details.dart';
-import 'package:projeto_cm/Widgets/store_widgets/gestao_section.dart';
-import 'package:projeto_cm/Screens/store_screens/lista_conversas_screen.dart';
+import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Widgets/store_widgets/gestao_section.dart';
+import 'package:hellofarmer/Widgets/store_widgets/store_details.dart';
+
 
 class MainStoreScreen extends StatefulWidget {
   final Store loja;
@@ -41,36 +40,6 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
       _currentIndex = index;
     });
 
-    if (index == 2) {
-    // Lista de conversas aqui mesmo
-    final List<Conversa> conversas = [
-      Conversa(
-        id: '1',
-        title: 'João Silva',
-        unreadCount: 0,
-        messages: [
-          Message(sender: 'João', text: 'Oi, preciso de ajuda', time: DateTime.now().subtract(Duration(minutes: 5))),
-          Message(sender: 'Suporte', text: 'Claro, em que posso ajudar?', time: DateTime.now()),
-        ],
-      ),
-      Conversa(
-        id: '2',
-        title: 'Maria Oliveira',
-        unreadCount: 1,
-        messages: [
-          Message(sender: 'Maria', text: 'Meu pedido atrasou', time: DateTime.now().subtract(Duration(hours: 1))),
-        ],
-      ),
-    ];
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ListaConversasScreen(conversas: conversas),
-      ),
-    );
-    return;
-  }
   
     // Scroll para as seções normais
     final sectionContext = _sectionsKeys[index].currentContext;
@@ -201,26 +170,6 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
                 isActive: _currentIndex == 1,
                 onPressed: () => _scrollToSection(1),
               ),
-              // _buildNavButton(
-              //   icon: Icons.support_agent,
-              //   label: "Suporte",
-              //   isActive: _currentIndex == 2,
-              //   onPressed: () => _scrollToSection(2),
-              // ),
-
-              // _buildNavButton(
-              //   icon:Icons.shopping_cart,
-              //   label: "Vender",
-              //   isActive: _currentIndex == 2,
-              //   onPressed: () => _scrollToSection(2),
-              // ),
-
-              // _buildNavButton(
-              //   icon:Icons.shopping_bag,
-              //   label: "Produtos",
-              //   isActive: _currentIndex == 3,
-              //   onPressed: () => _scrollToSection(3),
-              // ),
             ],
           ),
         ),
