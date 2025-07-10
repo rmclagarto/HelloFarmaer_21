@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/cart.dart';
+import 'package:hellofarmer/Model/cart_item.dart';
 import 'package:hellofarmer/Services/notification_service.dart';
 
 
@@ -255,10 +255,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           final codigoPedido = gerarCodigoPedido();
           await mostrarNotificacao(codigoPedido.toString(), context);
 
-          // Aqui você pode enviar o pedido para o backend ou navegar para uma tela de sucesso
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Pedido finalizado com sucesso!')),
-          );
+
+          widget.cartItems.clear();
+
+          Navigator.pop(context);
         },
         child: const Text(
           'Finalizar Pedido',

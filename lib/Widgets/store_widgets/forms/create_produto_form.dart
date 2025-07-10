@@ -220,7 +220,7 @@ class ProdutoFormState extends State<ProdutoForm> {
       value: _selectedCategory,
       hint: Text('Escolha uma categoria'),
       items:
-          ['Frutas', 'Legumes', 'Cereais', 'Laticínios']
+          ['Vegetais','Frutas']
               .map(
                 (category) =>
                     DropdownMenuItem(value: category, child: Text(category)),

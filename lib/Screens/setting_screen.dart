@@ -22,11 +22,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
   String _selectedLanguage = 'pt';
 
-  DateTime? _entradaApp;
-  Duration _tempoTotal = Duration.zero;
-  final bool _limiteAtivo = false;
-  final int _limiteMinutos = 60;
-
   bool _gpsEnabled = false;
   bool _galleryEnabled = false;
   bool _cameraEnabled = false;
@@ -42,22 +37,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _entradaApp = DateTime.now();
   }
 
   @override
   void dispose() {
-    if (_entradaApp != null) {
-      final tempoSessao = DateTime.now().difference(_entradaApp!);
-      setState(() {
-        _tempoTotal += tempoSessao;
-      });
-    }
     super.dispose();
-  }
-
-  String _formatarTempo(Duration duracao) {
-    return '${duracao.inHours}h ${duracao.inMinutes.remainder(60)}min';
   }
 
   Future<void> _requestPermission(
@@ -77,25 +61,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final isDarkTheme = themeNotifier.value == ThemeMode.dark;
     final l10n = AppLocalizations.of(context)!;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_limiteAtivo && _tempoTotal.inMinutes >= _limiteMinutos) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (ctx) => AlertDialog(
-            title: Text(l10n.limitReached),
-            content: Text(l10n.limitMessage(_formatarTempo(_tempoTotal))),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () => Navigator.pop(ctx),
-              ),
-            ],
-          ),
-        );
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Constants.primaryColor,
@@ -104,7 +69,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           l10n.settingsTitle,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -141,7 +109,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8,
+                ),
                 child: Text(
                   l10n.languageDescription,
                   style: TextStyle(color: Colors.grey[600]),
@@ -157,37 +128,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: Text(l10n.gpsPermission),
                 subtitle: Text(l10n.gpsPermissionDescription),
                 value: _gpsEnabled,
-                onChanged: (value) => _requestPermission(
-                  Permission.location,
-                  (enabled) => setState(() => _gpsEnabled = enabled),
-                ),
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.location,
+                      (enabled) => setState(() => _gpsEnabled = enabled),
+                    ),
               ),
               SwitchListTile(
                 title: Text(l10n.galleryPermission),
                 subtitle: Text(l10n.galleryPermissionDescription),
                 value: _galleryEnabled,
-                onChanged: (value) => _requestPermission(
-                  Permission.photos,
-                  (enabled) => setState(() => _galleryEnabled = enabled),
-                ),
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.photos,
+                      (enabled) => setState(() => _galleryEnabled = enabled),
+                    ),
               ),
               SwitchListTile(
                 title: Text(l10n.cameraPermission),
                 subtitle: Text(l10n.cameraPermissionDescription),
                 value: _cameraEnabled,
-                onChanged: (value) => _requestPermission(
-                  Permission.camera,
-                  (enabled) => setState(() => _cameraEnabled = enabled),
-                ),
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.camera,
+                      (enabled) => setState(() => _cameraEnabled = enabled),
+                    ),
               ),
               SwitchListTile(
                 title: Text(l10n.contactsPermission),
                 subtitle: Text(l10n.contactsPermissionDescription),
                 value: _contactsEnabled,
-                onChanged: (value) => _requestPermission(
-                  Permission.contacts,
-                  (enabled) => setState(() => _contactsEnabled = enabled),
-                ),
+                onChanged:
+                    (value) => _requestPermission(
+                      Permission.contacts,
+                      (enabled) => setState(() => _contactsEnabled = enabled),
+                    ),
               ),
             ],
           ),
@@ -210,7 +185,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 child: Text(
                   l10n.appearanceDescription,
                   style: TextStyle(color: Colors.grey[600]),
@@ -233,7 +211,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               if (_notificationsEnabled)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: Text(
                     l10n.notificationsDescription,
                     style: TextStyle(color: Colors.grey[600]),
@@ -241,21 +222,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
             ],
           ),
-          ExpansionTile(
-            leading: const Icon(Icons.shopping_cart, color: Colors.purple),
-            title: Text(l10n.purchaseHistory),
-            children: [
-              ListTile(
-                title: Text(l10n.viewFullHistory),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.viewPurchaseHistory)),
-                  );
-                },
-              ),
-            ],
-          ),
-
           // BOTÃO PARA REPORTAR ERROS
           ListTile(
             leading: const Icon(Icons.bug_report, color: Colors.redAccent),
@@ -264,7 +230,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               showDialog(
                 context: context,
                 builder: (ctx) {
-                  TextEditingController reportController = TextEditingController();
+                  TextEditingController reportController =
+                      TextEditingController();
                   return AlertDialog(
                     title: Text(l10n.reportErrors),
                     content: TextField(
@@ -272,7 +239,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       maxLines: 4,
                       decoration: InputDecoration(
                         hintText: l10n.describeProblem,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                     ),
                     actions: [
@@ -289,7 +258,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(l10n.thankYouReport)),
                             );
-                            // Aqui podes adicionar lógica para enviar o texto para backend/email/etc
                           }
                         },
                       ),

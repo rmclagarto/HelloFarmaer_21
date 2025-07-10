@@ -1,6 +1,3 @@
-
-
-
 import 'package:hellofarmer/Model/produtos.dart';
 
 class CartItem{
@@ -27,9 +24,8 @@ class CartItem{
     };
   }
 
-  // Método para converter preço string em double
+
   double _parsePrice(String priceStr) {
-    // Remove símbolos e converte vírgula em ponto
     final numericString = priceStr
         .replaceAll('€', '')
         .replaceAll(',', '.')

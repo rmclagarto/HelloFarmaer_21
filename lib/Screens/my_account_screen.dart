@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // NOVO
+import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/l10n/app_localizations.dart';
@@ -20,7 +21,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   late TextEditingController _passwordController;
   bool _obscurePassword = true;
 
-  File? _selectedImage; // NOVO
+  File? _selectedImage;
 
   @override
   void initState() {
@@ -64,11 +65,15 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
       appBar: AppBar(
         title: Text(
           l10n.myAccountTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Constants.primaryColor,
         centerTitle: true,
         elevation: 2,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -82,10 +87,16 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                   CircleAvatar(
                     radius: 60,
                     backgroundColor: Colors.grey[200],
-                    backgroundImage: _selectedImage != null
-                        ? FileImage(_selectedImage!)
-                        : const AssetImage('assets/img/user_photo.jpg') as ImageProvider,
+                    backgroundImage:
+                        _selectedImage != null
+                            ? FileImage(_selectedImage!)
+                            : null,
+                    child:
+                        _selectedImage == null
+                            ? Image.asset('assets/img/AgricultorAvatar.jpg')
+                            : null,
                   ),
+
                   Positioned(
                     bottom: 4,
                     right: 4,
@@ -94,7 +105,11 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                       child: CircleAvatar(
                         radius: 20,
                         backgroundColor: Constants.primaryColor,
-                        child: const Icon(Icons.edit, color: Colors.white, size: 20),
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -110,7 +125,9 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
               decoration: InputDecoration(
                 labelText: l10n.name,
                 prefixIcon: Icon(Icons.person, color: Constants.primaryColor),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -120,7 +137,9 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
               decoration: InputDecoration(
                 labelText: l10n.email,
                 prefixIcon: Icon(Icons.email, color: Constants.primaryColor),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               keyboardType: TextInputType.emailAddress,
             ),
@@ -133,10 +152,14 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 labelText: "l10n.password",
                 prefixIcon: Icon(Icons.lock, color: Constants.primaryColor),
                 suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
                   onPressed: _togglePasswordVisibility,
                 ),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
 
@@ -146,9 +169,21 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildMenuIcon(icon: Icons.message, label: 'Mensagens', onTap: () {}),
-                _buildMenuIcon(icon: Icons.star, label: 'Avaliações', onTap: () {}),
-                _buildMenuIcon(icon: Icons.shopping_bag, label: 'Encomendas', onTap: () {}),
+                _buildMenuIcon(
+                  icon: Icons.message,
+                  label: 'Mensagens',
+                  onTap: () {},
+                ),
+                _buildMenuIcon(
+                  icon: Icons.star,
+                  label: 'Avaliações',
+                  onTap: () {},
+                ),
+                _buildMenuIcon(
+                  icon: Icons.shopping_bag,
+                  label: 'Encomendas',
+                  onTap: () {},
+                ),
               ],
             ),
 
@@ -161,11 +196,16 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                   child: ElevatedButton.icon(
                     onPressed: () {},
                     icon: const Icon(Icons.history, color: Colors.white),
-                    label: const Text('Histórico', style: TextStyle(color: Colors.white)),
+                    label: const Text(
+                      'Histórico',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Constants.primaryColor,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),
@@ -174,11 +214,16 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                   child: ElevatedButton.icon(
                     onPressed: () {},
                     icon: const Icon(Icons.location_on, color: Colors.white),
-                    label: const Text('Moradas', style: TextStyle(color: Colors.white)),
+                    label: const Text(
+                      'Moradas',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Constants.primaryColor,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),
@@ -193,12 +238,19 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
               child: OutlinedButton.icon(
                 onPressed: () {},
                 icon: Icon(Icons.delete_outline, color: Colors.red.shade700),
-                label: Text('Encerrar Conta',
-                    style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold)),
+                label: Text(
+                  'Encerrar Conta',
+                  style: TextStyle(
+                    color: Colors.red.shade700,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.red.shade700),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),

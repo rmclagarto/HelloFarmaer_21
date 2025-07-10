@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/cart.dart';
+import 'package:hellofarmer/Model/cart_item.dart';
 import 'package:hellofarmer/Screens/market_screens/checkout_screen.dart';
 
 class CartTotalWidget extends StatelessWidget {

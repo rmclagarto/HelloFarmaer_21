@@ -7,6 +7,7 @@ import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Model/produtos.dart';
 import 'package:hellofarmer/Providers/cart_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/cart_screen.dart';
+import 'package:hellofarmer/Screens/market_screens/favorites_screen.dart';
 import 'package:hellofarmer/Widgets/market_widgets/category_horizontal_list.dart';
 import 'package:hellofarmer/Widgets/market_widgets/category_selector.dart';
 import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';
@@ -146,6 +147,13 @@ class _MarketScreenState extends State<MarketScreen> {
                       categoryName: category,
                       products: catProducts,
                       onShowAll: () {
+                        final index = categories.indexOf(category);
+                        if(index != -1 ){
+                          setState((){
+                            _selectedCategory = index;
+                            _onSearchChanged();
+                          });
+                        }
                         print(
                           'Mostrar todos os produtos da categoria: $category',
                         );
@@ -219,6 +227,14 @@ class _MarketScreenState extends State<MarketScreen> {
                 MaterialPageRoute(builder: (context) => CartScreen()),
               );
               break;
+
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FavoritesScreen()),
+              );
+            break;
+
           }
         });
       },
