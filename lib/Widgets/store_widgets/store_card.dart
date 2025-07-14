@@ -22,7 +22,7 @@ class StoreCard extends StatelessWidget {
           contentPadding: const EdgeInsets.all(16),
           leading: const Icon(Icons.store, color: Colors.blueAccent),
           title: Text(
-            store.nome,
+            store.nomeLoja,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Column(

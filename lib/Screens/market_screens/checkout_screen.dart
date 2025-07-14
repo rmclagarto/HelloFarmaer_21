@@ -25,8 +25,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   double discount = 0.0;
   String deliveryMethod = 'pickup'; // 'pickup' ou 'delivery'
   bool hasAvailableItems = false;
-  List<CartItem> _availableItems = [];
-  List<CartItem> _outOfStockItems = [];
+  // List<CartItem> _availableItems = [];
+  // List<CartItem> _outOfStockItems = [];
 
   @override
   void initState() {
@@ -36,8 +36,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _checkAvailableItems() {
-    _availableItems = [];
-    _outOfStockItems = [];
+    // _availableItems = [];
+    // _outOfStockItems = [];
 
     for (var i = 0; i < widget.cartItems.length; i++) {
       if (widget.cartItems[i].inStock == true) {
@@ -110,10 +110,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
         widgets.add(
           ListTile(
-            title: Text(item.product.title),
+            title: Text(item.product.nomeProduto),
             subtitle: Text('Qtd: ${item.quantity}'),
             trailing: Text(
-              '${(double.parse(item.product.price) * item.quantity).toStringAsFixed(2)} €',
+              '${(item.product.preco * item.quantity).toStringAsFixed(2)} €',
             ),
           ),
         );

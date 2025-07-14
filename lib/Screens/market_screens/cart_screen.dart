@@ -48,10 +48,10 @@ class _CartScreenState extends State<CartScreen> {
                 final item = cartItems[index];
                 return CartItemWidget(
                   item: {
-                    'name': item.product.title,
-                    'price': item.product.price,
+                    'name': item.product.nomeProduto,
+                    'price': item.product.preco,
                     'quantity': item.quantity,
-                    'image': item.product.image,
+                    'image': item.product.imagem,
                     'inStock': true,
                   },
                   onQuantityChanged: (newQuantity) {

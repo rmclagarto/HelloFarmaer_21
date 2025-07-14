@@ -16,30 +16,34 @@ class ClientesSection extends StatefulWidget {
 class _ClientesSectionState extends State<ClientesSection> {
   final List<CustomUser> clientes = [
     CustomUser(
-      id: "1",
-      name: 'Ana Silva',
+      idUser: "1",
+      nomeUser: 'Ana Silva',
       email: 'ana@email.com',
+      telefone: "1234567890",
       grupo: 'VIP',
       historicoCompras: ['Compra 1: 2023-04-01', 'Compra 2: 2023-05-10'],
     ),
     CustomUser(
-      id: "2",
-      name: 'Carlos Oliveira',
+      idUser: "2",
+      nomeUser: 'Carlos Oliveira',
       email: 'carlos@email.com',
+      telefone: "1234567890",
       grupo: 'Regular',
       historicoCompras: ['Compra 1: 2023-03-15'],
     ),
     CustomUser(
-      id: "3",
-      name: 'Joana Mendes',
+      idUser: "3",
+      nomeUser: 'Joana Mendes',
       email: 'joana@email.com',
+      telefone: "1234567890",
       grupo: 'Novo',
       historicoCompras: [],
     ),
     CustomUser(
-      id: "4",
-      name: 'Pedro Santos',
+      idUser: "4",
+      nomeUser: 'Pedro Santos',
       email: 'pedro@email.com',
+      telefone: "1234567890",
       grupo: 'VIP',
       historicoCompras: ['Compra 1: 2023-01-20', 'Compra 2: 2023-02-25', 'Compra 3: 2023-06-15'],
     ),
@@ -129,12 +133,12 @@ class _ClientesSectionState extends State<ClientesSection> {
                           leading: CircleAvatar(
                             backgroundColor: Colors.teal[200],
                             child: Text(
-                              cliente.name.substring(0, 1),
+                              cliente.nomeUser.substring(0, 1),
                               style: const TextStyle(color: Colors.teal, fontWeight: FontWeight.bold),
                             ),
                           ),
                           title: Text(
-                            cliente.name,
+                            cliente.nomeUser,
                             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                           ),
                           subtitle: Text(
@@ -152,17 +156,17 @@ class _ClientesSectionState extends State<ClientesSection> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              cliente.grupo,
+                              cliente.grupo!,
                               style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetalhesClientePage(cliente: cliente),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => DetalhesClientePage(cliente: cliente),
+                            //   ),
+                            // );
                           },
                         ),
                       );

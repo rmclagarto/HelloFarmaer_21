@@ -1,7 +1,10 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/store.dart';
+import 'package:image_picker/image_picker.dart';
 
 
 
@@ -23,6 +26,9 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
 
+  File? _selectedImage;
+
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -34,6 +40,18 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
     _streetController.dispose();
     _numberController.dispose();
     super.dispose();
+  }
+
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if(pickedFile != null){
+      setState((){
+        _selectedImage = File(pickedFile.path);
+      });
+    }
   }
 
   @override
@@ -56,6 +74,8 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildImagePicker(),
+              const SizedBox(height: Constants.spacingMedium),
               _buildSectionTitle('Informações Básicas'),
               _buildNameField(),
               const SizedBox(height: Constants.spacingMedium),
@@ -113,6 +133,46 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         if (value.length < 3) return 'Mínimo 3 caracteres';
         return null;
       },
+    );
+  }
+
+
+  Widget _buildImagePicker(){
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: _pickImage,
+          child: Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(Constants.spacingMedium),
+              border: Border.all(color: Colors.grey[400]!),
+            ),
+            child: _selectedImage == null ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add_a_photo, size: 40,color: Colors.grey,),
+                SizedBox(height: 8),
+                Text("Adicionar foto da loja"),
+              ],
+            )
+            : ClipRRect(
+              borderRadius: BorderRadius.circular(Constants.spacingMedium),
+              child: Image.file(
+                _selectedImage!,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+            ),
+          ),
+        ),
+        if(_selectedImage != null)
+          TextButton(onPressed: _pickImage, child: const Text("Alterar foto"),
+          ),
+      ],
     );
   }
 
@@ -246,9 +306,12 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final loja = Store(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        nome: _nameController.text,
+      
+
+
+      final minhaLoja = Store.myStore(
+        idLoja: DateTime.now().millisecondsSinceEpoch.toString(),
+        nomeLoja: _nameController.text,
         descricao: _descricaoController.text,
         telefone: _telefoneController.text,
         endereco: {
@@ -256,10 +319,14 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           'numero': _numberController.text,
           'bairro': _neighborhoodController.text,
           'cidade': _cityController.text,
-          'estado': _stateController.text.toUpperCase(),
         },
-        avaliacoes: 4.1,
+        avaliacoes: 0.0,
+        imagem: _selectedImage?.path ?? '',
+        faturamento: 0.0,
       );
+
+      
+
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -268,7 +335,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         ),
       );
 
-      Navigator.pop(context, loja);
+      Navigator.pop(context, minhaLoja);
     }
   }
 }

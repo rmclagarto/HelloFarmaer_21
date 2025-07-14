@@ -1,47 +1,47 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 
 class CustomUser {
-  final String id;
-  final String name;
+  final String idUser;
+  final String nomeUser;
   final String email;
-  final String grupo; // "VIP, regular, novo"
-  final List<String> historicoCompras;
+  String? telefone;
+  final String? grupo; // "VIP, Regular, Novo"
+  List<String>? historicoCompras; // armazena os nome, data, preco, codigo
+  final String? imagemPerfil;
 
   CustomUser({
-    required this.id,
-    required this.name,
+    required this.idUser,
+    required this.nomeUser,
     required this.email,
-    this.grupo = "regular",
+    this.telefone,
+    this.grupo = "Novo",
     this.historicoCompras = const [],
+    this.imagemPerfil,
   });
   
-  // Convert user to map for storage
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-    };
-  }
-  
-  // Create user from map
-  factory CustomUser.fromMap(Map<String, dynamic> map) {
-    return CustomUser(
-      id: map['id'] ?? '',
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
-    );
-  }
 
+ Map<String, dynamic> toJson() {
+  return {
+    'idUser': idUser,
+    'nomeUser': nomeUser,
+    'email': email,
+    'telefone': telefone,
+    'grupo': grupo,
+    'historicoCompras': historicoCompras,
+    'imagemPerfil': imagemPerfil,
+  };
+}
 
   factory CustomUser.fromFirebaseUser(fb_auth.User user) {
     return CustomUser(
-      id: user.uid,
-      name: user.displayName ?? '',
+      idUser: user.uid,
+      nomeUser: user.displayName ?? '',
       email: user.email ?? '',
     );
   }
   
   @override
-  String toString() => 'User(id: $id, name: $name, email: $email, grupo: $grupo)';
+  String toString() {
+    return 'CustomUser(idUser: $idUser, nomeUser: $nomeUser, email: $email, telefone: $telefone, grupo: $grupo, historicoCompras: $historicoCompras, imagemPerfil: $imagemPerfil)';
+  }
 }

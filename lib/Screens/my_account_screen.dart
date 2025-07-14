@@ -26,7 +26,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.user.name);
+    _nameController = TextEditingController(text: widget.user.nomeUser);
     _emailController = TextEditingController(text: widget.user.email);
     _passwordController = TextEditingController();
   }

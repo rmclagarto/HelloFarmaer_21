@@ -47,21 +47,21 @@ class FavoritesScreen extends StatelessWidget {
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
-                        produto.image,
+                        produto.imagem,
                         width: 60,
                         height: 60,
                         fit: BoxFit.cover,
                       ),
                     ),
                     title: Text(
-                      produto.title,
+                      produto.nomeProduto,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
                     subtitle: Text(
-                      "Preço: ${produto.price}€",
+                      "Preço: ${produto.preco}€",
                       style: const TextStyle(fontSize: 14),
                     ),
                     trailing: const Icon(

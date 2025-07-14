@@ -263,9 +263,10 @@ class _LoginFormState extends State<LoginForm> {
       onPressed: () {
         if (name == "Google") {
           final fakeUser = CustomUser(
-            id: 'anon',
+            idUser: 'anon',
             email: 'anon@google.com',
-            name: 'Usuário Google',
+            nomeUser: 'Usuário Google',
+            telefone: "12345678901"
             // preencha os campos necessários no seu CustomUser
           );
 

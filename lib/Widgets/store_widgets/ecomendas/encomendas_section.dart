@@ -1,9 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
-import 'package:hellofarmer/Model/produtos.dart';
-import 'package:hellofarmer/Services/encomenda_service.dart';
+// import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/encomenda.dart';
+// import 'package:hellofarmer/Model/produtos.dart';
+
 
 
 class EncomendasSection extends StatefulWidget {
@@ -22,7 +23,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _encomendas = _createSampleOrders();
+    // _encomendas = _createSampleOrders();
     _tabController.addListener(() {
       setState(() {});
     });
@@ -35,74 +36,73 @@ class _EncomendasSectionState extends State<EncomendasSection>
   }
 
   // Helper method to create sample orders safely
-  List<Encomenda> _createSampleOrders() {
-    final sampleProducts = Produtos.sampleAds();
-    final orders = <Encomenda>[];
-
-    final products = [
-      ...sampleProducts,
-      if (sampleProducts.isNotEmpty && sampleProducts.length < 3)
-        ...List.generate(
-          3 - sampleProducts.length,
-          (i) => sampleProducts[i % sampleProducts.length],
-        ),
-    ];
-
-    if (products.isNotEmpty) {
-      orders.add(
-        Encomenda(
-          id: 'e1',
-          produto: products[0],
-          comprador: CustomUser(
-            id: "1",
-            name: 'Ana Silva',
-            email: 'ana@email.com',
-          ),
-          quantidade: 2,
-          dataPedido: DateTime.now().subtract(const Duration(days: 1)),
-          status: StatusEncomenda.pendente,
-          observacoes: "Por favor entregar até sexta-feira.",
-        ),
-      );
-    }
-
-    if (products.length > 1) {
-      orders.add(
-        Encomenda(
-          id: 'e2',
-          produto: products[1],
-          comprador: CustomUser(
-            id: "2",
-            name: 'Carlos',
-            email: 'carlos@email.com',
-          ),
-          quantidade: 1,
-          dataPedido: DateTime.now().subtract(const Duration(days: 3)),
-          status: StatusEncomenda.concluida,
-        ),
-      );
-    }
-
-    if (products.length > 2) {
-      orders.add(
-        Encomenda(
-          id: 'e3',
-          produto: products[2],
-          comprador: CustomUser(
-            id: "3",
-            name: 'Joana Mendes',
-            email: 'joana@email.com',
-          ),
-          quantidade: 1,
-          dataPedido: DateTime.now().subtract(const Duration(days: 2)),
-          status: StatusEncomenda.cancelada,
-          observacoes: "Cancelado pelo cliente",
-        ),
-      );
-    }
-
-    return orders;
-  }
+  // List<Encomenda> _createSampleOrders() {
+  //   final orders = <Encomenda>[];
+  //   final products = [
+  //     ...sampleProducts,
+  //     if (sampleProducts.isNotEmpty && sampleProducts.length < 3)
+  //       ...List.generate(
+  //         3 - sampleProducts.length,
+  //         (i) => sampleProducts[i % sampleProducts.length],
+  //       ),
+  //   ];
+  //   if (products.isNotEmpty) {
+  //     orders.add(
+  //       Encomenda(
+  //         id: 'e1',
+  //         produto: products[0],
+  //         comprador: CustomUser(
+  //           idUser: "1",
+  //           nomeUser: 'Ana Silva',
+  //           email: 'ana@email.com',
+  //         ),
+  //         quantidade: 2,
+  //         dataPedido: DateTime.now().subtract(const Duration(days: 1)),
+  //         status: StatusEncomenda.pendente,
+  //         observacoes: "Por favor entregar até sexta-feira.",
+  //       ),
+  //     );
+  //   }
+  //   if (products.length > 1) {
+  //     orders.add(
+  //       Encomenda(
+  //         id: 'e2',
+  //         produto: products[1],
+  //         comprador: CustomUser(
+  //           idUser: "2",
+  //           nomeUser: 'Carlos',
+  //           email: 'carlos@email.com',
+  //         ),
+  //         quantidade: 1,
+  //         dataPedido: DateTime.now().subtract(const Duration(days: 3)),
+  //         status: StatusEncomenda.concluida,
+  //       ),
+  //     );
+  //   }
+  //   if (products.length > 2) {
+  //     orders.add(
+  //       Encomenda(
+  //         idEncomenda: 'e3',
+  //         produtos: [products[2]],
+  //         comprador: CustomUser(
+  //           idUser: "3",
+  //           nomeUser: 'Joana Mendes',
+  //           email: 'joana@email.com',
+  //         ),
+  //         vendedor: CustomUser(
+  //           idUser: "3",
+  //           nomeUser: 'Joana Mendes',
+  //           email: 'joana@email.com',
+  //         ),
+  //         quantidade: 1,
+  //         dataPedido: DateTime.now().subtract(const Duration(days: 2)),
+  //         status: StatusEncomenda.cancelada,
+  //         code: "1111",
+  //       ),
+  //     );
+  //   }
+  //   return orders;
+  // }
 
   List<Encomenda> get _pendentes =>
       _encomendas.where((e) => e.status == StatusEncomenda.pendente).toList();
@@ -151,18 +151,14 @@ class _EncomendasSectionState extends State<EncomendasSection>
             ),
             const SizedBox(height: 20),
 
-            _detailRow("Produto", encomenda.produto.title),
-            _detailRow("Preço", "${encomenda.produto.price} €"),
-            _detailRow("Descrição", encomenda.produto.description),
-            _detailRow("Comprador", encomenda.comprador.name),
+            _detailRow("Produto", encomenda.produtos[0].nomeProduto),
+            _detailRow("Preço", "${encomenda.produtos[0].preco} €"),
+            _detailRow("Descrição", encomenda.produtos[0].descricao),
+            _detailRow("Comprador", encomenda.comprador.nomeUser),
             _detailRow("Email", encomenda.comprador.email),
             _detailRow("Quantidade", encomenda.quantidade.toString()),
             _detailRow("Data", _formatDate(encomenda.dataPedido)),
             _detailRow("Estado", _statusLabel(encomenda.status)),
-
-            if (encomenda.observacoes != null &&
-                encomenda.observacoes!.isNotEmpty)
-              _detailRow("Observações", encomenda.observacoes!),
 
             const SizedBox(height: 24),
 
@@ -199,8 +195,9 @@ class _EncomendasSectionState extends State<EncomendasSection>
                   const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      final codigo = codigoEntregaController.text.trim();
-                      // Podes validar ou processar o código aqui
+                      final codigo = double.parse(codigoEntregaController.text.trim());
+
+                      
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -360,10 +357,10 @@ class _EncomendasSectionState extends State<EncomendasSection>
               ),
             ),
             title: Text(
-              encomenda.produto.title,
+              encomenda.produtos[0].nomeProduto,
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
-            subtitle: Text("Comprador: ${encomenda.comprador.name}"),
+            subtitle: Text("Comprador: ${encomenda.comprador.nomeUser}"),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

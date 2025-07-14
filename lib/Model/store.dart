@@ -1,17 +1,26 @@
 class Store {
-  final String id;
-  final String nome;
+  final String idLoja;
+  final String nomeLoja;
   final String descricao;
   final String telefone;
   final Map<String, String> endereco;
   final double avaliacoes;
+  final String imagem;
+  final double? faturamento;
 
-  Store({
-    required this.id,
-    required this.nome,
+  Store.myStore({
+    required this.idLoja,
+    required this.nomeLoja,
     required this.descricao,
     required this.telefone,
     required this.endereco,
-    required this.avaliacoes
+    required this.avaliacoes,
+    required this.imagem,
+    required this.faturamento,
   });
+
+
+  // Store.viewStore({
+
+  // });
 }

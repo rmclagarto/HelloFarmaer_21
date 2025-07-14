@@ -4,14 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/produtos.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class ProdutoForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
 
-  const ProdutoForm({
-    super.key, 
-    required this.formKey
-  });
+  const ProdutoForm({super.key, required this.formKey});
 
   @override
   ProdutoFormState createState() => ProdutoFormState();
@@ -29,19 +25,15 @@ class ProdutoFormState extends State<ProdutoForm> {
   );
 
   // Controladores de texto
-  final TextEditingController _tituloController = TextEditingController();
-  final TextEditingController _descricaoController = TextEditingController();
-  final TextEditingController _localizacaoController = TextEditingController();
   final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _telefoneController = TextEditingController();
+  final TextEditingController _descricaoController = TextEditingController();
   final TextEditingController _quantidadeMinController =
       TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _precoController = TextEditingController();
 
   final List<String> _deliveryLabels = [
-    'Entrega Domicílio (Produtor)',
-    'Comprador recolher num local à sua escolha',
-    'Entrega realizada por Transportadora',
+    'Entrega Domicílio ',
+    'Recolha na Loja',
   ];
 
   @override
@@ -51,10 +43,10 @@ class ProdutoFormState extends State<ProdutoForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionHeader('Título'),
+          _buildSectionHeader('Nome do Produto'),
           _buildTextField(
-            controller: _tituloController,
-            hint: 'Adicione um título',
+            controller: _nomeController,
+            hint: 'Adicione um nome ao Produto',
           ),
           SizedBox(height: 16),
 
@@ -74,11 +66,6 @@ class ProdutoFormState extends State<ProdutoForm> {
           ),
           Divider(thickness: 2, height: 40),
 
-          _buildSectionHeader('Localização'),
-          _buildTextField(
-            controller: _localizacaoController,
-            hint: 'Adicione a localização',
-          ),
           SizedBox(height: 16),
 
           _buildSectionHeader('Selecione opções de entrega'),
@@ -104,21 +91,7 @@ class ProdutoFormState extends State<ProdutoForm> {
 
           _buildSectionHeader('Preço', fontSize: 14),
           _buildPriceField(),
-          Divider(thickness: 2, height: 40),
 
-          _buildSectionHeader('Detalhes de Contacto'),
-          _buildSectionHeader('Nome', fontSize: 14),
-          _buildTextField(
-            controller: _nomeController,
-            hint: 'Introduza o seu nome',
-          ),
-          SizedBox(height: 16),
-
-          _buildSectionHeader('Telefone', fontSize: 14),
-          _buildTextField(
-            controller: _telefoneController,
-            hint: 'Introduza o telefone',
-          ),
           SizedBox(height: 24),
 
           Center(
@@ -135,7 +108,6 @@ class ProdutoFormState extends State<ProdutoForm> {
                       'PRÉ-VISUALIZAR',
                       style: TextStyle(color: Colors.white),
                     ),
-                  
                   ),
                 ),
                 SizedBox(width: 16),
@@ -170,22 +142,24 @@ class ProdutoFormState extends State<ProdutoForm> {
     if (widget.formKey.currentState!.validate()) {
       widget.formKey.currentState!.save();
 
+      if (_selectedImages[0] == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Por favor, selecione uma imagem')),
+        );
+        return;
+      }
+
       final produto = Produtos(
-        title: _tituloController.text,
-        price: '€${_priceController.text}',
-        image: _selectedImages[0]?.path ?? 'assets/images/placeholder.png',
-        isAsset:
-            _selectedImages[0] ==
-            null, // true se for imagem de asset, false se for do dispositivo
-        date:
-            "Publicado em ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
-        description: _descricaoController.text,
-        stats: {
-          'views': 0,
-          'clicks': 0,
-          'conversions': 0,
-          'history': [0, 0, 0, 0, 0],
-        },
+        idProduto: "1",
+        nomeProduto: _nomeController.text,
+        categoria: _selectedCategory!,
+        imagem: _selectedImages[0]!.path,
+        isAsset: true,
+        descricao: _descricaoController.text,
+        preco: double.parse(_precoController.text),
+        quantidade: double.parse(_quantidadeMinController.text),
+        unidadeMedida: _selectedUnit!,
+        data: DateTime.now(),
       );
 
       Navigator.pop(context, produto); // <- ✅ Retorna para ProdutosSection
@@ -220,7 +194,7 @@ class ProdutoFormState extends State<ProdutoForm> {
       value: _selectedCategory,
       hint: Text('Escolha uma categoria'),
       items:
-          ['Vegetais','Frutas']
+          ['Vegetais', 'Frutas']
               .map(
                 (category) =>
                     DropdownMenuItem(value: category, child: Text(category)),
@@ -274,7 +248,7 @@ class ProdutoFormState extends State<ProdutoForm> {
 
   List<Widget> _buildDeliveryOptions() {
     return List.generate(
-      3,
+      2,
       (index) => CheckboxListTile(
         contentPadding: EdgeInsets.zero,
         title: Text(_deliveryLabels[index]),
@@ -304,7 +278,7 @@ class ProdutoFormState extends State<ProdutoForm> {
 
   Widget _buildPriceField() {
     return TextFormField(
-      controller: _priceController,
+      controller: _precoController,
       decoration: InputDecoration(
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 15, top: 15),

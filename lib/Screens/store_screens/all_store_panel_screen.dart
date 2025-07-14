@@ -22,22 +22,6 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
   @override
   void initState() {
     super.initState();
-    final lojaTeste = Store(
-      id: '1',
-      nome: 'Loja Exemplo',
-      descricao: 'Descrição da loja exemplo para testes.',
-      telefone: '12345678901',
-      endereco: {
-        'rua': 'Rua Teste',
-        'numero': '123',
-        'bairro': 'Bairro Teste',
-        'cidade': 'Cidade Teste',
-        'estado': 'ST',
-      },
-      avaliacoes: 4.5,
-    );
-
-    _addStore(lojaTeste); // Adiciona uma loja de exemplo
   }
 
   void _addStore(Store store) {
@@ -83,7 +67,7 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
 
                             if(result != null &&  result is Map && result['delete'] == true) {
                               setState(() {
-                                _removeStore(store.id);
+                                _removeStore(store.idLoja);
                               });
                             }
 
@@ -111,7 +95,7 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
 
   void _removeStore(String storeId) {
   setState(() {
-    _stores.removeWhere((store) => store.id == storeId);
+    _stores.removeWhere((store) => store.idLoja == storeId);
   });
 }
 

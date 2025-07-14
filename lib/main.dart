@@ -35,7 +35,7 @@ class MainApp extends StatelessWidget {
           builder: (_, Locale currentLocale, _) {
             return MultiProvider(
               providers: [
-                ChangeNotifierProvider(create: (_) => MyStoreProvider()),
+                ChangeNotifierProvider(create: (_) => StoreProvider()),
                 ChangeNotifierProvider(create: (_) => FavoritesProvider()),
                 ChangeNotifierProvider(create: (_) => CartProvider()),
                 ChangeNotifierProvider(create: (_) => UserProvider()),

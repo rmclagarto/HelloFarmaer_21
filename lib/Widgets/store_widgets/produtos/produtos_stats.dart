@@ -18,19 +18,13 @@ class ProdutosStats extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final stats = produto.stats;
-    final history = List<int>.from(stats['history']);
-    final taxaConversao = stats['clicks'] == 0
-        ? 0.0
-        : (stats['conversions'] / stats['clicks']) * 100;
-
-    _priceController.text = produto.price;
-    _stockController.text = stats['stock']?.toString() ?? '0';
+    final List<int> history = produto.historicoCliques ?? [];
+    
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          produto.title,
+          produto.nomeProduto,
           style: theme.textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -60,7 +54,7 @@ class ProdutosStats extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
-                produto.image,
+                produto.imagem,
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
@@ -68,16 +62,16 @@ class ProdutosStats extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             // Info Principal
-            Text(produto.title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(produto.nomeProduto, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 6),
-            Text(produto.price, style: TextStyle(fontSize: 18, color: Constants.secondaryColor)),
+            Text("${produto.preco.toString()}€ ${produto.unidadeMedida}", style: TextStyle(fontSize: 18, color: Constants.secondaryColor)),
             const SizedBox(height: 4),
-            Text(produto.date, style: const TextStyle(color: Colors.grey)),
+            Text("Publicado em ${produto.data.toString()}", style: const TextStyle(color: Colors.grey)),
             const SizedBox(height: 20),
             // Descrição
             const Text('Descrição', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
             const SizedBox(height: 6),
-            Text(produto.description, style: const TextStyle(height: 1.4)),
+            Text(produto.descricao, style: const TextStyle(height: 1.4)),
             const SizedBox(height: 24),
             // Estatísticas em Cards
             const Text('Estatísticas', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
@@ -86,10 +80,8 @@ class ProdutosStats extends StatelessWidget {
               spacing: 12,
               runSpacing: 12,
               children: [
-                _buildStatCard('Visualizações', stats['views'].toString(), Icons.remove_red_eye),
-                _buildStatCard('Cliques', stats['clicks'].toString(), Icons.touch_app),
-                _buildStatCard('Conversões', stats['conversions'].toString(), Icons.shopping_cart),
-                _buildStatCard('Conversão', '${taxaConversao.toStringAsFixed(1)}%', Icons.percent),
+                _buildStatCard('Cliques', produto.cliques.toString(), Icons.touch_app),
+                _buildStatCard('Compras', produto.comprado.toString(), Icons.shopping_cart),
               ],
             ),
             const SizedBox(height: 24),
@@ -215,8 +207,8 @@ class ProdutosStats extends StatelessWidget {
                 onPressed: () {
                   
 
-                  produto.price = _priceController.text;
-                  produto.stats['stock'] = int.tryParse(_stockController.text) ?? 0;
+                  produto.preco = double.parse(_priceController.text);
+                  // produto.stats['stock'] = int.tryParse(_stockController.text) ?? 0;
 
                   Navigator.pop(context, produto); // Retorna o produto modificado
                   ScaffoldMessenger.of(context).showSnackBar(

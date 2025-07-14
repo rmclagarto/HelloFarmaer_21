@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
 import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Providers/cart_provider.dart';
 import 'package:hellofarmer/Providers/favorites_provider.dart';
 import 'package:hellofarmer/Providers/store_provider.dart';
@@ -26,7 +27,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final favoritesProvider = Provider.of<FavoritesProvider>(context);
     final isFavorited = favoritesProvider.isFavorite(widget.product);
-    final isAvailable = (widget.product.stock ?? 0) > 0;
+    final isAvailable = (widget.product.quantidade ?? 0) > 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +44,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    widget.product.image,
+                    widget.product.imagem,
                     width: double.infinity,
                     height: 250,
                     fit: BoxFit.cover,
@@ -56,7 +57,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        widget.product.title,
+                        widget.product.nomeProduto,
                         style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -90,7 +91,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${widget.product.price}€',
+                  '${widget.product.preco}€',
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
@@ -108,7 +109,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     const SizedBox(width: 6),
                     Text(
                       isAvailable
-                          ? 'Em stock (${widget.product.stock})'
+                          ? 'Em stock (${widget.product.quantidade})'
                           : 'Indisponível',
                       style: TextStyle(
                         color: isAvailable ? Colors.green : Colors.red,
@@ -135,7 +136,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Stock disponível: ${widget.product.stock ?? 0}',
+                  'Stock disponível: ${widget.product.quantidade ?? 0}',
                   style: const TextStyle(fontSize: 16),
                 ),
 
@@ -143,21 +144,67 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ElevatedButton.icon(
                   onPressed: () {
                     // Simule ou busque os produtos da loja real
-                    final storeProvider = Provider.of<MyStoreProvider>(
+                    final storeProvider = Provider.of<StoreProvider>(
                       context,
                       listen: false,
                     );
-                    final produtosDaLoja = storeProvider.getProdutosDaLoja(
-                      widget.product.loja,
+
+
+
+
+                    // final produtosDaLoja = storeProvider.getProdutosDaLoja(
+                    //   widget.product.loja,
+                    // );
+
+
+
+
+
+                    // Dados estáticos da loja
+                    final lojaEstatica = Store.myStore(
+                      idLoja: "1",
+                      nomeLoja: "Fazenda Orgânica do Zé",
+                      descricao:
+                          "Produtos orgânicos frescos diretamente da nossa fazenda familiar com mais de 20 anos de tradição.",
+                      telefone: "912345678",
+                      endereco: {
+                        "rua": "Estrada da Fazenda, 123",
+                        "cidade": "São Paulo",
+                        "estado": "SP",
+                        "cep": "12345-000",
+                      },
+                      avaliacoes: 0,
+                      imagem: "assets/img/quinta.jpg",
+                      faturamento: 0,
                     );
+
+
+                    final productStatic = Produtos(
+                      idProduto: "1", 
+                      nomeProduto: "product teste estatico", 
+                      categoria: "Vegetais",
+                      imagem: "assets/img/alface.png",
+                      isAsset: true, 
+                      descricao: "description", 
+                      // isAsset: true, 
+                      preco: 23.0, 
+                      quantidade: 1,
+                      unidadeMedida: "unidades",
+                      data: DateTime.now(), 
+                    );
+
+
+
+
+
 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder:
                             (_) => StoreDetailScreen(
-                              loja: widget.product.loja,
-                              produtosDaLoja: produtosDaLoja,
+                              loja: lojaEstatica,
+                              produtosDaLoja: [productStatic, productStatic,productStatic, productStatic,productStatic, productStatic,productStatic, productStatic],
                             ),
                       ),
                     );
@@ -227,9 +274,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   builder:
                                       (_) => CheckoutScreen(
                                         cartItems: [itemUnico],
-                                        subtotal: double.parse(
-                                          widget.product.price,
-                                        ),
+                                        subtotal: widget.product.preco,
                                       ),
                                 ),
                               );

@@ -21,7 +21,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
   @override
   void initState() {
     super.initState();
-    ads = Produtos.sampleAds();
+    // ads = Produtos.sampleAds();
   }
 
   @override

@@ -22,7 +22,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context); // Guarda o NavigatorState
-    final String userName = user.name;
+    final String userName = user.nomeUser;
     final String userPhotoUrl = ImageAssets.agricultor;
 
     // Lista dentro do build para poder usar o context nas funções onTap
@@ -35,17 +35,17 @@ class AppDrawer extends StatelessWidget {
           Navigator.pushNamed(context, Routes.myAccount, arguments: user);
         }
       },
-      {
-        'icon': Icons.shopping_basket,
-        'title': 'Mercado',
-        'onTap': () {
-          navigator.pop();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MarketScreen(user: user)),
-          );
-        },
-      },
+      // {
+      //   'icon': Icons.shopping_basket,
+      //   'title': 'Mercado',
+      //   'onTap': () {
+      //     navigator.pop();
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => MarketScreen(user: user)),
+      //     );
+      //   },
+      // },
       {
         'icon': Icons.shop,
         'title': 'Loja',

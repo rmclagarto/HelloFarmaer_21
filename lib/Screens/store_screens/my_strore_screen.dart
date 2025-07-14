@@ -83,7 +83,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
 
     if (confimar == true) {
       // Lógica para excluir a loja
-      Navigator.pop(context, {'delete': true, 'storeId': widget.loja.id});
+      Navigator.pop(context, {'delete': true, 'storeId': widget.loja.idLoja});
     }
   }
 
@@ -94,7 +94,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.loja.nome,
+          widget.loja.nomeLoja,
           style: theme.textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,

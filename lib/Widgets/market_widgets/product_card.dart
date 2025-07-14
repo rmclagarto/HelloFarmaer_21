@@ -33,14 +33,14 @@ class ProductCard extends StatelessWidget {
                 height: 80,
                 alignment: Alignment.center,
                 child: Image.asset(
-                  product.image,
+                  product.imagem,
                   width: 80,
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                product.title,
+                product.nomeProduto,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -55,7 +55,7 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      product.price,
+                      product.preco.toString(),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Constants.primaryColor,

@@ -1,26 +1,23 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/custom_user.dart';
 
-class UserProvider with ChangeNotifier{
+class UserProvider with ChangeNotifier {
   CustomUser? _user;
 
   CustomUser? get user => _user;
 
-  void registerUser(CustomUser newUser){
-
-    // query para o Firebase por o newUser na base de dados
+  void setUser(CustomUser user) {
+    _user = user;
     notifyListeners();
   }
 
-  void setUser(CustomUser newUser){
-    _user = newUser;
+  void updateUser(CustomUser updatedUser) {
+    _user = updatedUser;
     notifyListeners();
   }
 
-
-  void logout(){
+  void clearUser() {
     _user = null;
     notifyListeners();
   }
-
 }

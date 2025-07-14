@@ -46,7 +46,7 @@ class ProdutoCard extends StatelessWidget {
                 child: SizedBox(
                   width: 80,
                   height: 80,
-                  child: buildProductImage(produto.image, produto.isAsset),
+                  child: buildProductImage(produto.imagem, produto.isAsset),
                 ),
               ),
               const SizedBox(width: 12),
@@ -54,11 +54,11 @@ class ProdutoCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(produto.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(produto.nomeProduto, style: const TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
-                    Text(produto.price, style: TextStyle(color: Constants.secondaryColor)),
+                    Text(produto.preco.toString(), style: TextStyle(color: Constants.secondaryColor)),
                     const SizedBox(height: 6),
-                    Text(produto.date, style: const TextStyle(color: Colors.grey)),
+                    Text(produto.data.toString(), style: const TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
