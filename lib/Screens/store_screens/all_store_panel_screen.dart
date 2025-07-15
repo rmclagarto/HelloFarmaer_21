@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Providers/store_provider.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Screens/store_screens/my_strore_screen.dart';
 import 'package:hellofarmer/Widgets/store_widgets/forms/create_store_form.dart';
 import 'package:hellofarmer/Widgets/store_widgets/store_card.dart';
-
-// import 'package:projeto_cm/Widgets/store_widgets/forms/create_store_form.dart';
+import 'package:provider/provider.dart';
 
 
 class ListStorePanelScreen extends StatefulWidget {
@@ -17,86 +17,91 @@ class ListStorePanelScreen extends StatefulWidget {
 }
 
 class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
-  final List<Store> _stores = []; // Armazena as lojas
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _addStore(Store store) {
-    setState(() {
-      _stores.add(store);
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final storeProvider = Provider.of<StoreProvider>(context);
+
+    if (userProvider.user == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            "Minhas Lojas", 
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+        title: const Text(
+          "Minhas Lojas", 
+          style: TextStyle(
+            color: Colors.white, 
+            fontWeight: FontWeight.bold
+          ),
         ),
         backgroundColor: Constants.primaryColor,
-        elevation: 0,
         centerTitle: true,
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child:
-                _stores.isEmpty
-                    ? const Center(child: Text("Nenhuma loja cadastrada."))
-                    : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _stores.length,
-                      itemBuilder: (context, index) {
-                        final store = _stores[index];
-                        return StoreCard(
-                          store: store,
-                          onTap: () async {
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MainStoreScreen(loja: store)),
-                            );
-
-                            if(result != null &&  result is Map && result['delete'] == true) {
-                              setState(() {
-                                _removeStore(store.idLoja);
-                              });
-                            }
-
-                            
-                          },
-                        );
-                      },
-                    ),
-          ),
-        ],
+      body: StreamBuilder<List<Store>>(
+        stream: storeProvider.getUserStores(userProvider.user!.idUser),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          
+          if (snapshot.hasError) {
+            return Center(child: Text('Erro: ${snapshot.error}'));
+          }
+          
+          final stores = snapshot.data ?? [];
+          if (stores.isEmpty) {
+            return const Center(
+              child: Text("Você ainda não possui lojas cadastradas."),
+            );
+          }
+          
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: stores.length,
+            itemBuilder: (context, index) {
+              final store = stores[index];
+              return StoreCard(
+                store: store,
+                onTap: () => _navigateToStore(context, store),
+              );
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Constants.primaryColor,
-        onPressed: () async {
-          final novaLoja = await Navigator.push<Store>(
-            context,
-            MaterialPageRoute(builder: (context) => const CreateStoreForm()),
-          );
-          if (novaLoja != null) _addStore(novaLoja);
-        },
-        child: const Icon(Icons.add, size: 32, color: Colors.white),
+        onPressed: () => _createNewStore(context),
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
     );
   }
 
-  void _removeStore(String storeId) {
-  setState(() {
-    _stores.removeWhere((store) => store.idLoja == storeId);
-  });
-}
+  Future<void> _navigateToStore(BuildContext context, Store store) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => MainStoreScreen(loja: store)),
+    );
+    
+    if (result == true) {
+      // Atualize a UI se necessário
+      setState(() {});
+    }
+  }
 
+  Future<void> _createNewStore(BuildContext context) async {
+    final newStore = await Navigator.push<Store>(
+      context,
+      MaterialPageRoute(builder: (_) => const CreateStoreForm()),
+    );
+    
+    if (newStore != null) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      await userProvider.addStoreToUser(newStore.idLoja);
+      setState(() {});
+    }
+  }
 }

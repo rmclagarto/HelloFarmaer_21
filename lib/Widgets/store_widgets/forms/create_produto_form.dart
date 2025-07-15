@@ -2,18 +2,24 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Providers/store_provider.dart';
+import 'package:hellofarmer/Services/database_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ProdutoForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final String storeId;
 
-  const ProdutoForm({super.key, required this.formKey});
+  const ProdutoForm({super.key, required this.formKey, required this.storeId});
 
   @override
   ProdutoFormState createState() => ProdutoFormState();
 }
 
 class ProdutoFormState extends State<ProdutoForm> {
+  final DatabaseService _dbService = DatabaseService();
+
   String? _selectedCategory;
   String? _selectedUnit;
   final List<bool> _deliveryOptions = [false, false, false];
@@ -138,7 +144,7 @@ class ProdutoFormState extends State<ProdutoForm> {
     }
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (widget.formKey.currentState!.validate()) {
       widget.formKey.currentState!.save();
 
@@ -149,20 +155,46 @@ class ProdutoFormState extends State<ProdutoForm> {
         return;
       }
 
-      final produto = Produtos(
-        idProduto: "1",
-        nomeProduto: _nomeController.text,
-        categoria: _selectedCategory!,
-        imagem: _selectedImages[0]!.path,
-        isAsset: true,
-        descricao: _descricaoController.text,
-        preco: double.parse(_precoController.text),
-        quantidade: double.parse(_quantidadeMinController.text),
-        unidadeMedida: _selectedUnit!,
-        data: DateTime.now(),
-      );
+      try {
+        final productRef = _dbService.database.ref().child('products').push();
+        final productId = productRef.key!;
 
-      Navigator.pop(context, produto); // <- ✅ Retorna para ProdutosSection
+        final produto = Produtos(
+          idProduto: productId,
+          nomeProduto: _nomeController.text,
+          categoria: _selectedCategory!,
+          imagem: _selectedImages[0]!.path,
+          isAsset: true,
+          descricao: _descricaoController.text,
+          preco: double.parse(_precoController.text),
+          quantidade: double.parse(_quantidadeMinController.text),
+          unidadeMedida: _selectedUnit!,
+          data: DateTime.now(),
+        );
+
+        final storeProvider = Provider.of<StoreProvider>(
+          context,
+          listen: false,
+        );
+        await storeProvider.addProductToStore(
+          storeId: widget.storeId,
+          productId: productId,
+          produto: produto,
+        );
+
+        // await _dbService.create(
+        //   path: 'products/$productId',
+        //   data: produto.toJson(),
+        // );
+
+        if (!mounted) return;
+        Navigator.pop(context, produto); // <- Retorna para ProdutosSection
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao criar produto: ${e.toString()}')),
+        );
+      }
     }
   }
 

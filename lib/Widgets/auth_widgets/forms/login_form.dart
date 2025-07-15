@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+
 import 'package:hellofarmer/Core/routes.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
+
 
 
 class LoginForm extends StatefulWidget {
@@ -71,11 +71,9 @@ class _LoginFormState extends State<LoginForm> {
                 _buildForgotPassword(context),
                 const SizedBox(height: Constants.spacingMedium),
                 _buildLoginButton(),
-                const SizedBox(height: Constants.spacingLarge),
-                _buildDivider(),
-                const SizedBox(height: Constants.spacingLarge),
-                _buildSocialButtons(),
-                const SizedBox(height: Constants.spacingSmall - 4),
+                
+                const SizedBox(height: Constants.spacingLarge * 4),
+                
                 _buildSignUp(context),
               ],
             ),
@@ -230,68 +228,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _buildSocialButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        _socialBtn('Google'),
-        const SizedBox(width: 8),
-        _socialBtn('Facebook'),
-        const SizedBox(width: 8),
-        _socialBtn('IOS'),
-      ],
-    );
-  }
-
-  Widget _socialBtn(String name) {
-    String assetPath;
-    switch (name) {
-      case 'Google':
-        assetPath = ImageAssets.googleLogo;
-        break;
-      case 'Facebook':
-        assetPath = ImageAssets.facebookLogo;
-        break;
-      case 'IOS':
-        assetPath = ImageAssets.iosLogo;
-        break;
-      default:
-        assetPath = 'assets/default_logo.png';
-    }
-
-    return ElevatedButton(
-      onPressed: () {
-        if (name == "Google") {
-          final fakeUser = CustomUser(
-            idUser: 'anon',
-            email: 'anon@google.com',
-            nomeUser: 'Usuário Google',
-            telefone: "12345678901"
-            // preencha os campos necessários no seu CustomUser
-          );
-
-          Navigator.pushReplacementNamed(
-            context,
-            Routes.home,
-            arguments: fakeUser,
-          );
-        }
-      },
-
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        minimumSize: const Size(48, 48),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      child: Image(
-        image: AssetImage(assetPath),
-        height: 24,
-        width: 24,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
+  
 
   Widget _buildSignUp(BuildContext context) {
     return TextButton(

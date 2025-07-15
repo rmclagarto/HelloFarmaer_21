@@ -159,7 +159,7 @@ class _RegisterFromState extends State<RegisterFrom> {
       textInputAction: TextInputAction.next,
       cursorColor: Colors.grey,
       decoration: InputDecoration(
-        labelText: 'Senha',
+        labelText: 'Telefone',
         labelStyle: const TextStyle(color: Colors.grey),
         prefixIcon: const Icon(Icons.phone),
         border: OutlineInputBorder(

@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';

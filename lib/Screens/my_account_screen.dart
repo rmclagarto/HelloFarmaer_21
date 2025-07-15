@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/routes.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class MyAccountScreen extends StatefulWidget {
   final CustomUser user;
@@ -43,6 +45,52 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     setState(() => _obscurePassword = !_obscurePassword);
   }
 
+  Future<void> _deleteAccount() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text("Confirmar eleminação"),
+            content: const Text(
+              "Tens a certeza que queres eleminar a tua conta?",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text("Cancelar"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text(
+                  "Eleminar",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+    );
+
+    if (confirm != true) return;
+
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      await userProvider.deleteUserAccount();
+      if (!mounted) return;
+
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Erro ao apagar conta. Tenta novamente."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   // NOVO: Selecionar imagem da galeria
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -53,6 +101,13 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         _selectedImage = File(pickedFile.path);
       });
 
+      
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    if (userProvider.user != null && _selectedImage != null) {
+      final updatedUser = userProvider.user!.copyWith(imagemPerfil: _selectedImage!.path);
+      userProvider.updateUser(updatedUser);
+    }
       // Aqui você pode fazer upload da imagem para o servidor, se quiser
     }
   }
@@ -232,11 +287,11 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
 
             const SizedBox(height: 40),
 
-            // Botão para encerrar conta
+            // Botão para Apagar conta
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: _deleteAccount,
                 icon: Icon(Icons.delete_outline, color: Colors.red.shade700),
                 label: Text(
                   'Encerrar Conta',

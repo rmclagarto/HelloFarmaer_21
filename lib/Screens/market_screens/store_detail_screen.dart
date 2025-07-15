@@ -30,7 +30,7 @@ class StoreDetailScreen extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
-                loja.imagem,
+                loja.imagem!,
                 height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,

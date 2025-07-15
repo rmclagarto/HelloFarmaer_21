@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Core/routes.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/firebase_auth_service.dart';
 import 'package:hellofarmer/Widgets/auth_widgets/forms/login_form.dart';
+import 'package:provider/provider.dart';
 
 
 class Login extends StatefulWidget {
@@ -41,7 +43,12 @@ class _LoginState extends State<Login> {
       if (!mounted) return;
 
       if(user != null){
-        Navigator.pushReplacementNamed(context, Routes.home, arguments: user);
+
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        await userProvider.loadUserAccount(user.idUser);
+
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, Routes.home);
       }else{
         setState(() {
           _errorMessage = "Credenciais invalidos";

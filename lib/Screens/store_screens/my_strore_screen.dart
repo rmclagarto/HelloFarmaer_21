@@ -68,6 +68,9 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
               TextButton(
                 onPressed: () {
                   // Aqui você pode adicionar a lógica para excluir a loja
+
+            
+
                   Navigator.pop(context, true);
                 },
                 child: const Text(

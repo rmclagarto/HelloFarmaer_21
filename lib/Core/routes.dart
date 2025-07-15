@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Screens/ad_screens/publicar_anuncio_screnn.dart';
@@ -9,10 +8,6 @@ import 'package:hellofarmer/Screens/home_screen/home_screen.dart';
 import 'package:hellofarmer/Screens/my_account_screen.dart';
 import 'package:hellofarmer/Screens/setting_screen.dart';
 import 'package:hellofarmer/Screens/splash_screen.dart';
-
-
-
-
 
 class Routes {
   static const splash = '/splash';
@@ -34,14 +29,7 @@ class Routes {
     login: (context) => const Login(),
     register: (context) => const RegisterScreen(),
     recoverPassword: (context) => const RecoverPasswordScreen(),
-    home: (context) {
-      final args = ModalRoute.of(context)?.settings.arguments;
-      if (args is CustomUser) {
-        return Home(user: args);
-      } else {
-        return const Login(); // fallback seguro
-      }
-    },
+    home: (context) => const Home(),
 
     // storePanel:
     //     (context) => ChangeNotifierProvider(
@@ -63,15 +51,14 @@ class Routes {
 
     // market: (context) => const MarketScreen(),
     setting: (context) {
-      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 
       return SettingsScreen(
         isDarkTheme: args?['isDarkTheme'] ?? false,
         onThemeChanged: args?['onThemeChanged'] ?? (val) {},
       );
     },
-
-
 
     myAccount: (context) {
       final args = ModalRoute.of(context)?.settings.arguments;

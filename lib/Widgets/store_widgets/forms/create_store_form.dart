@@ -1,12 +1,14 @@
-
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Providers/store_provider.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Services/database_service.dart';
 import 'package:image_picker/image_picker.dart';
-
-
+import 'package:provider/provider.dart';
 
 class CreateStoreForm extends StatefulWidget {
   const CreateStoreForm({super.key});
@@ -28,7 +30,6 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   File? _selectedImage;
 
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -42,13 +43,12 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
     super.dispose();
   }
 
-
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if(pickedFile != null){
-      setState((){
+    if (pickedFile != null) {
+      setState(() {
         _selectedImage = File(pickedFile.path);
       });
     }
@@ -136,8 +136,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
     );
   }
 
-
-  Widget _buildImagePicker(){
+  Widget _buildImagePicker() {
     return Column(
       children: [
         GestureDetector(
@@ -150,28 +149,31 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
               borderRadius: BorderRadius.circular(Constants.spacingMedium),
               border: Border.all(color: Colors.grey[400]!),
             ),
-            child: _selectedImage == null ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.add_a_photo, size: 40,color: Colors.grey,),
-                SizedBox(height: 8),
-                Text("Adicionar foto da loja"),
-              ],
-            )
-            : ClipRRect(
-              borderRadius: BorderRadius.circular(Constants.spacingMedium),
-              child: Image.file(
-                _selectedImage!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-            ),
+            child:
+                _selectedImage == null
+                    ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add_a_photo, size: 40, color: Colors.grey),
+                        SizedBox(height: 8),
+                        Text("Adicionar foto da loja"),
+                      ],
+                    )
+                    : ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        Constants.spacingMedium,
+                      ),
+                      child: Image.file(
+                        _selectedImage!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                    ),
           ),
         ),
-        if(_selectedImage != null)
-          TextButton(onPressed: _pickImage, child: const Text("Alterar foto"),
-          ),
+        if (_selectedImage != null)
+          TextButton(onPressed: _pickImage, child: const Text("Alterar foto")),
       ],
     );
   }
@@ -304,38 +306,62 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      
+      try {
+        final storeRef = FirebaseDatabase.instance.ref().child("stores").push();
+        
+        final String idLoja = storeRef.key!;
 
+        final minhaNovaLoja = Store.myStore(
+          idLoja: idLoja,
+          nomeLoja: _nameController.text.trim(),
+          descricao: _descricaoController.text.trim(),
+          telefone: _telefoneController.text,
+          endereco: {
+            "rua": _streetController.text,
+            "bairro": _neighborhoodController.text,
+            "cidade": _cityController.text,
+            "numero": int.tryParse(_numberController.text) ?? 0,
+          },
+          avaliacoes: 0.0,
+          faturamento: 0.0,
+        );
 
-      final minhaLoja = Store.myStore(
-        idLoja: DateTime.now().millisecondsSinceEpoch.toString(),
-        nomeLoja: _nameController.text,
-        descricao: _descricaoController.text,
-        telefone: _telefoneController.text,
-        endereco: {
-          'rua': _streetController.text,
-          'numero': _numberController.text,
-          'bairro': _neighborhoodController.text,
-          'cidade': _cityController.text,
-        },
-        avaliacoes: 0.0,
-        imagem: _selectedImage?.path ?? '',
-        faturamento: 0.0,
-      );
+        final _dbService = DatabaseService();
+        await _dbService.create(
+          path: "stores/$idLoja",
+          data: minhaNovaLoja.toJson(),
+        );
 
-      
+        if (!mounted) return;
+        final usr = Provider.of<UserProvider>(context, listen: false);
+        await usr.addStoreToUser(minhaNovaLoja.idLoja);
 
+        
+        if (!mounted) return;
+        Provider.of<StoreProvider>(context,listen: false,).addStore(minhaNovaLoja);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Loja criada com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Loja criada com sucesso!'),
+            backgroundColor: Colors.green,
+          ),
+        );
 
-      Navigator.pop(context, minhaLoja);
-    }
+        if (!mounted) return;
+
+        Navigator.pop(context, minhaNovaLoja);
+    } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao criar loja: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
   }
+}
 }

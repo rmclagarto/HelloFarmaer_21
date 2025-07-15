@@ -140,7 +140,7 @@ class GestaoSection extends StatelessWidget {
     // Navigator.pop(context);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ProdutosSection()),
+      MaterialPageRoute(builder: (context) => ProdutosSection(storeId: store.idLoja,)),
     );
   }
 

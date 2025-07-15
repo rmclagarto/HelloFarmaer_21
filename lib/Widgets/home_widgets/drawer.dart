@@ -3,25 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Core/routes.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/main_market_screen.dart';
 import 'package:hellofarmer/Screens/store_screens/all_store_panel_screen.dart';
+import 'package:provider/provider.dart';
 
 
 
 class AppDrawer extends StatelessWidget {
-  final CustomUser user;
   final ValueNotifier<ThemeMode> themeNotifier;
 
   const AppDrawer({
     super.key, 
-    required this.user,
     required this.themeNotifier,
   });
 
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context); // Guarda o NavigatorState
+    
+    final user = Provider.of<UserProvider>(context).user!;
+    
     final String userName = user.nomeUser;
     final String userPhotoUrl = ImageAssets.agricultor;
 

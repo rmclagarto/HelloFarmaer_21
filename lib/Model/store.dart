@@ -3,10 +3,11 @@ class Store {
   final String nomeLoja;
   final String descricao;
   final String telefone;
-  final Map<String, String> endereco;
+  final Map<String, dynamic> endereco;
   final double avaliacoes;
-  final String imagem;
+  String? imagem;
   final double? faturamento;
+  List<String>? listProductsId;
 
   Store.myStore({
     required this.idLoja,
@@ -15,12 +16,36 @@ class Store {
     required this.telefone,
     required this.endereco,
     required this.avaliacoes,
-    required this.imagem,
+    this.imagem = "",
     required this.faturamento,
+    this.listProductsId = const [],
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      "idLoja": idLoja,
+      "nomeLoja": nomeLoja,
+      "descricao": descricao,
+      "telefone": telefone,
+      "endereco": endereco,
+      "avaliacoes": avaliacoes,
+      "imagem": imagem,
+      "faturamento": faturamento,
+      "listaProdutosId": listProductsId,
+    };
+  }
 
-  // Store.viewStore({
-
-  // });
+  factory Store.fromJson(Map<String, dynamic> json) {
+    return Store.myStore(
+      idLoja: json['idLoja'],
+      nomeLoja: json['nomeLoja'],
+      descricao: json['descricao'],
+      telefone: json['telefone'],
+      endereco: Map<String, dynamic>.from(json['endereco']),
+      avaliacoes: (json['avaliacoes'] as num).toDouble(),
+      imagem: json['imagem'] ?? '',
+      faturamento: (json['faturamento'] as num?)?.toDouble(),
+      listProductsId: List<String>.from(json['listaProdutosId'] ?? []),
+    );
+  }
 }

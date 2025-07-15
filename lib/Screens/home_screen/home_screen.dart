@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/main.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Widgets/home_widgets/drawer.dart';
 import 'package:hellofarmer/Widgets/home_widgets/map_widget.dart';
 import 'package:hellofarmer/Widgets/home_widgets/button_panel.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  final CustomUser user;
-  const Home({super.key, required this.user});
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -18,14 +18,6 @@ class _HomeState extends State<Home> {
   final TextEditingController searchController = TextEditingController();
   final GlobalKey<MapWidgetState> _mapKey = GlobalKey<MapWidgetState>();
 
-  late CustomUser user;
-
-  @override
-  void initState() {
-    super.initState();
-    user = widget.user;
-  }
-
   final List<String> _ads = [
     "Anúncio 1: Vendo batatas biológicas",
     "Anúncio 2: Serviço de colheita disponível",
@@ -34,6 +26,15 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+
+    final user = Provider.of<UserProvider>(context).user;
+    if(user == null){
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator(),),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -45,7 +46,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      drawer: AppDrawer(user: user, themeNotifier: themeNotifier),
+      drawer: AppDrawer(themeNotifier: themeNotifier),
       body: Stack(
         children: [
           MapWidget(key: _mapKey),

@@ -24,6 +24,7 @@ class MapWidgetState extends State<MapWidget> {
   final _mapCtrl = MapController();
   LatLng? _pos;
   bool _mapReady = false;
+  bool _isMoving = false;
 
   StreamSubscription? _movementSub;
   StreamSubscription? _positionSub;
@@ -43,16 +44,40 @@ class MapWidgetState extends State<MapWidget> {
       _pos = await _locationService.getCurrentPosition();
       if (mounted) setState(() {});
 
-      _accelerometerService.startMovementDetection();
-      _movementSub = _accelerometerService.movementStream.listen((isMoving) {
-        if (isMoving) {
-          _updatePosition(); // Ativa o GPS quando movimento é detectado
-        }
-      });
+
+      _setupMovementDetection();
+      // _accelerometerService.startMovementDetection();
+      // _movementSub = _accelerometerService.movementStream.listen((isMoving) {
+      //   if (isMoving) {
+      //     _updatePosition(); // Ativa o GPS quando movimento é detectado
+      //   }
+      // });
     } catch (e) {
       setState(() => _pos = const LatLng(0, 0)); // fallback visível
       debugPrint('Erro: ${e.toString()}');
     }
+  }
+
+  void _setupMovementDetection() {
+    _movementSub?.cancel();
+    _movementSub = _accelerometerService.movementStream.listen(
+      (isMoving){
+        if(!mounted) return;
+
+        setState(() {
+          _isMoving = isMoving;
+        });
+
+
+        if(isMoving){
+          _updatePosition();
+        }else{
+          _positionSub?.cancel();
+        }
+      },
+      onError: (error) => debugPrint("Erro no acelaromentro: $error"),
+    );
+    _accelerometerService.startMovementDetection();
   }
 
   void _updatePosition() {
@@ -60,12 +85,14 @@ class MapWidgetState extends State<MapWidget> {
     _positionSub = _locationService
         .getPositionStream(highAccuracy: true)
         .take(1) // Pega apenas uma atualização
-        .listen((newPos) {
-          if (mounted) {
+        .listen(
+          (newPos) {
+            if (!mounted) return;
             setState(() => _pos = newPos);
             if (_mapReady) _mapCtrl.move(newPos, widget.initialZoom);
-          }
-        });
+          },
+          onError: (error) => debugPrint('Erro atualizando posição: $error'),
+        );
   }
 
   void addMarker(LatLng point) {
@@ -169,7 +196,10 @@ class MapWidgetState extends State<MapWidget> {
   Widget build(BuildContext ctx) {
     if (_pos == null) return const Center(child: CircularProgressIndicator());
 
-    return FlutterMap(
+    return Stack(
+      children: [
+    
+    FlutterMap(
       mapController: _mapCtrl,
       options: MapOptions(
         initialCenter: _pos!,
@@ -198,6 +228,9 @@ class MapWidgetState extends State<MapWidget> {
             ..._markerPositions,
           ],
         ),
+      ],
+    ),
+    Positioned(bottom: 20,right: 20,child: FloatingActionButton(onPressed: addRandomMarker, child: const Icon(Icons.add_location),),)
       ],
     );
   }

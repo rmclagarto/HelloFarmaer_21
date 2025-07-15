@@ -8,8 +8,6 @@ enum StatusEncomenda { pendente, concluida, cancelada }
 
 class Encomenda {
 
- 
-
   final String idEncomenda;
   final List<Produtos> produtos;
   final CustomUser comprador;

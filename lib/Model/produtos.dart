@@ -38,6 +38,42 @@ class Produtos {
   });
   
 
-  
-
+  factory Produtos.fromJson(Map<String, dynamic> json) {
+    return Produtos(
+      idProduto: json['idProduto'],
+      nomeProduto: json['nomeProduto'],
+      categoria: json['categoria'],
+      imagem: json['imagem'],
+      isAsset: json['isAsset'] ?? false,
+      descricao: json['descricao'],
+      preco: json['preco'].toDouble(),
+      quantidade: json['quantidade'].toDouble(),
+      unidadeMedida: json['unidadeMedida'],
+      data: DateTime.parse(json['data']),
+      cliques: json['cliques'] ?? 0,
+      comprado: json['comprado'] ?? 0,
+      historicoCliques: List<int>.from(json['historicoCliques'] ?? []),
+      promovido: json['promovido'] ?? false,
+      diasPromovido: json['diasPromovido'] ?? 0,
+    );
+  }
+Map<String, dynamic> toJson() {
+    return {
+      'idProduto': idProduto,
+      'nomeProduto': nomeProduto,
+      'categoria': categoria,
+      'imagem': imagem,
+      'isAsset': isAsset,
+      'descricao': descricao,
+      'preco': preco,
+      'quantidade': quantidade,
+      'unidadeMedida': unidadeMedida,
+      'data': data.toIso8601String(),
+      'cliques': cliques,
+      'comprado': comprado,
+      'historicoCliques': historicoCliques,
+      'promovido': promovido,
+      'diasPromovido': diasPromovido,
+    };
+  }
 }
