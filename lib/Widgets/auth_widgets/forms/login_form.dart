@@ -215,18 +215,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _buildDivider() {
-    return Row(
-      children: [
-        const Expanded(child: Divider()),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(Constants.orDivider),
-        ),
-        const Expanded(child: Divider()),
-      ],
-    );
-  }
+  
 
   
 

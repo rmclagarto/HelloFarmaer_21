@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
 import 'package:hellofarmer/Model/produtos.dart';
 import 'package:hellofarmer/Model/store.dart';
-// import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 
 class StoreProvider with ChangeNotifier {
@@ -15,8 +14,6 @@ class StoreProvider with ChangeNotifier {
   final DatabaseService _dbService = DatabaseService();
 
   Stream<List<Store>> getUserStores(String userId) {
-    
-
     return _dbService.getUserStoresIDs(userId).asyncExpand((storeIds) {
       if (storeIds.isEmpty) return Stream.value([]);
 
@@ -30,19 +27,18 @@ class StoreProvider with ChangeNotifier {
     });
   }
 
-
   Stream<List<Produtos>> getStoreProducts(String storeId) {
     return _dbService.getProdutosIdsDaLoja(storeId).asyncExpand((productIds) {
       if (productIds.isEmpty) return Stream.value([]);
 
-      final productFutures = productIds.map((id) => _dbService.getProdutoById(id)).toList();
-      
+      final productFutures =
+          productIds.map((id) => _dbService.getProdutoById(id)).toList();
+
       return Stream.fromFuture(Future.wait(productFutures)).map((products) {
         return products.whereType<Produtos>().toList();
       });
     });
   }
-
 
   Future<void> addProductToStore({
     required String storeId,
@@ -83,7 +79,6 @@ class StoreProvider with ChangeNotifier {
     }
   }
 
-
   Future<void> deleteProduct({
     required String storeId,
     required String productId,
@@ -93,9 +88,10 @@ class StoreProvider with ChangeNotifier {
       final currentIds = await _dbService.read(
         path: 'stores/$storeId/listProductsId',
       );
-      
+
       if (currentIds != null && currentIds.value is List) {
-        final updatedIds = List<String>.from(currentIds.value as List)..remove(productId);
+        final updatedIds = List<String>.from(currentIds.value as List)
+          ..remove(productId);
         await _dbService.update(
           path: 'stores/$storeId/listProductsId',
           data: updatedIds,
@@ -103,8 +99,8 @@ class StoreProvider with ChangeNotifier {
       }
 
       // Remove o produto
-      await _dbService.delete(path: 'produtos/$productId');
-      
+      await _dbService.delete(path: 'products/$productId');
+
       notifyListeners();
     } catch (e) {
       debugPrint('Erro ao remover produto: $e');
@@ -115,7 +111,7 @@ class StoreProvider with ChangeNotifier {
   Future<void> updateProduct(Produtos produto) async {
     try {
       await _dbService.update(
-        path: 'produtos/${produto.idProduto}',
+        path: 'products/${produto.idProduto}',
         data: produto.toJson(),
       );
       notifyListeners();
@@ -135,6 +131,133 @@ class StoreProvider with ChangeNotifier {
     } catch (e) {
       debugPrint('Error adding store to provider: $e');
       rethrow;
+    }
+  }
+
+  // Future<void> deleteStore({
+  //   required String userID,
+  //   required String storeID,
+  // }) async {
+  //   try {
+  //     final snapshot = await _dbService.read(
+  //       path: 'stores/$storeID/listProductsId',
+  //     );
+
+  //     final List<String> productIds =
+  //         (snapshot?.value is List)
+  //             ? List<String>.from(snapshot!.value as List)
+  //             : [];
+
+  //     for (final productId in productIds) {
+  //       await _dbService.delete(path: 'products/$productId');
+  //     }
+
+  //     final userSnapshot = await _dbService.read(
+  //       path: 'users/$userID/myStoreList',
+  //     );
+  //     if (userSnapshot?.value is List) {
+  //       final updatedList = List<String>.from(userSnapshot!.value as List)
+  //         ..remove(storeID);
+  //       await _dbService.update(
+  //         path: 'users/$userID',
+  //         data: {'myStoreList': updatedList},
+  //       );
+  //     }
+
+  //     // 4. Remover a própria loja
+  //     await _dbService.delete(path: 'stores/$storeID');
+
+  //     // 5. Atualizar estado local
+  //     _stores.removeWhere((store) => store.idLoja == storeID);
+  //     notifyListeners();
+  //   } catch (e) {
+  //     debugPrint('Erro ao excluir loja: $e');
+  //     rethrow;
+  //   }
+  // }
+
+
+  Future<void> deleteStore({
+  required String userID,
+  required String storeID,
+}) async {
+  try {
+    debugPrint('Iniciando exclusão da loja $storeID para usuário $userID');
+
+    // 1. Deletar produtos da loja
+    final productsSnapshot = await _dbService.read(
+      path: 'stores/$storeID/listProductsId',
+    );
+
+    final List<String> productIds =
+        (productsSnapshot?.value is List)
+            ? List<String>.from(productsSnapshot!.value as List)
+            : [];
+
+    for (final productId in productIds) {
+      await _dbService.delete(path: 'products/$productId');
+      debugPrint('Produto $productId deletado');
+    }
+
+    // 2. Remover a loja da lista do usuário
+    final userSnapshot = await _dbService.read(path: 'users/$userID/myStoreList');
+    if (userSnapshot?.value is List) {
+      final List<String> currentList = List<String>.from(userSnapshot!.value as List);
+      if (currentList.contains(storeID)) {
+        final updatedList = List<String>.from(currentList)..remove(storeID);
+        
+        // CORREÇÃO AQUI - usar set com o caminho completo
+        await _dbService.update(
+          path: 'users/$userID/myStoreList',
+          data: updatedList,
+        );
+        debugPrint('Loja removida da lista do usuário');
+      }
+    }
+
+    // 3. Remover a própria loja
+    await _dbService.delete(path: 'stores/$storeID');
+    debugPrint('Loja $storeID deletada');
+
+    // 4. Atualizar estado local
+    _stores.removeWhere((store) => store.idLoja == storeID);
+    notifyListeners();
+
+  } catch (e) {
+    debugPrint('Erro ao excluir loja: $e');
+    rethrow;
+  }
+}
+
+
+
+  // Adicione este método no seu StoreProvider
+  Future<String?> findStoreIdForProduct(String productId) async {
+    try {
+      // 1. Obter todas as lojas
+      final storesSnapshot = await _dbService.read(path: 'stores');
+
+      if (storesSnapshot?.value is Map) {
+        final storesMap = storesSnapshot!.value as Map;
+
+        // 2. Verificar cada loja
+        for (final storeId in storesMap.keys) {
+          final products = await _dbService.read(
+            path: 'stores/$storeId/listProductsId',
+          );
+
+          if (products?.value is List) {
+            final productIds = List<String>.from(products!.value as List);
+            if (productIds.contains(productId)) {
+              return storeId as String;
+            }
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Erro ao buscar loja do produto: $e');
+      return null;
     }
   }
 }

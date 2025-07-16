@@ -6,6 +6,7 @@ import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     final favorites = Provider.of<FavoritesProvider>(context).favItens;

@@ -75,7 +75,7 @@ class DatabaseService {
   }
 
   Future<Produtos?> getProdutoById(String produtoId) async {
-    final snapshot = await database.ref().child('produtos/$produtoId').get();
+    final snapshot = await database.ref().child('products/$produtoId').get();
     if (snapshot.exists) {
       return Produtos.fromJson(
         Map<String, dynamic>.from(snapshot.value as Map),
@@ -83,4 +83,5 @@ class DatabaseService {
     }
     return null;
   }
+  
 }

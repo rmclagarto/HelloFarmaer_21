@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/produtos.dart';
-import 'package:hellofarmer/Widgets/store_widgets/produtos/produtos_stats.dart';
-
+import 'package:hellofarmer/Screens/store_screens/my_product_detail_screen.dart';
 
 class ProdutoCard extends StatelessWidget {
   final Produtos produto;
@@ -29,7 +29,7 @@ class ProdutoCard extends StatelessWidget {
           final updatedProduto = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProdutosStats(produto: produto),
+              builder: (context) => MyProductDetailScreen(produto: produto),
             ),
           );
 
@@ -46,7 +46,7 @@ class ProdutoCard extends StatelessWidget {
                 child: SizedBox(
                   width: 80,
                   height: 80,
-                  child: buildProductImage(produto.imagem, produto.isAsset),
+                  child: buildProductImage(ImageAssets.fruta, produto.isAsset),
                 ),
               ),
               const SizedBox(width: 12),
@@ -54,11 +54,20 @@ class ProdutoCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(produto.nomeProduto, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      produto.nomeProduto,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 6),
-                    Text(produto.preco.toString(), style: TextStyle(color: Constants.secondaryColor)),
+                    Text(
+                      produto.preco.toString(),
+                      style: TextStyle(color: Constants.secondaryColor),
+                    ),
                     const SizedBox(height: 6),
-                    Text(produto.data.toString(), style: const TextStyle(color: Colors.grey)),
+                    Text(
+                      produto.data.toString(),
+                      style: const TextStyle(color: Colors.grey),
+                    ),
                   ],
                 ),
               ),
@@ -72,9 +81,36 @@ class ProdutoCard extends StatelessWidget {
 
   Widget buildProductImage(String imagePath, bool isAsset) {
     if (isAsset) {
-      return Image.asset(imagePath, fit: BoxFit.cover);
+      return Image.asset(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.broken_image, color: Colors.grey);
+        },
+      );
     } else {
-      return Image.file(File(imagePath), fit: BoxFit.cover);
+      final file = File(imagePath);
+      return FutureBuilder<bool>(
+        future: file.exists(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.data == true) {
+            return Image.file(
+              file,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.broken_image, color: Colors.grey);
+              },
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(strokeWidth: 2),
+            );
+          } else {
+            return const Icon(Icons.broken_image, color: Colors.grey);
+          }
+        },
+      );
     }
   }
 }

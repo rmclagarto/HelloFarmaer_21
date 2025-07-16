@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Providers/store_provider.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Widgets/store_widgets/gestao_section.dart';
 import 'package:hellofarmer/Widgets/store_widgets/store_details.dart';
-
+import 'package:provider/provider.dart';
 
 class MainStoreScreen extends StatefulWidget {
   final Store loja;
@@ -40,7 +42,6 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
       _currentIndex = index;
     });
 
-  
     // Scroll para as seções normais
     final sectionContext = _sectionsKeys[index].currentContext;
     if (sectionContext != null) {
@@ -67,10 +68,6 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  // Aqui você pode adicionar a lógica para excluir a loja
-
-            
-
                   Navigator.pop(context, true);
                 },
                 child: const Text(
@@ -82,11 +79,24 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
           ),
     );
 
-    if (!mounted) return;
+    if (!mounted || confimar != true) return;
 
-    if (confimar == true) {
-      // Lógica para excluir a loja
-      Navigator.pop(context, {'delete': true, 'storeId': widget.loja.idLoja});
+    final storeProvider = Provider.of<StoreProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      await storeProvider.deleteStore(
+        userID: userProvider.user!.idUser,
+        storeID: widget.loja.idLoja,
+      );
+
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Erro ao excluir loja")));
     }
   }
 

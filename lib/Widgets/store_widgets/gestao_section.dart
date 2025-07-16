@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/store.dart';
@@ -7,11 +6,9 @@ import 'package:hellofarmer/Widgets/store_widgets/clientes/clientes_section.dart
 import 'package:hellofarmer/Widgets/store_widgets/ecomendas/encomendas_section.dart';
 import 'package:hellofarmer/Widgets/store_widgets/produtos/produtos_section.dart';
 
-
-
 class GestaoSection extends StatelessWidget {
   final Store store;
-  
+
   const GestaoSection({super.key, required this.store});
 
   @override
@@ -49,7 +46,7 @@ class GestaoSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context),
-          
+
           const SizedBox(height: 30),
           _buildGridCards(cardItems),
         ],
@@ -67,10 +64,6 @@ class GestaoSection extends StatelessWidget {
     );
   }
 
-  
-
-  
-
   Widget _buildGridCards(List<_CardItem> items) {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -80,11 +73,16 @@ class GestaoSection extends StatelessWidget {
         return Wrap(
           spacing: 16,
           runSpacing: 16,
-          children: items.map((item) => SizedBox(
-            width: cardWidth,
-            height: cardHeight,
-            child: _buildGestaoCard(item),
-          )).toList(),
+          children:
+              items
+                  .map(
+                    (item) => SizedBox(
+                      width: cardWidth,
+                      height: cardHeight,
+                      child: _buildGestaoCard(item),
+                    ),
+                  )
+                  .toList(),
         );
       },
     );
@@ -93,9 +91,7 @@ class GestaoSection extends StatelessWidget {
   Widget _buildGestaoCard(_CardItem item) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: item.onTap,
@@ -114,13 +110,12 @@ class GestaoSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              ...item.subtitles.map((sub) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text(
-                  '• $sub',
-                  style: const TextStyle(fontSize: 12),
+              ...item.subtitles.map(
+                (sub) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text('• $sub', style: const TextStyle(fontSize: 12)),
                 ),
-              )),
+              ),
             ],
           ),
         ),
@@ -130,17 +125,20 @@ class GestaoSection extends StatelessWidget {
 
   void _navegarParaEncomendas(BuildContext context) {
     // Implemente a navegação
-    Navigator.push(context,
-      MaterialPageRoute(builder: (context) => EncomendasSection()), 
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EncomendasSection(storeId: store.idLoja,)),
     );
   }
 
   void _navegarParaProdutos(BuildContext context) {
     // Implemente a navegação
-    // Navigator.pop(context);
+    Navigator.pop(context);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ProdutosSection(storeId: store.idLoja,)),
+      MaterialPageRoute(
+        builder: (context) => ProdutosSection(storeId: store.idLoja),
+      ),
     );
   }
 
@@ -148,7 +146,7 @@ class GestaoSection extends StatelessWidget {
     // Implemente a navegação
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ClientesSection()), 
+      MaterialPageRoute(builder: (context) => ClientesSection(storeId: store.idLoja,)),
     );
   }
 
@@ -156,7 +154,8 @@ class GestaoSection extends StatelessWidget {
     // Implemente a navegação
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AnalisesFinanceirasSection()));
+      MaterialPageRoute(builder: (context) => AnalisesFinanceirasSection(storeId: store.idLoja)),
+    );
   }
 }
 

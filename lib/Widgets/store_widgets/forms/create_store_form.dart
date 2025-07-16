@@ -291,7 +291,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.primaryColor, // Corrigido aqui
+          backgroundColor: Constants.primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Constants.spacingMedium),
@@ -328,8 +328,8 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           faturamento: 0.0,
         );
 
-        final _dbService = DatabaseService();
-        await _dbService.create(
+        // final _dbService = DatabaseService();
+        await DatabaseService().create(
           path: "stores/$idLoja",
           data: minhaNovaLoja.toJson(),
         );

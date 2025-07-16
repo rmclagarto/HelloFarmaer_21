@@ -17,7 +17,6 @@ class StoreDetails extends StatelessWidget {
     return SingleChildScrollView(
     child:Padding(
       padding: const EdgeInsets.all(16.0),
-      // child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -113,9 +112,6 @@ class StoreDetails extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        // Opcional: Barra de progresso por estrelas
-        _buildStarRatingsBreakdown(),
       ],
     );
   }
@@ -130,7 +126,7 @@ class StoreDetails extends StatelessWidget {
           context,
           Icons.location_on,
           "${store.endereco['rua']}, ${store.endereco['numero']}\n"
-          "${store.endereco['cidade']}, ${store.endereco['estado']}",
+          "${store.endereco['bairro']}, ${store.endereco['cidade']}",
         ),
       ],
     );
@@ -150,34 +146,6 @@ class StoreDetails extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  // Opcional: Detalhamento por estrelas
-  Widget _buildStarRatingsBreakdown() {
-    return Column(
-      children:
-          [5, 4, 3, 2, 1].map((stars) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Row(
-                children: [
-                  Text('$stars', style: const TextStyle(color: Colors.amber)),
-                  const Icon(Icons.star, size: 16, color: Colors.amber),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 0.7, // Substituir pelo valor real
-                      backgroundColor: Colors.grey[200],
-                      color: Colors.amber,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text('70%', style: TextStyle(color: Colors.grey[600])),
-                ],
-              ),
-            );
-          }).toList(),
     );
   }
 

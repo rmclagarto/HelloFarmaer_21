@@ -18,6 +18,13 @@ class UserProvider with ChangeNotifier {
     if (snapshot != null) {
       final data = Map<String, dynamic>.from(snapshot.value as Map);
 
+       if (data['historicoCompras'] is! List) {
+      data['historicoCompras'] = [];
+    }
+    if (data['myStoreList'] is! List) {
+      data['myStoreList'] = [];
+    }
+
       final user = CustomUser(
         idUser: data['idUser'],
         nomeUser: data['nomeUser'],
@@ -25,7 +32,7 @@ class UserProvider with ChangeNotifier {
         telefone: data['telefone'],
         grupo: data['grupo'],
         historicoCompras: List<String>.from(data['historicoCompras'] ?? []),
-        myStoreList: List<String>.from(data['myStoreList'] ?? []), // Nome consistente
+        myStoreList: List<String>.from(data['myStoreList'] ?? []),
         imagemPerfil: data['imagemPerfil'],
       );
 
@@ -52,7 +59,7 @@ class UserProvider with ChangeNotifier {
     try {
       // await _dbService.delete(path: 'users/${_user!.idUser}');
 
-      await _dbService.delete(path: 'users/${uid}'); 
+      await _dbService.delete(path: 'users/$uid'); 
       await fbUser.delete();
       
       clearUser();
@@ -72,14 +79,17 @@ class UserProvider with ChangeNotifier {
     currentStores.add(storeId);
     
     // Use set() em vez de update() para listas
-    await _dbService.create(
-      path: 'users/${_user!.idUser}/myStoreList',
-      data: currentStores,
+    await _dbService.update(
+      path: 'users/${_user!.idUser}',
+      data: {
+        'myStoreList': currentStores,
+      },
     );
     
     _user = _user!.copyWith(myStoreList: currentStores);
     notifyListeners();
   }
+ 
 }
 
   void setUser(CustomUser user) {

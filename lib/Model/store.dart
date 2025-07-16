@@ -8,6 +8,8 @@ class Store {
   String? imagem;
   final double? faturamento;
   List<String>? listProductsId;
+  List<String>? listClientsId;
+  List<String>? listEncomendasId;
 
   Store.myStore({
     required this.idLoja,
@@ -19,6 +21,8 @@ class Store {
     this.imagem = "",
     required this.faturamento,
     this.listProductsId = const [],
+    this.listClientsId = const [],
+    this.listEncomendasId = const [],
   });
 
   Map<String, dynamic> toJson() {
@@ -32,6 +36,8 @@ class Store {
       "imagem": imagem,
       "faturamento": faturamento,
       "listaProdutosId": listProductsId,
+      "listaClientesId": listClientsId,
+      "listaEncomendasId": listEncomendasId,
     };
   }
 
@@ -46,6 +52,8 @@ class Store {
       imagem: json['imagem'] ?? '',
       faturamento: (json['faturamento'] as num?)?.toDouble(),
       listProductsId: List<String>.from(json['listaProdutosId'] ?? []),
+      listClientsId: List<String>.from(json['listaClientesId'] ?? []),
+      listEncomendasId: List<String>.from(json['listaEncomendasId'] ?? []),
     );
   }
 }

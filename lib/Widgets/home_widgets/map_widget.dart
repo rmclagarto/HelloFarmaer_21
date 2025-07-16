@@ -24,7 +24,7 @@ class MapWidgetState extends State<MapWidget> {
   final _mapCtrl = MapController();
   LatLng? _pos;
   bool _mapReady = false;
-  bool _isMoving = false;
+  // bool _isMoving = false;
 
   StreamSubscription? _movementSub;
   StreamSubscription? _positionSub;
@@ -46,12 +46,7 @@ class MapWidgetState extends State<MapWidget> {
 
 
       _setupMovementDetection();
-      // _accelerometerService.startMovementDetection();
-      // _movementSub = _accelerometerService.movementStream.listen((isMoving) {
-      //   if (isMoving) {
-      //     _updatePosition(); // Ativa o GPS quando movimento é detectado
-      //   }
-      // });
+      
     } catch (e) {
       setState(() => _pos = const LatLng(0, 0)); // fallback visível
       debugPrint('Erro: ${e.toString()}');
@@ -64,9 +59,9 @@ class MapWidgetState extends State<MapWidget> {
       (isMoving){
         if(!mounted) return;
 
-        setState(() {
-          _isMoving = isMoving;
-        });
+        // setState(() {
+        //   _isMoving = isMoving;
+        // });
 
 
         if(isMoving){

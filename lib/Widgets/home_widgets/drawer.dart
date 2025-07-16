@@ -37,17 +37,17 @@ class AppDrawer extends StatelessWidget {
           Navigator.pushNamed(context, Routes.myAccount, arguments: user);
         }
       },
-      // {
-      //   'icon': Icons.shopping_basket,
-      //   'title': 'Mercado',
-      //   'onTap': () {
-      //     navigator.pop();
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => MarketScreen(user: user)),
-      //     );
-      //   },
-      // },
+      {
+        'icon': Icons.shopping_basket,
+        'title': 'Mercado',
+        'onTap': () {
+          navigator.pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MarketScreen(user: user)),
+          );
+        },
+      },
       {
         'icon': Icons.shop,
         'title': 'Loja',

@@ -7,15 +7,12 @@ class FinanceReportService {
   final double faturamentoTotal;
   final double despesas;
   final double lucro;
-  final Map<String, double> faturamentoMensal;
-  final Map<String, double> canaisDeVendas;
+
 
   FinanceReportService({
     required this.faturamentoTotal,
     required this.despesas,
     required this.lucro,
-    required this.faturamentoMensal,
-    required this.canaisDeVendas,
   });
 
   Future<Uint8List> generatePDF() async {
@@ -67,13 +64,7 @@ class FinanceReportService {
                 color: PdfColors.blue,
               ),
             ),
-            pw.TableHelper.fromTextArray(
-              context: context,
-              headers: ['Mês', 'Valor (€)'],
-              data: faturamentoMensal.entries
-                  .map((e) => [e.key, e.value.toStringAsFixed(2)])
-                  .toList(),
-            ),
+            
             pw.SizedBox(height: 30),
 
             // 3. Canais de Vendas
@@ -84,13 +75,6 @@ class FinanceReportService {
                 fontWeight: pw.FontWeight.bold,
                 color: PdfColors.blue,
               ),
-            ),
-            pw.TableHelper.fromTextArray(
-              context: context,
-              headers: ['Canal', 'Valor (€)'],
-              data: canaisDeVendas.entries
-                  .map((e) => [e.key, e.value.toStringAsFixed(2)])
-                  .toList(),
             ),
           ];
         },

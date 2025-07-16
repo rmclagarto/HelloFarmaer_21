@@ -76,4 +76,41 @@ Map<String, dynamic> toJson() {
       'diasPromovido': diasPromovido,
     };
   }
+
+
+  Produtos copyWith({
+    String? idProduto,
+    String? nomeProduto,
+    String? categoria,
+    String? imagem,
+    bool? isAsset,
+    String? descricao,
+    double? preco,
+    double? quantidade,
+    String? unidadeMedida,
+    DateTime? data,
+    int? cliques,
+    int? comprado,
+    List<int>? historicoCliques,
+    bool? promovido,
+    int? diasPromovido,
+  }) {
+    return Produtos(
+      idProduto: idProduto ?? this.idProduto,
+      nomeProduto: nomeProduto ?? this.nomeProduto,
+      categoria: categoria ?? this.categoria,
+      imagem: imagem ?? this.imagem,
+      isAsset: isAsset ?? this.isAsset,
+      descricao: descricao ?? this.descricao,
+      preco: preco ?? this.preco,
+      quantidade: quantidade ?? this.quantidade,
+      unidadeMedida: unidadeMedida ?? this.unidadeMedida,
+      data: data ?? this.data,
+      cliques: cliques ?? this.cliques,
+      comprado: comprado ?? this.comprado,
+      historicoCliques: historicoCliques ?? this.historicoCliques,
+      promovido: promovido ?? this.promovido,
+      diasPromovido: diasPromovido ?? this.diasPromovido,
+    );
+  }
 }

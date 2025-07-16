@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Services/database_service.dart';
 
 class FirebaseAuthService {
   final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
+  final DatabaseService _databaseService = DatabaseService();
 
   Future<CustomUser?> registerWithEmailPassword(
     String email,
@@ -23,11 +25,24 @@ class FirebaseAuthService {
 
         await user.reload();
 
-        return CustomUser(
+        final CustomUser customUser = CustomUser(
           idUser: user.uid,
-          nomeUser: "", // Default empty name - you can collect this separately
+          nomeUser: '',
           email: user.email ?? email,
+          telefone: '',
+          grupo: '',
+          historicoCompras: [],
+          myStoreList: [],
+          imagemPerfil: '',
         );
+
+
+        await _databaseService.create(
+          path: 'users/${user.uid}',
+          data: customUser.toJson(),
+        );
+
+        return customUser;
       }
     } on fb_auth.FirebaseAuthException catch (e) {
       debugPrint("\n Firebase Auth Error: ${e.code} - ${e.message} \n");
