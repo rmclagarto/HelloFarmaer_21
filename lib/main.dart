@@ -1,8 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/routes.dart';
-import 'package:hellofarmer/Providers/cart_provider.dart';
-import 'package:hellofarmer/Providers/favorites_provider.dart';
+
 import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/notification_service.dart';
@@ -36,8 +35,6 @@ class MainApp extends StatelessWidget {
             return MultiProvider(
               providers: [
                 ChangeNotifierProvider(create: (_) => StoreProvider()),
-                ChangeNotifierProvider(create: (_) => FavoritesProvider()),
-                ChangeNotifierProvider(create: (_) => CartProvider()),
                 ChangeNotifierProvider(create: (_) => UserProvider()),
               ],
               child: MaterialApp(

@@ -25,6 +25,8 @@ class UserProvider with ChangeNotifier {
       data['myStoreList'] = [];
     }
 
+    if (data['myFavProductList'] is! List) data['myFavProductList'] = [];
+
       final user = CustomUser(
         idUser: data['idUser'],
         nomeUser: data['nomeUser'],
@@ -33,6 +35,7 @@ class UserProvider with ChangeNotifier {
         grupo: data['grupo'],
         historicoCompras: List<String>.from(data['historicoCompras'] ?? []),
         myStoreList: List<String>.from(data['myStoreList'] ?? []),
+        myFavProductList: List<String>.from(data['myFavProductList'] ?? []),
         imagemPerfil: data['imagemPerfil'],
       );
 

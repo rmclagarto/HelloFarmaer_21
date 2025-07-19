@@ -27,12 +27,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _cameraEnabled = false;
   bool _contactsEnabled = false;
 
-  Future<void> _checkPermissions() async {
-    await Permission.location.status;
-    await Permission.photos.status;
-    await Permission.camera.status;
-    await Permission.contacts.status;
-  }
+  // Future<void> _checkPermissions() async {
+  //   await Permission.location.status;
+  //   await Permission.photos.status;
+  //   await Permission.camera.status;
+  //   await Permission.contacts.status;
+  // }
 
   @override
   void initState() {

@@ -159,7 +159,7 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
               ? Center(child: Text(_errorMessage!))
               : _stores.isEmpty
               ? const Center(
-                child: Text("Você ainda não possui lojas cadastradas."),
+                child: Text("Você ainda não possui lojas."),
               )
               : ListView.builder(
                 padding: const EdgeInsets.all(16),

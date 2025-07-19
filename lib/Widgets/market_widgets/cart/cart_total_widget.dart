@@ -16,8 +16,8 @@ class CartTotalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double discount = subtotal * 0.4;
-    final double total = subtotal - discount;
+    
+    final double total = subtotal;
 
     return Container(
       padding: const EdgeInsets.all(20),

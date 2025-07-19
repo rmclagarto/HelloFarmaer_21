@@ -26,7 +26,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
       text: widget.produto.preco.toString(),
     );
     _stockController = TextEditingController(
-      text: widget.produto.quantidade?.toString() ?? '0',
+      text: widget.produto.quantidade.toString(),
     );
   }
 

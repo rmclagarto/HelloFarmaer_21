@@ -63,7 +63,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
                   final produtos = snapshot.data ?? [];
 
                   if (produtos.isEmpty) {
-                    return const Center(child: Text('Nenhum produto cadastrado'));
+                    return const Center(child: Text('Nenhum produto registrado'));
                   }
 
                   return ListView.builder(

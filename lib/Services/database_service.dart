@@ -83,5 +83,4 @@ class DatabaseService {
     }
     return null;
   }
-  
 }

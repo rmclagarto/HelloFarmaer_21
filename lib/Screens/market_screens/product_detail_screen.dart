@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
 import 'package:hellofarmer/Model/produtos.dart';
 import 'package:hellofarmer/Model/store.dart';
-import 'package:hellofarmer/Providers/cart_provider.dart';
-import 'package:hellofarmer/Providers/favorites_provider.dart';
 import 'package:hellofarmer/Providers/store_provider.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 
 import 'package:hellofarmer/Screens/market_screens/checkout_screen.dart';
 import 'package:hellofarmer/Screens/market_screens/store_detail_screen.dart';
+import 'package:hellofarmer/Services/database_service.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -21,13 +22,122 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  bool isFavorited = false;
+  final DatabaseService _db = DatabaseService();
+  bool _isFavorite = false;
+  bool _isLoading = false;
+
+  Future<void> _addToCart(BuildContext context) async {
+    if (!mounted || _isLoading) return;
+    setState(() => _isLoading = true);
+
+    final user = Provider.of<UserProvider>(context, listen: false);
+    final dbService = DatabaseService();
+
+    try {
+      final cartSnapshot = await dbService.read(
+        path: 'users/${user.user?.idUser}/cartProductsList',
+      );
+      List<String> updatedCart = [];
+
+      if (cartSnapshot != null && cartSnapshot.value != null) {
+        if (cartSnapshot.value is List) {
+          updatedCart = List<String>.from(cartSnapshot.value as List);
+        } else if (cartSnapshot.value is Map) {
+          // Se for um Map (estrutura antiga), converter para List
+          updatedCart =
+              (cartSnapshot.value as Map).keys.cast<String>().toList();
+        }
+      }
+
+      // Verificar se o produto já está no carrinho
+      if (updatedCart.contains(widget.product.idProduto)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Produto já está no carrinho')),
+        );
+        return;
+      }
+
+      // Adicionar o novo ID do produto
+      updatedCart.add(widget.product.idProduto);
+
+      // Atualizar o carrinho no Firebase
+      await dbService.update(
+        path: "users/${user.user?.idUser}/cartProductsList",
+        data: updatedCart,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Produto adicionado ao carrinho!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao adicionar: ${e.toString()}')),
+      );
+    }
+  }
+
+  Future<void> _toggleFavorite(BuildContext context) async {
+    if (!mounted || _isLoading) return;
+    setState(() => _isLoading = true);
+    
+    final user = Provider.of<UserProvider>(context, listen: false);
+    
+
+    try {
+      final snapshot = await _db.read(
+        path: 'user/${user.user?.idUser}/favoritos',
+      );
+
+      List<String> favoritos = [];
+
+      if (snapshot?.value != null) {
+        favoritos = List<String>.from(snapshot!.value as List);
+      }
+
+      if (favoritos.contains(widget.product.idProduto)) {
+        favoritos.remove(widget.product.idProduto);
+      } else {
+        favoritos.add(widget.product.idProduto!);
+      }
+
+      await _db.update(
+        path: 'users/${user.user?.idUser}/favoritos',
+        data: favoritos,
+      );
+
+      if (!mounted) return;
+      setState(() => _isFavorite = !_isFavorite);
+
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            _isFavorite
+                ? 'Adicionado aos favoritos'
+                : 'Removido dos favoritos',
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      print("\n\n\n\n");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro: $e')));
+
+      print("Erro; $e");
+      print("\n\n\n\n");
+    }
+    finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final favoritesProvider = Provider.of<FavoritesProvider>(context);
-    final isFavorited = favoritesProvider.isFavorite(widget.product);
     final isAvailable = (widget.product.quantidade ?? 0) > 0;
+    // final favoritesSnapshot = Provider.of<UserProvider>(context).userFavorites;
+    // final isFavorited = favoritesSnapshot?.contains(product.idProduto) ?? false;
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +154,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    widget.product.imagem,
+                    ImageAssets.alface, // widget.product.imagem,
                     width: double.infinity,
                     height: 250,
                     fit: BoxFit.cover,
@@ -71,19 +181,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         padding: const EdgeInsets.all(8),
                         elevation: 2,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          if (isFavorited) {
-                            favoritesProvider.removeFromFavorites(
-                              widget.product,
-                            );
-                          } else {
-                            favoritesProvider.addToFavorites(widget.product);
-                          }
-                        });
-                      },
+                      onPressed: () => _toggleFavorite(context),
                       child: Icon(
-                        isFavorited ? Icons.favorite : Icons.favorite_border,
+                        _isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: Colors.red,
                       ),
                     ),
@@ -125,18 +225,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Este é um excelente produto, fresco e de alta qualidade. Ideal para uma alimentação saudável.',
-                  style: TextStyle(fontSize: 16, height: 1.5),
+                Text(
+                  widget.product.descricao,
+                  style: const TextStyle(fontSize: 16, height: 1.5),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Categoria: ${widget.product.categoria ?? 'N/A'}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Stock disponível: ${widget.product.quantidade ?? 0}',
+                  'Categoria: ${widget.product.categoria}',
                   style: const TextStyle(fontSize: 16),
                 ),
 
@@ -149,16 +244,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       listen: false,
                     );
 
-
-
-
                     // final produtosDaLoja = storeProvider.getProdutosDaLoja(
                     //   widget.product.loja,
                     // );
-
-
-
-
 
                     // Dados estáticos da loja
                     final lojaEstatica = Store.myStore(
@@ -178,25 +266,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       faturamento: 0,
                     );
 
-
                     final productStatic = Produtos(
-                      idProduto: "1", 
-                      nomeProduto: "product teste estatico", 
+                      idProduto: "1",
+                      nomeProduto: "product teste estatico",
                       categoria: "Vegetais",
                       imagem: "assets/img/alface.png",
-                      isAsset: true, 
-                      descricao: "description", 
-                      // isAsset: true, 
-                      preco: 23.0, 
+                      isAsset: true,
+                      descricao: "description",
+                      // isAsset: true,
+                      preco: 23.0,
                       quantidade: 1,
                       unidadeMedida: "unidades",
-                      data: DateTime.now(), 
+                      data: DateTime.now(),
                     );
-
-
-
-
-
 
                     Navigator.push(
                       context,
@@ -204,7 +286,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         builder:
                             (_) => StoreDetailScreen(
                               loja: lojaEstatica,
-                              produtosDaLoja: [productStatic, productStatic,productStatic, productStatic,productStatic, productStatic,productStatic, productStatic],
+                              produtosDaLoja: [
+                                productStatic,
+                                productStatic,
+                                productStatic,
+                                productStatic,
+                                productStatic,
+                                productStatic,
+                                productStatic,
+                                productStatic,
+                              ],
                             ),
                       ),
                     );
@@ -229,22 +320,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed:
-                        isAvailable
-                            ? () {
-                              Provider.of<CartProvider>(
-                                context,
-                                listen: false,
-                              ).addProduct(widget.product);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Produto adicionado ao carrinho!',
-                                  ),
-                                ),
-                              );
-                            }
-                            : null,
+                    onPressed: isAvailable ? () => _addToCart(context) : null,
                     icon: const Icon(Icons.add_shopping_cart),
                     label: const Text('Adicionar'),
                     style: ElevatedButton.styleFrom(

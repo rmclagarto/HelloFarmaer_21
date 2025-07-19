@@ -8,6 +8,7 @@ class CustomUser {
   final String? grupo;
   List<String>? historicoCompras;
   List<String>? myStoreList;
+  List<String>? myFavProductList;
   String? imagemPerfil;
 
   CustomUser({
@@ -18,6 +19,7 @@ class CustomUser {
     this.grupo = "Novo",
     this.historicoCompras = const [],
     this.myStoreList = const [], 
+    this.myFavProductList = const [],
     this.imagemPerfil,
   });
 
@@ -29,26 +31,30 @@ class CustomUser {
       'telefone': telefone,
       'grupo': grupo,
       'historicoCompras': historicoCompras,
-      'myStoreList': myStoreList, 
+      'myStoreList': myStoreList,
+      'myFavProductList': myFavProductList,
       'imagemPerfil': imagemPerfil,
     };
   }
 
   factory CustomUser.fromJson(Map<String, dynamic> json) {
-  return CustomUser(
-    idUser: json['idUser'],
-    nomeUser: json['nomeUser'],
-    email: json['email'],
-    telefone: json['telefone'],
-    grupo: json['grupo'],
-    historicoCompras: json['historicoCompras'] is List
-        ? List<String>.from(json['historicoCompras'])
-        : [],
-    myStoreList: json['myStoreList'] is List
-        ? List<String>.from(json['myStoreList'])
-        : [],
-    imagemPerfil: json['imagemPerfil'],
-  );
+    return CustomUser(
+      idUser: json['idUser'],
+      nomeUser: json['nomeUser'],
+      email: json['email'],
+      telefone: json['telefone'],
+      grupo: json['grupo'],
+      historicoCompras: json['historicoCompras'] is List
+          ? List<String>.from(json['historicoCompras'])
+          : [],
+      myStoreList: json['myStoreList'] is List
+          ? List<String>.from(json['myStoreList'])
+          : [],
+      myFavProductList: json['myFavProductList'] is List
+          ? List<String>.from(json['myFavProductList'])
+          : [],
+      imagemPerfil: json['imagemPerfil'],
+    );
 }
 
 
@@ -67,7 +73,8 @@ class CustomUser {
     String? telefone,
     String? grupo,
     List<String>? historicoCompras,
-    List<String>? myStoreList, 
+    List<String>? myStoreList,
+    List<String>? myFavProductList,
     String? imagemPerfil,
   }) {
     return CustomUser(
@@ -77,7 +84,8 @@ class CustomUser {
       telefone: telefone ?? this.telefone,
       grupo: grupo ?? this.grupo,
       historicoCompras: historicoCompras ?? this.historicoCompras,
-      myStoreList: myStoreList ?? this.myStoreList, 
+      myStoreList: myStoreList ?? this.myStoreList,
+      myFavProductList: myFavProductList ?? this.myFavProductList,
       imagemPerfil: imagemPerfil ?? this.imagemPerfil,
     );
   }
