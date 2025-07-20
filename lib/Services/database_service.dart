@@ -43,6 +43,12 @@ class DatabaseService {
     return ref.remove();
   }
 
+
+
+  Stream<DatabaseEvent> readAsStream({required String path}) {
+    return database.ref().child(path).onValue;
+  }
+
   Stream<List<String>> getUserStoresIDs(String userID) {
     final ref = database.ref().child('users/${userID}/myStoreList');
     return ref.onValue.map((event) {

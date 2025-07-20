@@ -31,7 +31,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     try {
       // 1. Buscar lista de IDs de favoritos
       final favoritesSnapshot = await _dbService.read(
-        path: 'users/${user?.idUser}/favorites',
+        path: 'users/${user?.idUser}/favoritos',
       );
 
       if (favoritesSnapshot == null || favoritesSnapshot.value == null) {

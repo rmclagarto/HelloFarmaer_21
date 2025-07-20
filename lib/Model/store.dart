@@ -56,4 +56,35 @@ class Store {
       listEncomendasId: List<String>.from(json['listaEncomendasId'] ?? []),
     );
   }
+
+
+   Store copyWith({
+    String? idLoja,
+    String? nomeLoja,
+    String? descricao,
+    String? telefone,
+    Map<String, dynamic>? endereco,
+    double? avaliacoes,
+    String? imagem,
+    double? faturamento,
+    List<String>? listProductsId,
+    List<String>? listClientsId,
+    List<String>? listEncomendasId,
+  }) {
+    return Store.myStore(
+      idLoja: idLoja ?? this.idLoja,
+      nomeLoja: nomeLoja ?? this.nomeLoja,
+      descricao: descricao ?? this.descricao,
+      telefone: telefone ?? this.telefone,
+      endereco: endereco ?? this.endereco,
+      avaliacoes: avaliacoes ?? this.avaliacoes,
+      imagem: imagem ?? this.imagem,
+      faturamento: faturamento ?? this.faturamento,
+      listProductsId: listProductsId ?? this.listProductsId,
+      listClientsId: listClientsId ?? this.listClientsId,
+      listEncomendasId: listEncomendasId ?? this.listEncomendasId,
+    );
+  }
 }
+
+

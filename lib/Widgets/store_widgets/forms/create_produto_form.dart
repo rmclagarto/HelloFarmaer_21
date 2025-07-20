@@ -161,6 +161,7 @@ class ProdutoFormState extends State<ProdutoForm> {
 
         final produto = Produtos(
           idProduto: productId,
+          idLoja: widget.storeId,
           nomeProduto: _nomeController.text,
           categoria: _selectedCategory!,
           imagem: _selectedImages[0]!.path,
