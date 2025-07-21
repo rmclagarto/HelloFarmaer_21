@@ -9,7 +9,7 @@ class Produtos {
   String imagem;
   String descricao;
   double preco;
-  double quantidade;
+  int quantidade;
   String unidadeMedida;
   DateTime data;
   int? cliques;
@@ -49,7 +49,7 @@ class Produtos {
       isAsset: json['isAsset'] ?? false,
       descricao: json['descricao'],
       preco: json['preco'].toDouble(),
-      quantidade: json['quantidade'].toDouble(),
+      quantidade: int.tryParse(json['quantidade'].toString()) ?? 0,
       unidadeMedida: json['unidadeMedida'],
       data: DateTime.parse(json['data']),
       cliques: json['cliques'] ?? 0,
@@ -90,7 +90,7 @@ Map<String, dynamic> toJson() {
     bool? isAsset,
     String? descricao,
     double? preco,
-    double? quantidade,
+    int? quantidade,
     String? unidadeMedida,
     DateTime? data,
     int? cliques,

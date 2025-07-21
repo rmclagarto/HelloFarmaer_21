@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
+import 'package:hellofarmer/Model/encomenda.dart';
+import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/notification_service.dart';
-
+import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -56,6 +58,48 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Random().nextInt(100);
   }
 
+  Map<String, List<CartItem>> _groupItemsByStore() {
+    final Map<String, List<CartItem>> storeGroups = {};
+
+    for (final item in widget.cartItems) {
+      if (!item.inStock) continue;
+
+      final storeId = item.product.idLoja;
+      if (!storeGroups.containsKey(storeId)) {
+        storeGroups[storeId] = [];
+      }
+      storeGroups[storeId]!.add(item);
+    }
+
+    return storeGroups;
+  }
+
+  Future<List<Encomenda>> _createEncomendas() async {
+    final storeGroups = _groupItemsByStore();
+    final masterOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+    final masterOrderCode = gerarCodigoPedido().toString();
+    final List<Encomenda> encomendas = [];
+
+    final user = Provider.of<UserProvider>(context, listen: false);
+    for (final storeId in storeGroups.keys) {
+      final items = storeGroups[storeId]!;
+
+      final encomenda = Encomenda(
+        idEncomenda: '$masterOrderId-$storeId',
+        pedidos: items.map((item) => item.product.idProduto).toList(),
+        compradorId: user.user!.idUser, // Substitua pelo ID real
+        vendedorId: storeId,
+        dataPedido: DateTime.now(),
+        status: StatusEncomenda.pendente,
+        code: masterOrderCode,
+      );
+
+      encomendas.add(encomenda);
+    }
+
+    return encomendas;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,20 +148,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
     widgets.add(SizedBox(height: 10));
 
-    for (var i = 0; i < widget.cartItems.length; i++) {
-      for (var item in widget.cartItems) {
-        if (!item.inStock) continue;
+    for (var item in widget.cartItems) {
+      if (!item.inStock) continue;
 
-        widgets.add(
-          ListTile(
-            title: Text(item.product.nomeProduto),
-            subtitle: Text('Qtd: ${item.quantity}'),
-            trailing: Text(
-              '${(item.product.preco * item.quantity).toStringAsFixed(2)} €',
-            ),
+      widgets.add(
+        ListTile(
+          title: Text(item.product.nomeProduto),
+          subtitle: Text('Qtd: ${item.quantity}'),
+          trailing: Text(
+            '${(item.product.preco * item.quantity).toStringAsFixed(2)} €',
           ),
-        );
-      }
+        ),
+      );
     }
 
     // if (outOfStockCount > 0) {
@@ -254,7 +296,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
           final codigoPedido = gerarCodigoPedido();
           await mostrarNotificacao(codigoPedido.toString(), context);
-
 
           widget.cartItems.clear();
 

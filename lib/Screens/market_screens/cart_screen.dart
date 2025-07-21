@@ -75,11 +75,45 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> _updateQuantity(String productId, int newQuantity) async {
-    if (newQuantity < 1) return;
+    // Find the product to check available quantity
+    final product = cartProducts.firstWhere(
+      (p) => p.idProduto == productId,
+      orElse:
+          () => Produtos(
+            idProduto: '',
+            nomeProduto: '',
+            preco: 0,
+            quantidade: 0,
+            idLoja: '', // Added required field
+            categoria: '', // Added required field
+            imagem: '', // Added required field
+            isAsset: false, // Added required field
+            descricao: '', // Added required field
+            unidadeMedida: '', // Added required field
+            data: DateTime.now(), // Added required field
+          ),
+    );
 
-    setState(() {
-      quantities[productId] = newQuantity;
-    });
+    // Enforce quantity limits
+    if (newQuantity < 1) {
+      newQuantity = 1; // Minimum quantity
+    } else if (newQuantity > product.quantidade) {
+      newQuantity = product.quantidade; // Maximum available quantity
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Quantidade máxima disponível atingida'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        quantities[productId] = newQuantity;
+      });
+    }
   }
 
   Future<void> _removeItem(String productId) async {
@@ -140,7 +174,9 @@ class _CartScreenState extends State<CartScreen> {
         children: [
           Expanded(
             child:
-                cartProducts.isEmpty
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : cartProducts.isEmpty
                     ? const Center(child: Text('Seu carrinho está vazio'))
                     : ListView.separated(
                       itemCount: cartProducts.length,
@@ -152,9 +188,10 @@ class _CartScreenState extends State<CartScreen> {
                           item: {
                             'name': product.nomeProduto,
                             'price': product.preco,
-                            'quantity': product.quantidade,
+                            'quantity': quantities[product.idProduto] ?? 1.0,
+                            'maxQuantity': product.quantidade,
                             'image': ImageAssets.alface,
-                            'inStock': true,
+                            'inStock': product.quantidade > 0,
                           },
                           onQuantityChanged: (newQuantity) {
                             _updateQuantity(product.idProduto, newQuantity);

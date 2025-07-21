@@ -69,13 +69,6 @@ class ProductCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.add_shopping_cart, size: 20),
-                    color: Constants.primaryColor,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () => _addToCart(context),
-                  ),
                 ],
               ),
             ],
@@ -83,52 +76,5 @@ class ProductCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _addToCart(BuildContext context) async {
-    final user = Provider.of<UserProvider>(context, listen: false);
-    final dbService = DatabaseService();
-
-    try {
-      final cartSnapshot = await dbService.read(
-        path: 'users/${user.user?.idUser}/cartProductList',
-      );
-
-      List<String> updatedCart = [];
-
-      if(cartSnapshot != null && cartSnapshot.value != null){
-        if (cartSnapshot.value is List) {
-        updatedCart = List<String>.from(cartSnapshot.value as List);
-      } else if (cartSnapshot.value is Map) {
-        // Se for um Map (estrutura antiga), converter para List
-        updatedCart = (cartSnapshot.value as Map).keys.cast<String>().toList();
-      }
-      }
-
-      // 4. Verificar se o produto já está no carrinho
-    if (updatedCart.contains(product.idProduto)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Produto já está no carrinho')),
-      );
-      return;
-    }
-
-      // 5. Adicionar o novo ID do produto
-    updatedCart.add(product.idProduto);
-
-    // 6. Atualizar o carrinho no Firebase
-    await dbService.update(
-      path: "users/${user.user?.idUser}/cartProductsList",
-      data: updatedCart,
-    );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Produto adicionado ao carrinho!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao adicionar: ${e.toString()}')),
-      );
-    }
   }
 }

@@ -61,38 +61,30 @@ class CartItemWidget extends StatelessWidget {
   }
 
   Widget _buildHeaderRow() {
-  double priceDouble = 0.0;
-  if (item['price'] is String) {
-    priceDouble = double.tryParse(item['price'].replaceAll(',', '.')) ?? 0.0;
-  } else if (item['price'] is double) {
-    priceDouble = item['price'];
-  }
+    double priceDouble = 0.0;
+    if (item['price'] is String) {
+      priceDouble = double.tryParse(item['price'].replaceAll(',', '.')) ?? 0.0;
+    } else if (item['price'] is double) {
+      priceDouble = item['price'];
+    }
 
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Expanded(
-        child: Text(
-          item['name'],
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          overflow: TextOverflow.ellipsis,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            item['name'],
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-      Text(
-        '${priceDouble.toStringAsFixed(2)} €',
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-      ),
-    ],
-  );
-}
-
-
-  // Widget _buildDescription() {
-  //   return Text(
-  //     item['description'],
-  //     style: TextStyle(color: Colors.grey[600], fontSize: 14),
-  //   );
-  // }
+        Text(
+          '${priceDouble.toStringAsFixed(2)} €',
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
 
   Widget _buildQuantityAndDeleteRow(bool inStock) {
     return Row(
@@ -136,7 +128,10 @@ class CartItemWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.add, size: 18),
                 onPressed: () {
-                  onQuantityChanged(item['quantity'] + 1);
+                  final newQty = (item['quantity'] as num).toInt() + 1;
+                  if (newQty <= (item['maxQuantity'] as num).toInt()) {
+                    onQuantityChanged(newQty);
+                  }
                 },
                 padding: EdgeInsets.zero,
               ),

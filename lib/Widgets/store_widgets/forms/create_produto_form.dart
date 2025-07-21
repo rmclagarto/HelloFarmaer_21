@@ -168,7 +168,7 @@ class ProdutoFormState extends State<ProdutoForm> {
           isAsset: true,
           descricao: _descricaoController.text,
           preco: double.parse(_precoController.text),
-          quantidade: double.parse(_quantidadeMinController.text),
+          quantidade: int.parse(_quantidadeMinController.text),
           unidadeMedida: _selectedUnit!,
           data: DateTime.now(),
         );

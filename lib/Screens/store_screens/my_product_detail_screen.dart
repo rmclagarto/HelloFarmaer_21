@@ -168,7 +168,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                 onPressed: () {
                   final updatedProduct = widget.produto.copyWith(
                     preco: double.parse(_precoController.text),
-                    quantidade: double.tryParse(_stockController.text) ?? 0.0,
+                    quantidade: int.tryParse(_stockController.text) ?? 0,
                   );
 
                   Navigator.pop(

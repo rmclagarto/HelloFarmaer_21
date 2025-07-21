@@ -4,7 +4,7 @@ import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
 import 'package:hellofarmer/Model/produtos.dart';
-import 'package:hellofarmer/Model/store.dart';
+// import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/checkout_screen.dart';
