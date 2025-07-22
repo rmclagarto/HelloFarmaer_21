@@ -30,7 +30,7 @@ class _MarketScreenState extends State<MarketScreen> {
 
   List<Produtos> _allProducts = [];
   List<Produtos> _filteredProducts = [];
-  bool _isLoading = true;
+  // bool _isLoading = true;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _MarketScreenState extends State<MarketScreen> {
     setState(() {
       _allProducts = produtos;
       _filteredProducts = produtos;
-      _isLoading = false;
+      // _isLoading = false;
     });
   }
 

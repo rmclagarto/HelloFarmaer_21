@@ -1,0 +1,187 @@
+{
+  "@@locale": "pt",
+  "@@context": "PublicarAnuncioScreen",
+
+  // Títulos
+  "appBarTitle": "Publicar Anúncio",
+  "@appBarTitle": {
+    "description": "Título da AppBar"
+  },
+
+  // Seções
+  "titleSection": "Título",
+  "@titleSection": {
+    "description": "Título da seção de título"
+  },
+
+  "categorySection": "Categoria",
+  "@categorySection": {
+    "description": "Título da seção de categoria"
+  },
+
+  "imagesSection": "Imagens",
+  "@imagesSection": {
+    "description": "Título da seção de imagens"
+  },
+
+  "descriptionSection": "Descrição",
+  "@descriptionSection": {
+    "description": "Título da seção de descrição"
+  },
+
+  "locationSection": "Localização",
+  "@locationSection": {
+    "description": "Título da seção de localização"
+  },
+
+  "deliveryOptionsSection": "Selecione opções de entrega",
+  "@deliveryOptionsSection": {
+    "description": "Título da seção de entregas"
+  },
+
+  "saleDetailsSection": "Detalhes de Venda",
+  "@saleDetailsSection": {
+    "description": "Título da seção de vendas"
+  },
+
+  "contactDetailsSection": "Detalhes de Contacto",
+  "@contactDetailsSection": {
+    "description": "Título da seção de contato"
+  },
+
+  // Subseções
+  "minQuantity": "Quantidade mínima",
+  "@minQuantity": {
+    "description": "Subtítulo da quantidade"
+  },
+
+  "unitMeasure": "Selecione unidade de medida",
+  "@unitMeasure": {
+    "description": "Subtítulo da unidade"
+  },
+
+  "priceSection": "Preço",
+  "@priceSection": {
+    "description": "Subtítulo do preço"
+  },
+
+  "phoneSection": "Telefone",
+  "@phoneSection": {
+    "description": "Subtítulo do telefone"
+  },
+
+  // Placeholders
+  "titleHint": "Adicione um título",
+  "@titleHint": {
+    "description": "Placeholder do campo título"
+  },
+
+  "categoryHint": "Selecione uma categoria",
+  "@categoryHint": {
+    "description": "Placeholder do dropdown de categoria"
+  },
+
+  "descriptionHint": "Escreva uma descrição",
+  "@descriptionHint": {
+    "description": "Placeholder da descrição"
+  },
+
+  "locationHint": "Adicione a localização",
+  "@locationHint": {
+    "description": "Placeholder da localização"
+  },
+
+  "quantityHint": "Introduza a quantidade mínima de venda",
+  "@quantityHint": {
+    "description": "Placeholder da quantidade"
+  },
+
+  "unitHint": "Selecione a unidade",
+  "@unitHint": {
+    "description": "Placeholder da unidade"
+  },
+
+  "priceHint": "0.00",
+  "@priceHint": {
+    "description": "Placeholder do preço"
+  },
+
+  "phoneHint": "Ex: 912 345 678",
+  "@phoneHint": {
+    "description": "Placeholder do telefone"
+  },
+
+  // Opções de entrega
+  "deliveryProducer": "Entrega Domicílio (Produtor)",
+  "@deliveryProducer": {
+    "description": "Opção de entrega pelo produtor"
+  },
+
+  "deliveryProducerSubtitle": "Consumidor recolhe num local à sua escolha",
+  "@deliveryProducerSubtitle": {
+    "description": "Subtítulo da entrega pelo produtor"
+  },
+
+  "deliveryCarrier": "Entrega realizada por Transportadora",
+  "@deliveryCarrier": {
+    "description": "Opção de entrega por transportadora"
+  },
+
+  // Botões
+  "previewButton": "PRÉ-VISUALIZAR",
+  "@previewButton": {
+    "description": "Texto do botão de pré-visualização"
+  },
+
+  "publishButton": "CONFIRMAR E PUBLICAR",
+  "@publishButton": {
+    "description": "Texto do botão de publicação"
+  },
+
+  // Mensagens
+  "publishSuccess": "Anúncio publicado com sucesso!",
+  "@publishSuccess": {
+    "description": "Mensagem de sucesso ao publicar"
+  },
+
+  // Validações
+  "titleValidation": "Por favor, insira um título",
+  "@titleValidation": {
+    "description": "Validação do campo título"
+  },
+
+  "categoryValidation": "Por favor, selecione uma categoria",
+  "@categoryValidation": {
+    "description": "Validação do campo categoria"
+  },
+
+  "descriptionValidation": "Por favor, insira uma descrição",
+  "@descriptionValidation": {
+    "description": "Validação do campo descrição"
+  },
+
+  "locationValidation": "Por favor, insira a localização",
+  "@locationValidation": {
+    "description": "Validação do campo localização"
+  },
+
+  "quantityValidation": "Por favor, insira a quantidade mínima",
+  "@quantityValidation": {
+    "description": "Validação do campo quantidade"
+  },
+
+  "unitValidation": "Por favor, selecione uma unidade",
+  "@unitValidation": {
+    "description": "Validação do campo unidade"
+  },
+
+  "priceValidation": "Por favor, insira o preço",
+  "@priceValidation": {
+    "description": "Validação do campo preço"
+  },
+
+  "phoneValidation": "Por favor, insira o telefone",
+  "@phoneValidation": {
+    "description": "Validação do campo telefone"
+  }
+}

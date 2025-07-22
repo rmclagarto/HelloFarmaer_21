@@ -1,0 +1,102 @@
+{
+  "@@locale": "pt",
+  "@@context": "RegisterScreen",
+
+  // Mensagens da Screen
+  "passwordsDontMatch": "As passwords não coincidem",
+  "@passwordsDontMatch": {
+    "description": "Erro quando as senhas não são iguais"
+  },
+  
+  "registerFailed": "Falha ao criar a conta",
+  "@registerFailed": {
+    "description": "Erro genérico no registo"
+  },
+
+  "registerError": "Erro: {error}",
+  "@registerError": {
+    "description": "Erro detalhado no registo",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "E-mail já em uso"
+      }
+    }
+  },
+
+  // Formulário
+  "registerTitle": "Registrar",
+  "@registerTitle": {
+    "description": "Título da tela"
+  },
+
+  "nameFieldLabel": "Nome",
+  "@nameFieldLabel": {
+    "description": "Rótulo do campo nome"
+  },
+
+  "nameValidationEmpty": "Por favor, insira seu Nome",
+  "@nameValidationEmpty": {
+    "description": "Validação de campo vazio"
+  },
+
+  "emailFieldLabel": "E-mail",
+  "@emailFieldLabel": {
+    "description": "Rótulo do campo e-mail"
+  },
+
+  "emailValidationEmpty": "Por favor, insira seu e-mail",
+  "@emailValidationEmpty": {
+    "description": "Validação de campo vazio"
+  },
+
+  "emailValidationInvalid": "Por favor, insira um e-mail válido",
+  "@emailValidationInvalid": {
+    "description": "Validação de formato"
+  },
+
+  "phoneFieldLabel": "Telefone",
+  "@phoneFieldLabel": {
+    "description": "Rótulo do campo telefone"
+  },
+
+  "phoneValidationEmpty": "Por favor, insira seu telefone",
+  "@phoneValidationEmpty": {
+    "description": "Validação de campo vazio"
+  },
+
+  "phoneValidationInvalid": "O telefone deve ter pelo menos 9 dígitos",
+  "@phoneValidationInvalid": {
+    "description": "Validação de tamanho"
+  },
+
+  "passwordFieldLabel": "Senha",
+  "@passwordFieldLabel": {
+    "description": "Rótulo do campo senha"
+  },
+
+  "passwordValidationEmpty": "Por favor, insira sua senha",
+  "@passwordValidationEmpty": {
+    "description": "Validação de campo vazio"
+  },
+
+  "confirmPasswordFieldLabel": "Confirmar Senha",
+  "@confirmPasswordFieldLabel": {
+    "description": "Rótulo do campo de confirmação"
+  },
+
+  "registerButton": "Registrar",
+  "@registerButton": {
+    "description": "Botão principal"
+  },
+
+  "alreadyMember": "Já é membro?",
+  "@alreadyMember": {
+    "description": "Texto antes do link de login"
+  },
+
+  "loginLink": "Faça login",
+  "@loginLink": {
+    "description": "Link para tela de login"
+  }
+}

@@ -64,7 +64,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
         child: Card(
           elevation: 5,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.borderRadiusCard),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
             padding: const EdgeInsets.all(28.0),
@@ -78,7 +78,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Constants.textColor,
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -107,7 +107,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
         hintText: 'Digite seu email',
         prefixIcon: const Icon(Icons.email, color: Colors.grey),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
@@ -133,7 +133,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
           backgroundColor: Constants.secondaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+            borderRadius: BorderRadius.circular(40),
           ),
           elevation: 5,
         ),

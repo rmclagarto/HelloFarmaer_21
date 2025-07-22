@@ -49,7 +49,7 @@ class _LoginFormState extends State<LoginForm> {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Constants.borderRadiusCard),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.all(28.0),
@@ -59,20 +59,20 @@ class _LoginFormState extends State<LoginForm> {
             child: Column(
               children: <Widget>[
                 _buildTitle(),
-                const SizedBox(height: Constants.spacingMedium),
+                const SizedBox(height: 20),
                 _buildEmailField(),
-                const SizedBox(height: Constants.spacingMedium),
+                const SizedBox(height: 20),
                 _buildPasswordField(),
                 if (widget.errorMessage != null) ...[
-                  const SizedBox(height: Constants.spacingSmall),
+                  const SizedBox(height: 10),
                   _buildErrorText(),
                 ],
-                const SizedBox(height: Constants.spacingSmall),
+                const SizedBox(height: 10),
                 _buildForgotPassword(context),
-                const SizedBox(height: Constants.spacingMedium),
+                const SizedBox(height: 20),
                 _buildLoginButton(),
                 
-                const SizedBox(height: Constants.spacingLarge * 4),
+                const SizedBox(height: 40 * 4),
                 
                 _buildSignUp(context),
               ],
@@ -101,12 +101,12 @@ class _LoginFormState extends State<LoginForm> {
         labelStyle: const TextStyle(color: Colors.grey),
         prefixIcon: const Icon(Icons.email),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
@@ -143,12 +143,12 @@ class _LoginFormState extends State<LoginForm> {
           },
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
@@ -178,7 +178,7 @@ class _LoginFormState extends State<LoginForm> {
                 Navigator.pushReplacementNamed(context, Routes.recoverPassword),
         child: const Text(
           "Recuperar Palavra-Passe",
-          style: TextStyle(color: Constants.textColor, fontSize: 14),
+          style: TextStyle(color: Colors.black, fontSize: 14),
         ),
       ),
     );
@@ -193,10 +193,10 @@ class _LoginFormState extends State<LoginForm> {
           backgroundColor: Constants.secondaryColor,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(
-            vertical: Constants.buttonVerticalPadding,
+            vertical: 15,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.spacingLarge),
+            borderRadius: BorderRadius.circular(40),
           ),
           elevation: 5,
         ),

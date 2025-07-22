@@ -1,0 +1,77 @@
+{
+  "@@locale": "pt",
+  "@@context": "Login Screen",
+
+  // Títulos e rótulos
+  "loginTitle": "Entrar",
+  "@loginTitle": {
+    "description": "Título principal da tela de login"
+  },
+
+  "emailLabel": "E-mail",
+  "@emailLabel": {
+    "description": "Rótulo do campo de e-mail"
+  },
+  "passwordLabel": "Senha",
+  "@passwordLabel": {
+    "description": "Rótulo do campo de senha"
+  },
+  "loginButton": "Acessar",
+  "@loginButton": {
+    "description": "Texto do botão de login"
+  },
+
+  // Links
+  "forgotPassword": "Recuperar palavra-passe",
+  "@forgotPassword": {
+    "description": "Link para recuperação de senha"
+  },
+  "notAMember": "Não é membro?",
+  "@notAMember": {
+    "description": "Texto para redirecionamento ao cadastro"
+  },
+  "joinNow": "Adere já",
+  "@joinNow": {
+    "description": "Link para tela de registro"
+  },
+
+  "emailRequired": "Por favor, insira seu email",
+  "@emailRequired": {
+    "description": "Mensagem de validação para e-mail vazio"
+  },
+
+  "validEmailRequired": "Por favor, insira um email válido",
+  "@validEmailRequired": {
+    "description": "Mensagem de validação para formato de e-mail inválido"
+  },
+
+  "passwordRequired": "Por favor, insira sua senha",
+  "@passwordRequired": {
+    "description": "Mensagem de validação para senha vazia"
+  }
+
+
+  // Mensagens de validação
+  "emailRequired": "Por favor, insira seu e-mail",
+  "@emailRequired": {
+    "description": "Validação de campo vazio (e-mail)"
+  },
+  "validEmailRequired": "Insira um e-mail válido (ex: nome@exemplo.com)",
+  "@validEmailRequired": {
+    "description": "Validação de formato de e-mail"
+  },
+  "passwordRequired": "Por favor, insira sua senha",
+  "@passwordRequired": {
+    "description": "Validação de campo vazio (senha)"
+  },
+
+  // Mensagens de erro
+  "loginErrorEmptyFields": "Preencha o e-mail e a senha",
+  "@loginErrorEmptyFields": {
+    "description": "Erro quando campos estão vazios"
+  },
+  "loginErrorInvalidCredentials": "E-mail ou senha incorretos",
+  "@loginErrorInvalidCredentials": {
+    "description": "Erro quando credenciais são inválidas"
+  }
+}

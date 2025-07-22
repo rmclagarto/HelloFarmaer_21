@@ -1,0 +1,14 @@
+{
+  "@@locale": "pt",
+  "@@context": "SellerInfo",
+
+  "phoneLabel": "Telefone",
+  "@phoneLabel": {
+    "description": "Rótulo para informação de telefone"
+  },
+
+  "addressLabel": "Endereço",
+  "@addressLabel": {
+    "description": "Rótulo para informação de endereço"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "@@locale": "pt",
+  "@@context": "MapWidget",
+
+  "storePopupTitle": "Loja XYZ",
+  "@storePopupTitle": {
+    "description": "Título do popup do marcador"
+  },
+
+  "storePopupContent": "Aqui vão os detalhes da loja...",
+  "@storePopupContent": {
+    "description": "Conteúdo do popup do marcador"
+  },
+
+  "storeName": "Loja XYZ",
+  "@storeName": {
+    "description": "Nome da loja no marcador"
+  }
+}

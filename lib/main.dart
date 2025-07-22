@@ -6,7 +6,7 @@ import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/notification_service.dart';
 import 'package:hellofarmer/firebase_options.dart';
-import 'package:hellofarmer/l10n/app_localizations.dart';
+// import 'package:hellofarmer/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -42,13 +42,13 @@ class MainApp extends StatelessWidget {
                 darkTheme: ThemeData.dark(),
                 themeMode: currentMode,
 
-                locale: currentLocale,
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
+                // locale: currentLocale,
+                // localizationsDelegates: const [
+                //   AppLocalizations.delegate,
+                //   GlobalMaterialLocalizations.delegate,
+                //   GlobalWidgetsLocalizations.delegate,
+                //   GlobalCupertinoLocalizations.delegate,
+                // ],
 
                 supportedLocales: const [
                   Locale('en'),

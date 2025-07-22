@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/l10n/app_localizations.dart';
+// import 'package:hellofarmer/l10n/app_localizations.dart';
 import 'package:hellofarmer/main.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -59,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final isDarkTheme = themeNotifier.value == ThemeMode.dark;
-    final l10n = AppLocalizations.of(context)!;
+    // final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
-          l10n.settingsTitle,
+          "Definições",
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -86,17 +86,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           ExpansionTile(
             leading: const Icon(Icons.language, color: Colors.blue),
-            title: Text(l10n.languageAndTranslations),
+            title: Text("Idiomas e Traduções"),
             children: [
               ListTile(
-                title: Text(l10n.currentLanguage),
+                title: Text("Idioma Atual"),
                 trailing: DropdownButton<String>(
                   value: _selectedLanguage,
                   items: [
-                    DropdownMenuItem(value: 'pt', child: Text(l10n.portuguese)),
-                    DropdownMenuItem(value: 'es', child: Text(l10n.spanish)),
-                    DropdownMenuItem(value: 'en', child: Text(l10n.english)),
-                    DropdownMenuItem(value: 'fr', child: Text(l10n.french)),
+                    DropdownMenuItem(value: 'pt', child: Text("Português")),
+                    DropdownMenuItem(value: 'es', child: Text("Espanhol")),
+                    DropdownMenuItem(value: 'en', child: Text("Inglês")),
+                    DropdownMenuItem(value: 'fr', child: Text("Francês")),
                   ],
                   onChanged: (value) {
                     setState(() {
@@ -114,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   vertical: 8,
                 ),
                 child: Text(
-                  l10n.languageDescription,
+                  "Selecione o idioma preferido para a interface e traduções.",
                   style: TextStyle(color: Colors.grey[600]),
                 ),
               ),
@@ -122,11 +122,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ExpansionTile(
             leading: const Icon(Icons.vpn_key, color: Colors.orange),
-            title: Text(l10n.access),
+            title: Text("Acessos"),
             children: [
               SwitchListTile(
-                title: Text(l10n.gpsPermission),
-                subtitle: Text(l10n.gpsPermissionDescription),
+                title: Text("Localização (GPS)"),
+                subtitle: Text("Permitir acesso à sua localização"),
                 value: _gpsEnabled,
                 onChanged:
                     (value) => _requestPermission(
@@ -135,8 +135,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
               ),
               SwitchListTile(
-                title: Text(l10n.galleryPermission),
-                subtitle: Text(l10n.galleryPermissionDescription),
+                title: Text("Galeria"),
+                subtitle: Text("Permitir acesso às suas fotos"),
                 value: _galleryEnabled,
                 onChanged:
                     (value) => _requestPermission(
@@ -145,8 +145,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
               ),
               SwitchListTile(
-                title: Text(l10n.cameraPermission),
-                subtitle: Text(l10n.cameraPermissionDescription),
+                title: Text("Câmera"),
+                subtitle: Text("Permitir acesso à câmera"),
                 value: _cameraEnabled,
                 onChanged:
                     (value) => _requestPermission(
@@ -155,8 +155,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
               ),
               SwitchListTile(
-                title: Text(l10n.contactsPermission),
-                subtitle: Text(l10n.contactsPermissionDescription),
+                title: Text( "Contatos"),
+                subtitle: Text("Permitir acesso aos seus contatos"),
                 value: _contactsEnabled,
                 onChanged:
                     (value) => _requestPermission(
@@ -168,10 +168,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ExpansionTile(
             leading: const Icon(Icons.brightness_6, color: Colors.amber),
-            title: Text(l10n.appearance),
+            title: Text("Aparência"),
             children: [
               SwitchListTile(
-                title: Text(l10n.darkTheme),
+                title: Text("Tema escuro"),
                 value: isDarkTheme,
                 activeColor: Constants.primaryColor,
                 activeTrackColor: Colors.grey[400],
@@ -190,7 +190,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   vertical: 8,
                 ),
                 child: Text(
-                  l10n.appearanceDescription,
+                  "Altere entre o modo claro e escuro para uma melhor experiência visual.",
                   style: TextStyle(color: Colors.grey[600]),
                 ),
               ),
@@ -198,10 +198,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ExpansionTile(
             leading: const Icon(Icons.notifications, color: Colors.redAccent),
-            title: Text(l10n.notifications),
+            title: Text("Notificações"),
             children: [
               SwitchListTile(
-                title: Text(l10n.enableNotifications),
+                title: Text("Ativar notificações"),
                 value: _notificationsEnabled,
                 onChanged: (val) {
                   setState(() {
@@ -216,7 +216,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     vertical: 8,
                   ),
                   child: Text(
-                    l10n.notificationsDescription,
+                    "Configurações detalhadas de notificações virão aqui.",
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ),
@@ -225,7 +225,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // BOTÃO PARA REPORTAR ERROS
           ListTile(
             leading: const Icon(Icons.bug_report, color: Colors.redAccent),
-            title: Text(l10n.reportErrors),
+            title: Text("Reportar Erros"),
             onTap: () {
               showDialog(
                 context: context,
@@ -233,12 +233,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   TextEditingController reportController =
                       TextEditingController();
                   return AlertDialog(
-                    title: Text(l10n.reportErrors),
+                    title: Text("Reportar Erros"),
                     content: TextField(
                       controller: reportController,
                       maxLines: 4,
                       decoration: InputDecoration(
-                        hintText: l10n.describeProblem,
+                        hintText: "Descreve o problema aqui...",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -246,17 +246,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     actions: [
                       TextButton(
-                        child: Text(l10n.cancel),
+                        child: Text("Cancelar"),
                         onPressed: () => Navigator.of(ctx).pop(),
                       ),
                       ElevatedButton(
-                        child: Text(l10n.send),
+                        child: Text("Enviar"),
                         onPressed: () {
                           final reportText = reportController.text.trim();
                           if (reportText.isNotEmpty) {
                             Navigator.of(ctx).pop();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(l10n.thankYouReport)),
+                              SnackBar(content: Text("Obrigado por reportar o erro!")),
                             );
                           }
                         },

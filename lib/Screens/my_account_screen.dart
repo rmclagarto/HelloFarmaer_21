@@ -6,7 +6,7 @@ import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Screens/historico_encomendas_screen.dart';
-import 'package:hellofarmer/l10n/app_localizations.dart';
+// import 'package:hellofarmer/l10n/app_localizations.dart';
 
 class MyAccountScreen extends StatelessWidget {
   final CustomUser user;
@@ -15,13 +15,13 @@ class MyAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    // final l10n = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
     
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          l10n.myAccountTitle,
+          "Minha Conta",
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Constants.primaryColor,

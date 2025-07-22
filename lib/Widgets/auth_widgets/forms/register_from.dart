@@ -51,7 +51,7 @@ class _RegisterFromState extends State<RegisterFrom> {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(Constants.borderRadiusCard),
+        borderRadius: BorderRadiusGeometry.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.all(28.0),
@@ -61,19 +61,19 @@ class _RegisterFromState extends State<RegisterFrom> {
             child: Column(
               children: <Widget>[
                 _buildTitle(),
-                const SizedBox(height: Constants.spacingLarge),
+                const SizedBox(height: 40),
                 _buildNomeField(),
-                const SizedBox(height: Constants.spacingSmall),
+                const SizedBox(height: 10),
                 _buildEmailField(),
-                const SizedBox(height: Constants.spacingSmall),
+                const SizedBox(height: 10),
                 _buildTelefoneFiled(),
-                const SizedBox(height: Constants.spacingSmall),
+                const SizedBox(height: 10),
                 _buildPasswordField(),
-                const SizedBox(height: Constants.spacingSmall),
+                const SizedBox(height: 10),
                 _buildComfirmPasswordField(),
-                const SizedBox(height: Constants.spacingLarge),
+                const SizedBox(height: 40),
                 _buildRegisterButton(),
-                const SizedBox(height: Constants.spacingMedium),
+                const SizedBox(height: 20),
                 _buildSignUp(context),
               ],
             ),
@@ -101,12 +101,12 @@ class _RegisterFromState extends State<RegisterFrom> {
         labelStyle: const TextStyle(color: Colors.grey),
         prefixIcon: const Icon(Icons.person),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
@@ -131,12 +131,12 @@ class _RegisterFromState extends State<RegisterFrom> {
         labelStyle: const TextStyle(color: Colors.grey),
         prefixIcon: const Icon(Icons.email),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
@@ -163,12 +163,12 @@ class _RegisterFromState extends State<RegisterFrom> {
         labelStyle: const TextStyle(color: Colors.grey),
         prefixIcon: const Icon(Icons.phone),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
           borderSide: const BorderSide(color: Colors.grey),
         ),
         
@@ -204,12 +204,12 @@ class _RegisterFromState extends State<RegisterFrom> {
           },
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
@@ -244,12 +244,12 @@ class _RegisterFromState extends State<RegisterFrom> {
           },
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
         ),
         filled: true,
         fillColor: Colors.white,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(40),
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
@@ -271,10 +271,10 @@ class _RegisterFromState extends State<RegisterFrom> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Constants.secondaryColor,
           padding: const EdgeInsets.symmetric(
-            vertical: Constants.buttonVerticalPadding,
+            vertical: 15,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.spacingLarge),
+            borderRadius: BorderRadius.circular(40),
           ),
         ),
         child: const Text(

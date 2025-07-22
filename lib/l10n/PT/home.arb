@@ -1,0 +1,29 @@
+{
+  "@@locale": "pt",
+  "@@context": "HomeScreen",
+
+  "appBarTitle": "HelloFarmer",
+  "@appBarTitle": {
+    "description": "Título da AppBar na tela inicial"
+  },
+
+  "loadingMessage": "Carregando...",
+  "@loadingMessage": {
+    "description": "Mensagem exibida durante o carregamento"
+  },
+
+  "ad1": "Anúncio 1: Vendo batatas biológicas",
+  "@ad1": {
+    "description": "Texto do primeiro anúncio de exemplo"
+  },
+
+  "ad2": "Anúncio 2: Serviço de colheita disponível",
+  "@ad2": {
+    "description": "Texto do segundo anúncio de exemplo"
+  },
+
+  "ad3": "Anúncio 3: Aluguer de trator",
+  "@ad3": {
+    "description": "Texto do terceiro anúncio de exemplo"
+  }
+}

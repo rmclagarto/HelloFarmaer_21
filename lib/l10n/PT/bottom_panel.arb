@@ -1,0 +1,9 @@
+{
+  "@@locale": "pt",
+  "@@context": "BottomPanel",
+
+  "adTitle": "Anúncio",
+  "@adTitle": {
+    "description": "Título genérico para anúncios"
+  }
+}

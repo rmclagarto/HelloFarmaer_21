@@ -29,7 +29,7 @@ class _LoginState extends State<Login> {
     password = password.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      setState(() => _errorMessage = "Por favor introduz o e-mail e a senha");
+      setState(() => _errorMessage = l10n.loginErrorEmptyFields);
       return;
     }
 
@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacementNamed(context, Routes.home);
       }else{
         setState(() {
-          _errorMessage = "Credenciais invalidos";
+          _errorMessage = l10n.loginErrorInvalidCredentials;
           _isLoading = false;
         });
       }

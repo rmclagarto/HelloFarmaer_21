@@ -75,27 +75,27 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildImagePicker(),
-              const SizedBox(height: Constants.spacingMedium),
+              const SizedBox(height: 20),
               _buildSectionTitle('Informações Básicas'),
               _buildNameField(),
-              const SizedBox(height: Constants.spacingMedium),
+              const SizedBox(height: 20),
               _buildDescricaoField(),
-              const SizedBox(height: Constants.spacingMedium),
+              const SizedBox(height: 20),
               _buildTelefoneField(),
-              const SizedBox(height: Constants.spacingMedium),
+              const SizedBox(height: 20),
               _buildSectionTitle('Endereço'),
               _buildStreetField(),
-              const SizedBox(height: Constants.spacingMedium),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(flex: 3, child: _buildNumberField()),
-                  const SizedBox(width: Constants.spacingMedium),
+                  const SizedBox(width: 20),
                   Expanded(flex: 4, child: _buildNeighborhoodField()),
                 ],
               ),
-              const SizedBox(height: Constants.spacingMedium),
+              const SizedBox(height: 20),
               Row(children: [Expanded(flex: 5, child: _buildCityField())]),
-              const SizedBox(height: Constants.spacingLarge),
+              const SizedBox(height: 40),
               _buildSubmitButton(),
             ],
           ),
@@ -125,7 +125,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         labelText: 'Nome da Loja*',
         prefixIcon: const Icon(Icons.store),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.spacingMedium),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       validator: (value) {
@@ -146,7 +146,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(Constants.spacingMedium),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: Colors.grey[400]!),
             ),
             child:
@@ -161,7 +161,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
                     )
                     : ClipRRect(
                       borderRadius: BorderRadius.circular(
-                        Constants.spacingMedium,
+                        20,
                       ),
                       child: Image.file(
                         _selectedImage!,
@@ -186,7 +186,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         labelText: 'Descrição*',
         alignLabelWithHint: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.spacingMedium),
+          borderRadius: BorderRadius.circular(20),
         ),
       ), // <-- close decoration here
       validator: (value) {
@@ -205,7 +205,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         labelText: 'Telefone*',
         prefixIcon: const Icon(Icons.phone),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.spacingMedium),
+          borderRadius: BorderRadius.circular(20),
         ),
         hintText: '(00) 00000-0000',
       ),
@@ -224,7 +224,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         labelText: 'Rua/Avenida*',
         prefixIcon: const Icon(Icons.streetview),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.spacingMedium),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       validator: (value) {
@@ -242,7 +242,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         labelText: 'Número*',
         prefixIcon: const Icon(Icons.numbers),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.spacingMedium),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       validator: (value) {
@@ -259,7 +259,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         labelText: 'Bairro*',
         prefixIcon: const Icon(Icons.location_city),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.spacingMedium),
+          borderRadius: BorderRadius.circular(20),
         ),
       ), // <-- close decoration here
       validator: (value) {
@@ -276,7 +276,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         labelText: 'Cidade*',
         prefixIcon: const Icon(Icons.location_city),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Constants.spacingMedium),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       validator: (value) {
@@ -294,7 +294,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           backgroundColor: Constants.primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.spacingMedium),
+            borderRadius: BorderRadius.circular(20),
           ),
         ),
         onPressed: _submitForm,

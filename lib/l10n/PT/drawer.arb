@@ -1,0 +1,34 @@
+{
+  "@@locale": "pt",
+  "@@context": "AppDrawer",
+
+  "accountItem": "Minha Conta",
+  "@accountItem": {
+    "description": "Item do menu para a conta do usuário"
+  },
+
+  "marketItem": "Mercado",
+  "@marketItem": {
+    "description": "Item do menu para o mercado"
+  },
+
+  "storeItem": "Loja",
+  "@storeItem": {
+    "description": "Item do menu para a loja"
+  },
+
+  "helpItem": "Ajuda",
+  "@helpItem": {
+    "description": "Item do menu para ajuda"
+  },
+
+  "settingsItem": "Definições",
+  "@settingsItem": {
+    "description": "Item do menu para configurações"
+  },
+
+  "logoutItem": "Sair",
+  "@logoutItem": {
+    "description": "Item do menu para logout"
+  }
+}

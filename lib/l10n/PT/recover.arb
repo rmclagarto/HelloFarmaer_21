@@ -1,0 +1,62 @@
+{
+  "@@locale": "pt",
+  "@@context": "RecoverPasswordScreen",
+
+  // Mensagens da Screen
+  "recoveryEmailSent": "Verifica o teu e-mail para redefinir a senha.",
+  "@recoveryEmailSent": {
+    "description": "Sucesso no envio de e-mail de recuperação"
+  },
+  
+  "recoveryError": "Erro ao tentar recuperar senha.",
+  "@recoveryError": {
+    "description": "Erro genérico"
+  },
+
+  // Formulário
+  "recoverPasswordTitle": "Recuperar Senha",
+  "@recoverPasswordTitle": {
+    "description": "Título da tela"
+  },
+
+  "emailFieldLabel": "E-mail",
+  "@emailFieldLabel": {
+    "description": "Rótulo do campo e-mail"
+  },
+
+  "emailFieldHint": "Digite seu e-mail",
+  "@emailFieldHint": {
+    "description": "Placeholder do campo"
+  },
+
+  "emailValidationEmpty": "Por favor, digite seu e-mail",
+  "@emailValidationEmpty": {
+    "description": "Validação de campo vazio"
+  },
+
+  "emailValidationInvalid": "Por favor, digite um e-mail válido",
+  "@emailValidationInvalid": {
+    "description": "Validação de formato"
+  },
+
+  "sendRecoveryButton": "ENVIAR LINK DE RECUPERAÇÃO",
+  "@sendRecoveryButton": {
+    "description": "Botão principal"
+  },
+
+  "backToLoginButton": "Voltar ao Login",
+  "@backToLoginButton": {
+    "description": "Botão secundário"
+  },
+
+  "recoveryErrorDetailed": "Erro ao enviar link: {error}",
+  "@recoveryErrorDetailed": {
+    "description": "Erro com detalhes",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "E-mail não encontrado"
+      }
+    }
+  }
+}
