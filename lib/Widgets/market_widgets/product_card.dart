@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/produtos.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
-import 'package:hellofarmer/Services/database_service.dart';
 
-import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   final Produtos product;

@@ -5,6 +5,7 @@ import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Services/database_service.dart';
 import 'package:hellofarmer/Services/notification_service.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   double discount = 0.0;
   String deliveryMethod = 'pickup'; // 'pickup' ou 'delivery'
   bool hasAvailableItems = false;
+  final DatabaseService _dbService = DatabaseService();
+
   // List<CartItem> _availableItems = [];
   // List<CartItem> _outOfStockItems = [];
 
@@ -58,46 +61,93 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Random().nextInt(100);
   }
 
-  Map<String, List<CartItem>> _groupItemsByStore() {
-    final Map<String, List<CartItem>> storeGroups = {};
+  Future<void> createOrder(int code) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    String compradorId = user!.idUser;
 
-    for (final item in widget.cartItems) {
-      if (!item.inStock) continue;
+    for (var cartItem in widget.cartItems) {
+      final newOrderRef = _dbService.database.ref().child('orders').push();
+      final newOrderId = newOrderRef.key!;
 
-      final storeId = item.product.idLoja;
-      if (!storeGroups.containsKey(storeId)) {
-        storeGroups[storeId] = [];
-      }
-      storeGroups[storeId]!.add(item);
-    }
-
-    return storeGroups;
-  }
-
-  Future<List<Encomenda>> _createEncomendas() async {
-    final storeGroups = _groupItemsByStore();
-    final masterOrderId = DateTime.now().millisecondsSinceEpoch.toString();
-    final masterOrderCode = gerarCodigoPedido().toString();
-    final List<Encomenda> encomendas = [];
-
-    final user = Provider.of<UserProvider>(context, listen: false);
-    for (final storeId in storeGroups.keys) {
-      final items = storeGroups[storeId]!;
+      final produto = cartItem.product;
+      final vendedorId = produto.idLoja;
 
       final encomenda = Encomenda(
-        idEncomenda: '$masterOrderId-$storeId',
-        pedidos: items.map((item) => item.product.idProduto).toList(),
-        compradorId: user.user!.idUser, // Substitua pelo ID real
-        vendedorId: storeId,
+        idEncomenda: newOrderId,
+        compradorId: compradorId,
+        vendedorId: vendedorId,
         dataPedido: DateTime.now(),
-        status: StatusEncomenda.pendente,
-        code: masterOrderCode,
+        code: code,
+        valor: (cartItem.quantity *  produto.preco),
+        compradorInfo: {
+          "nome": user.nomeUser,
+          "email": user.email,
+          "telemovel": user.telefone,
+        },
+        quantidade: cartItem.quantity,
+        produtosInfo: [
+    {
+      'id': cartItem.product.idProduto,
+      'nome': cartItem.product.nomeProduto,
+      'quantidade': cartItem.quantity,
+    }
+  ],
       );
 
-      encomendas.add(encomenda);
+      await _dbService.update(
+        path: "orders/$newOrderId",
+        data: encomenda.toJson(),
+      );
+
+      final lojaSnapshot = await _dbService.read(
+        path: "stores/$vendedorId/listEncomendasId",
+      );
+
+      List<dynamic> listaLoja = [];
+      if (lojaSnapshot != null && lojaSnapshot.value is List) {
+        listaLoja = List<dynamic>.from(lojaSnapshot.value as List);
+      }
+      if (!listaLoja.contains(newOrderId)) {
+        listaLoja.add(newOrderId);
+        await _dbService.update(
+          path: "stores/$vendedorId/listEncomendasId",
+          data: listaLoja,
+        );
+      }
+
+      // 5. Atualizar lista de encomendas do usuário
+      final userSnapshot = await _dbService.read(
+        path: "users/$compradorId/listEncomendasId",
+      );
+
+      List<dynamic> listaUser = [];
+      if (userSnapshot != null && userSnapshot.value is List) {
+        listaUser = List<dynamic>.from(userSnapshot.value as List);
+      }
+      if (!listaUser.contains(newOrderId)) {
+        listaUser.add(newOrderId);
+        await _dbService.update(
+          path: "users/$compradorId/listEncomendasId",
+          data: listaUser,
+        );
+      }
+
+      // Remover o produto específico do carrinho do utilizador
+      final cartSnapshot = await _dbService.read(
+        path: "users/$compradorId/cartProductsList",
+      );
+
+      if (cartSnapshot != null && cartSnapshot.value is List) {
+        List<dynamic> cartList = List<dynamic>.from(cartSnapshot.value as List);
+        cartList.remove(cartItem.product.idProduto);
+        await _dbService.update(
+          path: "users/$compradorId/cartProductsList",
+          data: cartList,
+        );
+      }
     }
 
-    return encomendas;
+    print("\n\n\n\n\n\n");
   }
 
   @override
@@ -161,16 +211,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       );
     }
-
-    // if (outOfStockCount > 0) {
-    //   widgets.insert(2, Padding(
-    //     padding: EdgeInsets.only(bottom: 8),
-    //     child: Text(
-    //       '$outOfStockCount item(s) esgotado(s) removido(s) do pedido',
-    //       style: TextStyle(color: Colors.red),
-    //     ),
-    //   ));
-    // }
 
     widgets.add(Divider(height: 32));
 
@@ -295,6 +335,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             return;
           }
           final codigoPedido = gerarCodigoPedido();
+          createOrder(codigoPedido);
+
           await mostrarNotificacao(codigoPedido.toString(), context);
 
           widget.cartItems.clear();

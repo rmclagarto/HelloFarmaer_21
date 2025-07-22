@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hellofarmer/Model/encomenda.dart';
 import 'package:hellofarmer/Model/produtos.dart';
 import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Services/database_service.dart';
@@ -7,7 +6,6 @@ import 'package:hellofarmer/Services/database_service.dart';
 class StoreProvider with ChangeNotifier {
   final List<Store> _stores = [];
   final List<Produtos> _products = [];
-  // final List<Encomenda> _encomendas = [];
 
   List<Store> get userStore => _stores;
 
@@ -134,102 +132,60 @@ class StoreProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> deleteStore({
-  //   required String userID,
-  //   required String storeID,
-  // }) async {
-  //   try {
-  //     final snapshot = await _dbService.read(
-  //       path: 'stores/$storeID/listProductsId',
-  //     );
-
-  //     final List<String> productIds =
-  //         (snapshot?.value is List)
-  //             ? List<String>.from(snapshot!.value as List)
-  //             : [];
-
-  //     for (final productId in productIds) {
-  //       await _dbService.delete(path: 'products/$productId');
-  //     }
-
-  //     final userSnapshot = await _dbService.read(
-  //       path: 'users/$userID/myStoreList',
-  //     );
-  //     if (userSnapshot?.value is List) {
-  //       final updatedList = List<String>.from(userSnapshot!.value as List)
-  //         ..remove(storeID);
-  //       await _dbService.update(
-  //         path: 'users/$userID',
-  //         data: {'myStoreList': updatedList},
-  //       );
-  //     }
-
-  //     // 4. Remover a própria loja
-  //     await _dbService.delete(path: 'stores/$storeID');
-
-  //     // 5. Atualizar estado local
-  //     _stores.removeWhere((store) => store.idLoja == storeID);
-  //     notifyListeners();
-  //   } catch (e) {
-  //     debugPrint('Erro ao excluir loja: $e');
-  //     rethrow;
-  //   }
-  // }
-
-
   Future<void> deleteStore({
-  required String userID,
-  required String storeID,
-}) async {
-  try {
-    debugPrint('Iniciando exclusão da loja $storeID para usuário $userID');
+    required String userID,
+    required String storeID,
+  }) async {
+    try {
+      debugPrint('Iniciando exclusão da loja $storeID para usuário $userID');
 
-    // 1. Deletar produtos da loja
-    final productsSnapshot = await _dbService.read(
-      path: 'stores/$storeID/listProductsId',
-    );
+      // 1. Deletar produtos da loja
+      final productsSnapshot = await _dbService.read(
+        path: 'stores/$storeID/listProductsId',
+      );
 
-    final List<String> productIds =
-        (productsSnapshot?.value is List)
-            ? List<String>.from(productsSnapshot!.value as List)
-            : [];
+      final List<String> productIds =
+          (productsSnapshot?.value is List)
+              ? List<String>.from(productsSnapshot!.value as List)
+              : [];
 
-    for (final productId in productIds) {
-      await _dbService.delete(path: 'products/$productId');
-      debugPrint('Produto $productId deletado');
-    }
-
-    // 2. Remover a loja da lista do usuário
-    final userSnapshot = await _dbService.read(path: 'users/$userID/myStoreList');
-    if (userSnapshot?.value is List) {
-      final List<String> currentList = List<String>.from(userSnapshot!.value as List);
-      if (currentList.contains(storeID)) {
-        final updatedList = List<String>.from(currentList)..remove(storeID);
-        
-        // CORREÇÃO AQUI - usar set com o caminho completo
-        await _dbService.update(
-          path: 'users/$userID/myStoreList',
-          data: updatedList,
-        );
-        debugPrint('Loja removida da lista do usuário');
+      for (final productId in productIds) {
+        await _dbService.delete(path: 'products/$productId');
+        debugPrint('Produto $productId deletado');
       }
+
+      // 2. Remover a loja da lista do usuário
+      final userSnapshot = await _dbService.read(
+        path: 'users/$userID/myStoreList',
+      );
+      if (userSnapshot?.value is List) {
+        final List<String> currentList = List<String>.from(
+          userSnapshot!.value as List,
+        );
+        if (currentList.contains(storeID)) {
+          final updatedList = List<String>.from(currentList)..remove(storeID);
+
+          // CORREÇÃO AQUI - usar set com o caminho completo
+          await _dbService.update(
+            path: 'users/$userID/myStoreList',
+            data: updatedList,
+          );
+          debugPrint('Loja removida da lista do usuário');
+        }
+      }
+
+      // 3. Remover a própria loja
+      await _dbService.delete(path: 'stores/$storeID');
+      debugPrint('Loja $storeID deletada');
+
+      // 4. Atualizar estado local
+      _stores.removeWhere((store) => store.idLoja == storeID);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Erro ao excluir loja: $e');
+      rethrow;
     }
-
-    // 3. Remover a própria loja
-    await _dbService.delete(path: 'stores/$storeID');
-    debugPrint('Loja $storeID deletada');
-
-    // 4. Atualizar estado local
-    _stores.removeWhere((store) => store.idLoja == storeID);
-    notifyListeners();
-
-  } catch (e) {
-    debugPrint('Erro ao excluir loja: $e');
-    rethrow;
   }
-}
-
-
 
   // Adicione este método no seu StoreProvider
   Future<String?> findStoreIdForProduct(String productId) async {

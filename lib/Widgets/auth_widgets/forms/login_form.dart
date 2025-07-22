@@ -85,7 +85,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _buildTitle() {
     return const Text(
-      Constants.loginTitle,
+      "Entrar",
       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
     );
   }
@@ -177,7 +177,7 @@ class _LoginFormState extends State<LoginForm> {
             () =>
                 Navigator.pushReplacementNamed(context, Routes.recoverPassword),
         child: const Text(
-          Constants.forgotPassword,
+          "Recuperar Palavra-Passe",
           style: TextStyle(color: Constants.textColor, fontSize: 14),
         ),
       ),
@@ -204,7 +204,7 @@ class _LoginFormState extends State<LoginForm> {
             widget.isLoading
                 ? const CircularProgressIndicator(color: Colors.white)
                 : const Text(
-                  Constants.loginButton,
+                  "Acessar",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -226,9 +226,9 @@ class _LoginFormState extends State<LoginForm> {
         text: const TextSpan(
           style: TextStyle(color: Colors.black, fontSize: 16),
           children: [
-            TextSpan(text: Constants.notAMember),
+            TextSpan(text: "Não é membro?"),
             TextSpan(
-              text: Constants.signUpNow,
+              text: "Adere já",
               style: TextStyle(color: Colors.blue),
             ),
           ],

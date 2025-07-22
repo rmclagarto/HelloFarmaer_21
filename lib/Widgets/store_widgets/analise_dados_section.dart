@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 import 'package:hellofarmer/Services/finance_report_service.dart';

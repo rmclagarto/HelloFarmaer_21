@@ -11,15 +11,15 @@ class Constants {
   static const String appName = 'Meu App Legal';
   static const String welcomeMessage = 'Bem-vindo ao app!';
 
-  static const String loginTitle = 'Entrar';
-  static const String registerTitle = 'Registar';
-  static const String recoverTitle = 'Recuperar Senha';
+  // static const String loginTitle = 'Entrar';
+  // static const String registerTitle = 'Registar';
+  // static const String recoverTitle = 'Recuperar Senha';
   
-  static const String forgotPassword = 'Recuperar palavra-passe';
-  static const String loginButton = 'ACESSAR';
-  static const String orDivider = 'OU';
-  static const String notAMember = 'Não é membro? ';
-  static const String signUpNow = 'Adere já';
+  // static const String forgotPassword = 'Recuperar palavra-passe';
+  // static const String loginButton = 'ACESSAR';
+  // static const String orDivider = 'OU';
+  // static const String notAMember = 'Não é membro? ';
+  // static const String signUpNow = 'Adere já';
 
   // Outros valores
   static const double defaultPadding = 16.0;

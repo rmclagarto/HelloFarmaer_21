@@ -85,7 +85,7 @@ class _RegisterFromState extends State<RegisterFrom> {
 
   Widget _buildTitle() {
     return const Text(
-      Constants.registerTitle,
+      "Registrar",
       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
     );
   }
@@ -278,7 +278,7 @@ class _RegisterFromState extends State<RegisterFrom> {
           ),
         ),
         child: const Text(
-          Constants.loginButton,
+          "Acessar",
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
@@ -292,9 +292,9 @@ class _RegisterFromState extends State<RegisterFrom> {
         text: const TextSpan(
           style: TextStyle(color: Colors.black, fontSize: 16),
           children: [
-            TextSpan(text: Constants.notAMember),
+            TextSpan(text: "Não é membro?"),
             TextSpan(
-              text: Constants.signUpNow,
+              text: "Adere já",
               style: TextStyle(color: Colors.blue),
             ),
           ],

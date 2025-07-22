@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Services/database_service.dart';
-import 'package:provider/provider.dart';
 import 'package:hellofarmer/Model/produtos.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Widgets/market_widgets/search_box.dart';
 import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';

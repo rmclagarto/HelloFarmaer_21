@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/store.dart';
-import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Screens/store_screens/my_strore_screen.dart';
 import 'package:hellofarmer/Services/database_service.dart';
