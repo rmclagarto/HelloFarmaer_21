@@ -75,55 +75,70 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                 fit: BoxFit.cover,
               ),
             ),
+            
             const SizedBox(height: 16),
+            
             Text(
               "${widget.produto.preco.toString()}€ / ${widget.produto.unidadeMedida}",
               style: TextStyle(fontSize: 18, color: PaletaCores.corSecundaria),
             ),
+            
             const SizedBox(height: 4),
+            
             Text(
               "Publicado em ${widget.produto.data.toString()}",
               style: const TextStyle(color: Colors.grey),
             ),
+            
             const SizedBox(height: 20),
-            // Descrição
+            
             const Text(
               'Descrição',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
+            
             const SizedBox(height: 6),
+            
             Text(widget.produto.descricao, style: const TextStyle(height: 1.4)),
+            
             const SizedBox(height: 24),
-            // Estatísticas em Cards
+            
             const Text(
               'Estatísticas',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
+
             const SizedBox(height: 12),
 
             Wrap(
               spacing: 12,
               runSpacing: 12,
               children: [
+                
                 _buildStatCard(
                   'Cliques',
                   widget.produto.cliques.toString(),
                   Icons.touch_app,
                 ),
+                
                 _buildStatCard(
                   'Compras',
                   widget.produto.comprado.toString(),
                   Icons.shopping_cart,
                 ),
+
               ],
             ),
+            
             const SizedBox(height: 24),
+            
             const Text(
               'Gestão de Produto',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
+
             const SizedBox(height: 12),
-            // Preço
+
             TextField(
               controller: _precoController,
               decoration: InputDecoration(
@@ -137,7 +152,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
             ),
 
             const SizedBox(height: 12),
-            // Stock
+
             TextField(
               controller: _stockController,
               decoration: InputDecoration(
@@ -151,7 +166,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
             ),
 
             const SizedBox(height: 20),
-            // Botões
+       
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -174,7 +189,8 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                   Navigator.pop(
                     context,
                     updatedProduct,
-                  ); // Retorna o produto modificado
+                  ); 
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Alterações guardadas!')),
                   );
@@ -265,16 +281,16 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
       final double despesasAtuais;
 
       if (snapshot?.value == null) {
-      despesasAtuais = 0.0;
-    } else if (snapshot!.value is int) {
-      despesasAtuais = (snapshot.value as int).toDouble();
-    } else if (snapshot.value is double) {
-      despesasAtuais = snapshot.value as double;
-    } else if (snapshot.value is String) {
-      despesasAtuais = double.parse(snapshot.value as String);
-    } else {
-      despesasAtuais = 0.0;
-    }
+        despesasAtuais = 0.0;
+      } else if (snapshot!.value is int) {
+        despesasAtuais = (snapshot.value as int).toDouble();
+      } else if (snapshot.value is double) {
+        despesasAtuais = snapshot.value as double;
+      } else if (snapshot.value is String) {
+        despesasAtuais = double.parse(snapshot.value as String);
+      } else {
+        despesasAtuais = 0.0;
+      }
 
       await _dbService.update(
         path: 'stores/$storeId',
@@ -347,8 +363,8 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  icon: const Icon(Icons.check_circle_outline),
-                  label: const Text('Confirmar e Pagar'),
+                  icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
+                  label:  Text('Confirmar e Pagar', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PaletaCores.corPrimaria,
                     padding: const EdgeInsets.symmetric(vertical: 14),
@@ -388,10 +404,10 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
               ),
               TextButton(
                 onPressed: () async {
-                  // Fechar o diálogo de confirmação inicial
+                  
                   Navigator.pop(context);
 
-                  // Mostrar indicador de carregamento
+                  
                   showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -401,14 +417,13 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                   );
 
                   try {
-                    // Buscar o ID da loja que contém este produto
                     final storeId = await storeProvider.findStoreIdForProduct(
                       widget.produto.idProduto,
                     );
 
                     if (storeId == null) {
                       if (mounted) {
-                        Navigator.pop(context); // Fechar loading
+                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -420,19 +435,19 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                       return;
                     }
 
-                    // Executar a exclusão
+                    
                     await storeProvider.deleteProduct(
                       storeId: storeId,
                       productId: widget.produto.idProduto,
                     );
 
-                    // Fechar loading e sair da tela de detalhes
+                    
                     if (mounted) {
-                      Navigator.pop(context); // Fechar loading
+                      Navigator.pop(context);
                       Navigator.pop(
                         context,
                         true,
-                      ); // Fechar tela de detalhes e retornar true
+                      ); 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Produto eliminado com sucesso!"),
@@ -441,7 +456,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                     }
                   } catch (e) {
                     if (mounted) {
-                      Navigator.pop(context); // Fechar loading
+                      Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(

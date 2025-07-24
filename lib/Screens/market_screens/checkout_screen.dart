@@ -59,23 +59,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Random().nextInt(100);
   }
 
-  Future<void> createOrder(int code) async {
+  Future<void> criarEncomenda(int codigo) async {
     final user = Provider.of<UserProvider>(context, listen: false).user;
     String compradorId = user!.idUtilizador;
 
     for (var cartItem in widget.cartItems) {
-      final newOrderRef = _dbService.database.ref().child('orders').push();
-      final newOrderId = newOrderRef.key!;
+      final novaEncomendaRef = _dbService.database.ref().child('orders').push();
+      final novaEncomendaId = novaEncomendaRef.key!;
 
       final produto = cartItem.product;
       final vendedorId = produto.idLoja;
 
       final encomenda = Encomenda(
-        idEncomenda: newOrderId,
+        idEncomenda: novaEncomendaId,
         compradorId: compradorId,
         vendedorId: vendedorId,
         dataPedido: DateTime.now(),
-        code: code,
+        code: codigo,
         valor: (cartItem.quantity * produto.preco),
         compradorInfo: {
           "nome": user.nomeUtilizador,
@@ -93,7 +93,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       );
 
       await _dbService.update(
-        path: "orders/$newOrderId",
+        path: "orders/$novaEncomendaId",
         data: encomenda.toJson(),
       );
 
@@ -105,8 +105,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       if (lojaSnapshot != null && lojaSnapshot.value is List) {
         listaLoja = List<dynamic>.from(lojaSnapshot.value as List);
       }
-      if (!listaLoja.contains(newOrderId)) {
-        listaLoja.add(newOrderId);
+      if (!listaLoja.contains(novaEncomendaId)) {
+        listaLoja.add(novaEncomendaId);
         await _dbService.update(
           path: "stores/$vendedorId/listEncomendasId",
           data: listaLoja,
@@ -122,8 +122,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       if (userSnapshot != null && userSnapshot.value is List) {
         listaUser = List<dynamic>.from(userSnapshot.value as List);
       }
-      if (!listaUser.contains(newOrderId)) {
-        listaUser.add(newOrderId);
+      if (!listaUser.contains(novaEncomendaId)) {
+        listaUser.add(novaEncomendaId);
         await _dbService.update(
           path: "users/$compradorId/listEncomendasId",
           data: listaUser,
@@ -148,6 +148,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
       await _atualizarEstoqueProduto(produto.idProduto, cartItem.quantity);
       await _atualizarFaturamentoLoja(vendedorId, (cartItem.quantity * produto.preco));
+      await _atualizarQuantidadeComprada(produto.idProduto);
       // await _removerProdutoDoCarrinho(compradorId, produto.idProduto);
       await _registrarClienteNaLoja(vendedorId, user);
     }
@@ -162,7 +163,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
       await _dbService.update(
         path: "products/$produtoId", 
-        data: {'quantidade': novoEstoque},
+        data: {'quantidade': novoEstoque}
       );
     }
   }
@@ -175,10 +176,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       atual = double.tryParse(snapshot.value.toString()) ?? 0;
     }
 
+
     await _dbService.update(
       path: 'stores/$lojaId', 
-      data: {'faturamento': atual + valor}
+      data: {'faturamento': atual + valor,
+      }
     );
+  }
+
+
+  Future<void> _atualizarQuantidadeComprada(String produtoId) async {
+    final snapshot = await _dbService.read(path: 'products/$produtoId');
+    if(snapshot != null && snapshot.value is Map){
+      final data = Map<String, dynamic>.from(snapshot.value as Map);
+      int quantidadeComprada = data['comprado'] ?? 0;
+
+      await _dbService.update(
+        path: 'products/$produtoId', 
+        data: {'comprado': (quantidadeComprada + 1)}
+      );
+    }
   }
 
   Future<void> _registrarClienteNaLoja(String vendedorId, Utilizador user) async{
@@ -400,7 +417,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             return;
           }
           final codigoPedido = gerarCodigoPedido();
-          createOrder(codigoPedido);
+          criarEncomenda(codigoPedido);
 
           await mostrarNotificacao(codigoPedido.toString(), context);
 

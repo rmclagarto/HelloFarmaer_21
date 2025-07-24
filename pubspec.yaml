@@ -1,7 +1,7 @@
 name: hellofarmer
 description: "A new Flutter project."
 publish_to: 'none'
-version: 0.2.0
+version: 0.18.0
 
 environment:
   sdk: ^3.7.2
@@ -55,6 +55,5 @@ flutter:
   - assets\img\logotipo.jpg
   - assets\img\AgricultorAvatar.jpg
   - assets\img\quinta.jpg
-  - assets\img\baldeZinco.jpg
   - assets\img\fruta.jpg
   - assets\img\alface.png
