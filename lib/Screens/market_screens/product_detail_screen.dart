@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 // import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
@@ -13,16 +13,16 @@ import 'package:hellofarmer/Services/database_service.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final Produtos product;
+  final Produto produto;
 
-  const ProductDetailScreen({super.key, required this.product});
+  const ProductDetailScreen({super.key, required this.produto});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  final DatabaseService _db = DatabaseService();
+  final BancoDadosServico _db = BancoDadosServico();
   bool _isFavorite = false;
   bool _isLoading = false;
 
@@ -31,12 +31,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     setState(() => _isLoading = true);
 
     final user = Provider.of<UserProvider>(context, listen: false);
-    final dbService = DatabaseService();
-     final productId = widget.product.idProduto;
+    final dbService = BancoDadosServico();
+    final productId = widget.produto.idProduto;
 
     try {
       final cartSnapshot = await dbService.read(
-        path: 'users/${user.user?.idUser}/cartProductsList',
+        path: 'users/${user.user?.idUtilizador}/cartProductsList',
       );
 
       if (!mounted) return;
@@ -63,15 +63,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
 
       // Adicionar o novo ID do produto
-      updatedCart.add(widget.product.idProduto);
+      updatedCart.add(widget.produto.idProduto);
 
       // Atualizar o carrinho no Firebase
       await dbService.update(
-        path: "users/${user.user?.idUser}/cartProductsList",
+        path: "users/${user.user?.idUtilizador}/cartProductsList",
         data: updatedCart,
       );
 
-if (!mounted) return;
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Produto adicionado ao carrinho!')),
       );
@@ -88,7 +88,7 @@ if (!mounted) return;
 
     final user = Provider.of<UserProvider>(context, listen: false);
 
-    if (user.user?.idUser == null) {
+    if (user.user?.idUtilizador == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor, faça login primeiro')),
       );
@@ -99,7 +99,7 @@ if (!mounted) return;
 
     try {
       final snapshot = await _db.read(
-        path: 'users/${user.user?.idUser}/favoritos',
+        path: 'users/${user.user?.idUtilizador}/favoritos',
       );
 
       List<String> favoritos = [];
@@ -112,7 +112,7 @@ if (!mounted) return;
         }
       }
 
-      final productId = widget.product.idProduto;
+      final productId = widget.produto.idProduto;
       if (productId == null) throw Exception('ID do produto inválido');
 
       final isCurrentlyFavorite = favoritos.contains(productId);
@@ -124,7 +124,7 @@ if (!mounted) return;
       }
 
       await _db.update(
-        path: 'users/${user.user?.idUser}/favoritos',
+        path: 'users/${user.user?.idUtilizador}/favoritos',
         data: favoritos,
       );
 
@@ -142,18 +142,16 @@ if (!mounted) return;
       );
     } catch (e) {
       debugPrint('Erro ao atualizar favoritos: $e');
-      if (mounted){
-      
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString().contains('permission-denied')
-                ? 'Permissão negada. Verifique seu login.'
-                : 'Erro: ${e.toString()}',
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString().contains('permission-denied')
+                  ? 'Permissão negada. Verifique seu login.'
+                  : 'Erro: ${e.toString()}',
+            ),
           ),
-        ),
-      );
+        );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -161,13 +159,13 @@ if (!mounted) return;
   }
 
   Future<void> _incrementClicks() async {
-    if (widget.product.idProduto == null) return;
+    if (widget.produto.idProduto == null) return;
 
     try {
-      final currentCliks = widget.product.cliques ?? 0;
+      final currentCliks = widget.produto.cliques ?? 0;
 
       await _db.update(
-        path: 'products/${widget.product.idProduto}',
+        path: 'products/${widget.produto.idProduto}',
         data: {'cliques': currentCliks + 1},
       );
     } catch (e) {
@@ -181,14 +179,14 @@ if (!mounted) return;
     final user = Provider.of<UserProvider>(context, listen: false);
 
     // Verificar se o usuário está autenticado
-    if (user.user?.idUser == null) {
+    if (user.user?.idUtilizador == null) {
       setState(() => _isFavorite = false);
       return;
     }
 
     try {
       final snapshot = await _db.read(
-        path: 'users/${user.user?.idUser}/favoritos',
+        path: 'users/${user.user?.idUtilizador}/favoritos',
       );
 
       if (snapshot?.value != null) {
@@ -202,7 +200,7 @@ if (!mounted) return;
 
         if (mounted) {
           setState(() {
-            _isFavorite = favoritos.contains(widget.product.idProduto);
+            _isFavorite = favoritos.contains(widget.produto.idProduto);
           });
         }
       }
@@ -214,6 +212,31 @@ if (!mounted) return;
     }
   }
 
+  Future<void> getQuantidadePreco() async {
+    try {
+      final snapshot = await _db.read(
+        path: "products/${widget.produto.idProduto}",
+      );
+
+      final rawData = snapshot?.value;
+      if (rawData != null && rawData is Map) {
+        final data = Map<String, dynamic>.from(rawData);
+
+        final novaQuantidade = data['quantidade'];
+        final novoPreco = data['preco'];
+
+        if (!mounted) return;
+
+        setState(() {
+          widget.produto.quantidade = novaQuantidade;
+          widget.produto.preco = novoPreco;
+        });
+      }
+    } catch (e) {
+      debugPrint('Erro ao buscar quantidade/preço: $e');
+    }
+  }
+
   StreamSubscription? _favoritesSubscription;
 
   @override
@@ -221,29 +244,30 @@ if (!mounted) return;
     super.initState();
     _incrementClicks();
     _checkIfFavorite();
+    getQuantidadePreco();
 
     final user = Provider.of<UserProvider>(context, listen: false);
-  if (user.user?.idUser != null) {
-    _favoritesSubscription = _db.readAsStream(
-      path: 'users/${user.user?.idUser}/favoritos',
-    ).listen((event) {
-      if (mounted && event.snapshot.exists) {
-        List<String> favoritos = [];
-        final value = event.snapshot.value;
-        
-        if (value is List) {
-          favoritos = List<String>.from(value);
-        } else if (value is Map) {
-          favoritos = (value as Map).keys.cast<String>().toList();
-        }
-        
-        setState(() {
-          _isFavorite = favoritos.contains(widget.product.idProduto);
-        });
-      }
-    });
+    if (user.user?.idUtilizador != null) {
+      _favoritesSubscription = _db
+          .readAsStream(path: 'users/${user.user?.idUtilizador}/favoritos')
+          .listen((event) {
+            if (mounted && event.snapshot.exists) {
+              List<String> favoritos = [];
+              final value = event.snapshot.value;
+
+              if (value is List) {
+                favoritos = List<String>.from(value);
+              } else if (value is Map) {
+                favoritos = (value as Map).keys.cast<String>().toList();
+              }
+
+              setState(() {
+                _isFavorite = favoritos.contains(widget.produto.idProduto);
+              });
+            }
+          });
+    }
   }
-}
 
   @override
   void dispose() {
@@ -253,12 +277,12 @@ if (!mounted) return;
 
   @override
   Widget build(BuildContext context) {
-    final isAvailable = (widget.product.quantidade ?? 0) > 0;
+    final isAvailable = (widget.produto.quantidade ?? 0) > 0;
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
@@ -270,7 +294,7 @@ if (!mounted) return;
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    ImageAssets.alface, // widget.product.imagem,
+                    Imagens.alface, // widget.product.imagem,
                     width: double.infinity,
                     height: 250,
                     fit: BoxFit.cover,
@@ -283,7 +307,7 @@ if (!mounted) return;
                   children: [
                     Expanded(
                       child: Text(
-                        widget.product.nomeProduto,
+                        widget.produto.nomeProduto,
                         style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -308,11 +332,11 @@ if (!mounted) return;
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${widget.product.preco}€',
+                  '${widget.produto.preco}€',
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
-                    color: Constants.primaryColor,
+                    color: PaletaCores.corPrimaria,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -326,7 +350,7 @@ if (!mounted) return;
                     const SizedBox(width: 6),
                     Text(
                       isAvailable
-                          ? 'Em stock (${widget.product.quantidade} / ${widget.product.unidadeMedida})'
+                          ? 'Em stock (${widget.produto.quantidade} / ${widget.produto.unidadeMedida})'
                           : 'Indisponível',
                       style: TextStyle(
                         color: isAvailable ? Colors.green : Colors.red,
@@ -343,20 +367,20 @@ if (!mounted) return;
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  widget.product.descricao,
+                  widget.produto.descricao,
                   style: const TextStyle(fontSize: 16, height: 1.5),
                 ),
                 const SizedBox(height: 20),
 
                 Text(
-                  'Categoria: ${widget.product.categoria}',
+                  'Categoria: ${widget.produto.categoria}',
                   style: const TextStyle(fontSize: 16),
                 ),
 
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Simule ou busque os produtos da loja real
+                    
                     final storeProvider = Provider.of<StoreProvider>(
                       context,
                       listen: false,
@@ -365,7 +389,10 @@ if (!mounted) return;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => StoreDetailScreen(lojaId: widget.product.idLoja,),
+                        builder:
+                            (_) => StoreDetailScreen(
+                              lojaId: widget.produto.idLoja,
+                            ),
                       ),
                     );
                   },
@@ -393,7 +420,7 @@ if (!mounted) return;
                     icon: const Icon(Icons.add_shopping_cart),
                     label: const Text('Adicionar'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Constants.primaryColor,
+                      backgroundColor: PaletaCores.corPrimaria,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -409,7 +436,7 @@ if (!mounted) return;
                         isAvailable
                             ? () {
                               final itemUnico = CartItem(
-                                product: widget.product,
+                                product: widget.produto,
                                 quantity: 1,
                                 inStock: true,
                               );
@@ -419,7 +446,7 @@ if (!mounted) return;
                                   builder:
                                       (_) => CheckoutScreen(
                                         cartItems: [itemUnico],
-                                        subtotal: widget.product.preco,
+                                        subtotal: widget.produto.preco,
                                       ),
                                 ),
                               );

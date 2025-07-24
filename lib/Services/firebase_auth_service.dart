@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
-import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/user.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 
-class FirebaseAuthService {
+class AutenticacaoFirebaseServico {
   final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
-  final DatabaseService _databaseService = DatabaseService();
+  final BancoDadosServico _databaseService = BancoDadosServico();
 
-  Future<CustomUser?> registerWithEmailPassword(
+  Future<Utilizador?> registerWithEmailPassword(
     String email,
     String password,
   ) async {
@@ -25,21 +25,20 @@ class FirebaseAuthService {
 
         await user.reload();
 
-        final CustomUser customUser = CustomUser(
-          idUser: user.uid,
-          nomeUser: '',
+        final Utilizador customUser = Utilizador(
+          idUtilizador: user.uid,
+          nomeUtilizador: '',
           email: user.email ?? email,
           telefone: '',
-          grupo: '',
           historicoCompras: [],
-          myStoreList: [],
+          minhasLojas: [],
           imagemPerfil: '',
         );
 
 
-        await _databaseService.create(
-          path: 'users/${user.uid}',
-          data: customUser.toJson(),
+        await _databaseService.criar(
+          caminho: 'users/${user.uid}',
+          dados: customUser.toJson(),
         );
 
         return customUser;
@@ -54,7 +53,7 @@ class FirebaseAuthService {
     return null;
   }
 
-  Future<CustomUser?> signInWithEmailPassword(
+  Future<Utilizador?> signInWithEmailPassword(
     String email,
     String password,
   ) async {
@@ -67,9 +66,9 @@ class FirebaseAuthService {
       final user = result.user;
 
       if (user != null) {
-        return CustomUser(
-          idUser: user.uid,
-          nomeUser: user.displayName ?? '',
+        return Utilizador(
+          idUtilizador: user.uid,
+          nomeUtilizador: user.displayName ?? '',
           email: user.email ?? email,
           telefone: '', // Or use a stored value if available
 
@@ -91,8 +90,8 @@ class FirebaseAuthService {
     await _auth.signOut();
   }
 
-  CustomUser? get currentUser {
+  Utilizador? get currentUser {
     final user = _auth.currentUser;
-    return user != null ? CustomUser.fromFirebaseUser(user) : null;
+    return user != null ? Utilizador.fromFirebaseUser(user) : null;
   }
 }

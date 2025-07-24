@@ -1,13 +1,13 @@
 // category_horizontal_list.dart
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';
 
 
 class CategoryHorizontalList extends StatelessWidget {
   final String categoryName;
-  final List<Produtos> products;
+  final List<Produto> products;
   final VoidCallback onShowAll;
 
   const CategoryHorizontalList({

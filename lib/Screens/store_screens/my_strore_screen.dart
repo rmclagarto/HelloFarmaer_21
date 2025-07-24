@@ -86,7 +86,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
 
     try {
       await storeProvider.deleteStore(
-        userID: userProvider.user!.idUser,
+        userID: userProvider.user!.idUtilizador,
         storeID: widget.loja.idLoja,
       );
 
@@ -113,7 +113,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -199,7 +199,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        foregroundColor: isActive ? Constants.primaryColor : Colors.grey,
+        foregroundColor: isActive ? PaletaCores.corPrimaria : Colors.grey,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Screens/store_screens/criar_produto_screen.dart';
 import 'package:hellofarmer/Widgets/store_widgets/produtos/produto_card.dart';
@@ -17,7 +17,7 @@ class ProdutosSection extends StatefulWidget {
 
 class _ProdutosSectionState extends State<ProdutosSection> {
   late final StoreProvider _storeProvider;
-  late Stream<List<Produtos>> _produtosStream;
+  late Stream<List<Produto>> _produtosStream;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
           ),
         ),
         elevation: 0,
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -49,7 +49,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
         child: Column(
           children: [
             Expanded(
-              child: StreamBuilder<List<Produtos>>(
+              child: StreamBuilder<List<Produto>>(
                 stream: _produtosStream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -84,7 +84,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToAddProduct(context),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -128,7 +128,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
     }
   }
 
-  Future<void> _updateProduct(BuildContext context, Produtos produto) async {
+  Future<void> _updateProduct(BuildContext context, Produto produto) async {
     try {
       await _storeProvider.updateProduct(produto);
       

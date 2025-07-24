@@ -8,7 +8,7 @@ import 'package:hellofarmer/Services/notification_service.dart';
 import 'package:hellofarmer/firebase_options.dart';
 // import 'package:hellofarmer/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 final ValueNotifier<Locale> localeNotifier = ValueNotifier(const Locale('pt'));
@@ -42,7 +42,7 @@ class MainApp extends StatelessWidget {
                 darkTheme: ThemeData.dark(),
                 themeMode: currentMode,
 
-                // locale: currentLocale,
+                locale: currentLocale,
                 // localizationsDelegates: const [
                 //   AppLocalizations.delegate,
                 //   GlobalMaterialLocalizations.delegate,
@@ -50,15 +50,15 @@ class MainApp extends StatelessWidget {
                 //   GlobalCupertinoLocalizations.delegate,
                 // ],
 
-                supportedLocales: const [
-                  Locale('en'),
-                  Locale('pt'),
-                  Locale('fr'),
-                  Locale('es'),
-                ],
+                // supportedLocales: const [
+                //   Locale('en'),
+                //   Locale('pt'),
+                //   Locale('fr'),
+                //   Locale('es'),
+                // ],
 
-                routes: Routes.routes,
-                initialRoute: Routes.splash,
+                routes: Rotas.rotas,
+                initialRoute: Rotas.splash,
               ),
             );
           },

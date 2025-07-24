@@ -1,38 +1,41 @@
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/routes.dart' show Routes;
+import 'package:hellofarmer/Core/routes.dart' show Rotas;
 
 
 
-class RecoverPasswordForm extends StatefulWidget {
-  final void Function(String email)? onSendRecoveryEmail;
+class RecuperarSenhaFormulario extends StatefulWidget {
+  final void Function(String email)? enviarEmailRecuperacao;
 
-  const RecoverPasswordForm({super.key, this.onSendRecoveryEmail});
+  const RecuperarSenhaFormulario({
+    super.key, 
+    this.enviarEmailRecuperacao
+  });
 
   @override
-  State<RecoverPasswordForm> createState() => _RecoverPasswordFormState();
+  State<RecuperarSenhaFormulario> createState() => _RecuperarSenhaFormularioState();
 }
 
-class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  bool _isLoading = false;
+class _RecuperarSenhaFormularioState extends State<RecuperarSenhaFormulario> {
+  final _chaveFormulario = GlobalKey<FormState>();
+  final TextEditingController _controladorEmail = TextEditingController();
+  bool _carregando = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _controladorEmail.dispose();
     super.dispose();
   }
 
-  Future<void> _handleSendRecoveryLink() async {
-    if (!_formKey.currentState!.validate()) return;
+  Future<void> _enviarLinkRecuperacao() async {
+    if (!_chaveFormulario.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
+    setState(() => _carregando = true);
 
     try {
-      if (widget.onSendRecoveryEmail != null) {
-        widget.onSendRecoveryEmail!(_emailController.text.trim());
+      if (widget.enviarEmailRecuperacao != null) {
+        widget.enviarEmailRecuperacao!(_controladorEmail.text.trim());
 
       }
     } catch (e) {
@@ -46,14 +49,14 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
       }
     } finally {
       if (mounted) {
-        setState(() => _isLoading = false);
+        setState(() => _carregando = false);
       }
     }
   }
 
-  void _handleBackToLogin() {
+  void _voltarParaLogin() {
     Navigator.pop(context);
-    Navigator.restorablePushNamed(context, Routes.login);
+    Navigator.restorablePushNamed(context, Rotas.login);
   }
 
   @override
@@ -69,7 +72,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
           child: Padding(
             padding: const EdgeInsets.all(28.0),
             child: Form(
-              key: _formKey,
+              key: _chaveFormulario,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -82,11 +85,11 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  _buildEmailInputField(),
+                  _campoEmail(),
                   const SizedBox(height: 30),
-                  _buildSendRecoveryLinkButton(),
+                  _botaoEnviarLink(),
                   const SizedBox(height: 20),
-                  _buildBackToLoginLink(),
+                  _linkVoltarLogin(),
                 ],
               ),
             ),
@@ -96,9 +99,9 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
     );
   }
 
-  Widget _buildEmailInputField() {
+  Widget _campoEmail() {
     return TextFormField(
-      controller: _emailController,
+      controller: _controladorEmail,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.done,
       cursorColor: Colors.grey,
@@ -124,13 +127,13 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
     );
   }
 
-  Widget _buildSendRecoveryLinkButton() {
+  Widget _botaoEnviarLink() {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: _isLoading ? null : _handleSendRecoveryLink,
+        onPressed: _carregando ? null : _enviarLinkRecuperacao,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.secondaryColor,
+          backgroundColor: PaletaCores.corSecundaria,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
@@ -146,13 +149,13 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
     );
   }
 
-  Widget _buildBackToLoginLink() {
+  Widget _linkVoltarLogin() {
     return TextButton(
-      onPressed: _handleBackToLogin,
+      onPressed: _voltarParaLogin,
       child: const Text(
         'Voltar ao Login',
         style: TextStyle(
-          color: Constants.secondaryColor,
+          color: PaletaCores.corSecundaria,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),

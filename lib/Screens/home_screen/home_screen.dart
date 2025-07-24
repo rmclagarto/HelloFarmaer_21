@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Services/database_service.dart';
 import 'package:hellofarmer/main.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Widgets/home_widgets/drawer.dart';
@@ -18,11 +20,41 @@ class _HomeState extends State<Home> {
   final TextEditingController searchController = TextEditingController();
   final GlobalKey<MapWidgetState> _mapKey = GlobalKey<MapWidgetState>();
 
-  final List<String> _ads = [
-    "Anúncio 1: Vendo batatas biológicas",
-    "Anúncio 2: Serviço de colheita disponível",
-    "Anúncio 3: Aluguer de trator",
-  ];
+  List<Produto> _ads = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadADS();
+  }
+
+  Future<List<Produto>> fetchAds() async {
+    final snapshot = await BancoDadosServico().read(path: "products");
+    if(snapshot == null) return [];
+
+
+    final data = snapshot.value as Map<dynamic, dynamic>;
+    final List<Produto> produtos = [];
+
+
+    data.forEach((key, value){
+      final produtoJson = Map<String, dynamic>.from(value);
+    final produto = Produto.fromJson(produtoJson);
+    // Só adiciona se for promovido
+    if (produto.promovido == true) {
+      produtos.add(produto);
+    }
+    });
+
+    return produtos;
+  }
+
+  Future<void> _loadADS () async {
+    final ads = await fetchAds();
+    setState(() {
+      _ads = ads;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +73,7 @@ class _HomeState extends State<Home> {
           'HelloFarmer',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -53,8 +85,8 @@ class _HomeState extends State<Home> {
 
           BottomPanel(
             ads: _ads,
-            onAdTap: (ad) {
-              _mapKey.currentState?.addRandomMarker();
+            onAdTap: (produto) {
+              _mapKey.currentState?.addRandomMarker(produto);
             },
           ),
         ],

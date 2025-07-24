@@ -175,7 +175,7 @@ class _LoginFormState extends State<LoginForm> {
       child: TextButton(
         onPressed:
             () =>
-                Navigator.pushReplacementNamed(context, Routes.recoverPassword),
+                Navigator.pushReplacementNamed(context, Rotas.recuperarSenha),
         child: const Text(
           "Recuperar Palavra-Passe",
           style: TextStyle(color: Colors.black, fontSize: 14),
@@ -190,7 +190,7 @@ class _LoginFormState extends State<LoginForm> {
       child: ElevatedButton(
         onPressed: widget.isLoading ? null : _submitForm,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.secondaryColor,
+          backgroundColor: PaletaCores.corSecundaria,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(
             vertical: 15,
@@ -221,7 +221,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _buildSignUp(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.pushReplacementNamed(context, Routes.register),
+      onPressed: () => Navigator.pushReplacementNamed(context, Rotas.registrar),
       child: RichText(
         text: const TextSpan(
           style: TextStyle(color: Colors.black, fontSize: 16),

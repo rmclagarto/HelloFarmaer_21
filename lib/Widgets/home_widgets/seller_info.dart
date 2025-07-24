@@ -33,7 +33,7 @@ class SellerInfo extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   radius: 24,
-                  backgroundImage: AssetImage(ImageAssets.agricultor),
+                  backgroundImage: AssetImage(Imagens.agricultor),
                 ),
                 const SizedBox(width: 12),
                 Column(

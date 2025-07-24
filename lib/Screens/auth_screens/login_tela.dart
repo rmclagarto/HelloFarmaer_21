@@ -5,22 +5,22 @@ import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Core/routes.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/firebase_auth_service.dart';
-import 'package:hellofarmer/Widgets/auth_widgets/forms/login_form.dart';
+import 'package:hellofarmer/Widgets/autenticacao_widgets/formularios/login_formulario.dart';
 import 'package:provider/provider.dart';
 
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LoginTela extends StatefulWidget {
+  const LoginTela({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginTela> createState() => _LoginTelaState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginTelaState extends State<LoginTela> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final FirebaseAuthService _firebaseAuthService = FirebaseAuthService();
+  final AutenticacaoFirebaseServico _firebaseAuthService = AutenticacaoFirebaseServico();
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -29,7 +29,7 @@ class _LoginState extends State<Login> {
     password = password.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      setState(() => _errorMessage = l10n.loginErrorEmptyFields);
+      setState(() => _errorMessage = 'Por favor preencha todos os campos.');
       return;
     }
 
@@ -45,13 +45,13 @@ class _LoginState extends State<Login> {
       if(user != null){
 
         final userProvider = Provider.of<UserProvider>(context, listen: false);
-        await userProvider.loadUserAccount(user.idUser);
+        await userProvider.loadUserAccount(user.idUtilizador);
 
         if (!mounted) return;
-        Navigator.pushReplacementNamed(context, Routes.home);
+        Navigator.pushReplacementNamed(context, Rotas.home);
       }else{
         setState(() {
-          _errorMessage = l10n.loginErrorInvalidCredentials;
+          _errorMessage = 'Credenciais inválidas. Tente novamente.';
           _isLoading = false;
         });
       }
@@ -74,7 +74,7 @@ class _LoginState extends State<Login> {
   Widget _buildLogoHeaderImage() {
     return Center(
       child: Image(
-        image: AssetImage(ImageAssets.logotipo),
+        image: AssetImage(Imagens.logotipo),
         height: 120,
         fit: BoxFit.contain,
       ),
@@ -84,7 +84,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.primaryColor,
+      backgroundColor: PaletaCores.corPrimaria,
       body: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Column(

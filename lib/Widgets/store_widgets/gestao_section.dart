@@ -59,7 +59,7 @@ class GestaoSection extends StatelessWidget {
       'Gestão da Loja',
       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.bold,
-        color: Constants.primaryColor,
+        color: PaletaCores.corPrimaria,
       ),
     );
   }
@@ -100,7 +100,7 @@ class GestaoSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(item.icon, size: 30, color: Constants.primaryColor),
+              Icon(item.icon, size: 30, color: PaletaCores.corPrimaria),
               const SizedBox(height: 8),
               Text(
                 item.title,

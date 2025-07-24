@@ -1,4 +1,4 @@
-class Produtos {
+class Produto {
   
   bool isAsset;
 
@@ -19,7 +19,7 @@ class Produtos {
   int? diasPromovido;
 
 
-  Produtos({
+  Produto({
     required this.idProduto,
     required this.idLoja,
     required this.nomeProduto,
@@ -33,14 +33,13 @@ class Produtos {
     required this.data,
     this.cliques = 0,
     this.comprado = 0,
-    this.historicoCliques = const [],
     this.promovido = false,
     this.diasPromovido = 0
   });
   
 
-  factory Produtos.fromJson(Map<String, dynamic> json) {
-    return Produtos(
+  factory Produto.fromJson(Map<String, dynamic> json) {
+    return Produto(
       idProduto: json['idProduto'],
       idLoja: json['idLoja'],
       nomeProduto: json['nomeProduto'],
@@ -54,7 +53,6 @@ class Produtos {
       data: DateTime.parse(json['data']),
       cliques: json['cliques'] ?? 0,
       comprado: json['comprado'] ?? 0,
-      historicoCliques: List<int>.from(json['historicoCliques'] ?? []),
       promovido: json['promovido'] ?? false,
       diasPromovido: json['diasPromovido'] ?? 0,
     );
@@ -74,14 +72,13 @@ Map<String, dynamic> toJson() {
       'data': data.toIso8601String(),
       'cliques': cliques,
       'comprado': comprado,
-      'historicoCliques': historicoCliques,
       'promovido': promovido,
       'diasPromovido': diasPromovido,
     };
   }
 
 
-  Produtos copyWith({
+  Produto copyWith({
     String? idProduto,
     String? idLoja,
     String? nomeProduto,
@@ -99,7 +96,7 @@ Map<String, dynamic> toJson() {
     bool? promovido,
     int? diasPromovido,
   }) {
-    return Produtos(
+    return Produto(
       idProduto: idProduto ?? this.idProduto,
       idLoja: idLoja ?? this.idLoja,
       nomeProduto: nomeProduto ?? this.nomeProduto,
@@ -113,7 +110,6 @@ Map<String, dynamic> toJson() {
       data: data ?? this.data,
       cliques: cliques ?? this.cliques,
       comprado: comprado ?? this.comprado,
-      historicoCliques: historicoCliques ?? this.historicoCliques,
       promovido: promovido ?? this.promovido,
       diasPromovido: diasPromovido ?? this.diasPromovido,
     );

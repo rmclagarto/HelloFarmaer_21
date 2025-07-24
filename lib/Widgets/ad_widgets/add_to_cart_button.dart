@@ -15,7 +15,7 @@ class AddToCartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         minimumSize: const Size(double.infinity, 50),
       ),
       onPressed: onPressed,

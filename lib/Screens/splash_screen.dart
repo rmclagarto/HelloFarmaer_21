@@ -19,7 +19,7 @@ class _SplashState extends State<Splash> {
     super.initState();
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
-        Navigator.popAndPushNamed(context, Routes.login);
+        Navigator.popAndPushNamed(context, Rotas.login);
       }
     });
   }
@@ -27,8 +27,8 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.primaryColor,
-      body: const Center(child: Image(image: AssetImage(ImageAssets.logotipo))),
+      backgroundColor: PaletaCores.corPrimaria,
+      body: const Center(child: Image(image: AssetImage(Imagens.logotipo))),
     );
   }
 }

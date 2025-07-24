@@ -2,17 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Widgets/auth_widgets/forms/recover_password_form.dart';
+import 'package:hellofarmer/Widgets/autenticacao_widgets/formularios/recuperar_senha_formulario.dart';
 
 
-class RecoverPasswordScreen extends StatefulWidget {
-  const RecoverPasswordScreen({super.key});
+class RecuperarSenhaTela extends StatefulWidget {
+  const RecuperarSenhaTela({super.key});
 
   @override
-  State<RecoverPasswordScreen> createState() => _RecoverPasswordScreenState();
+  State<RecuperarSenhaTela> createState() => _RecuperarSenhaTelaState();
 }
 
-class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
+class _RecuperarSenhaTelaState extends State<RecuperarSenhaTela> {
   // final AuthService _authService = AuthService();
   
 
@@ -22,7 +22,7 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
 
   }
 
-  Future<void> handlePasswordRecovery(String email) async {
+  Future<void> _enviarLinkRecuperacao(String email) async {
     try {
       if (!mounted) return;
 
@@ -37,10 +37,10 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
     }
   }
 
-  Widget _buildLogoHeaderImage() {
+  Widget _cabecalhoComLogo() {
     return Center(
       child: Image(
-        image: AssetImage(ImageAssets.logotipo),
+        image: AssetImage(Imagens.logotipo),
         height: 120,
         fit: BoxFit.contain,
       ),
@@ -50,16 +50,16 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.primaryColor,
+      backgroundColor: PaletaCores.corPrimaria,
       body: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Column(
           children: <Widget>[
-            _buildLogoHeaderImage(),
+            _cabecalhoComLogo(),
             Expanded(
               child: Center(
-                child: RecoverPasswordForm(
-                  onSendRecoveryEmail: handlePasswordRecovery,
+                child: RecuperarSenhaFormulario(
+                  enviarEmailRecuperacao: _enviarLinkRecuperacao,
                 ),
               ),
             ),

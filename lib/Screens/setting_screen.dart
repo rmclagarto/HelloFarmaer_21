@@ -63,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -173,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SwitchListTile(
                 title: Text("Tema escuro"),
                 value: isDarkTheme,
-                activeColor: Constants.primaryColor,
+                activeColor: PaletaCores.corPrimaria,
                 activeTrackColor: Colors.grey[400],
                 inactiveThumbColor: Colors.grey,
                 inactiveTrackColor: Colors.grey[400],

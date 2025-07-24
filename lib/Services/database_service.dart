@@ -1,23 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Model/store.dart';
 
-class DatabaseService {
+class BancoDadosServico {
   final database = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL:
         'https://hello-farmer-cm-2025-c2db6-default-rtdb.europe-west1.firebasedatabase.app/',
   );
 
-  Future<void> create({required String path, required dynamic data}) async {
-    final DatabaseReference ref = database.ref().child(path);
+  Future<void> criar({required String caminho, required dynamic dados}) async {
+    final DatabaseReference ref = database.ref().child(caminho);
 
     try {
-      await ref.set(data);
+      await ref.set(dados);
     } catch (e) {
-      debugPrint('\n\n\n\nErro ao criar dados no caminho $path: $e');
+      debugPrint('\n\n\n\nErro ao criar dados no caminho $caminho: $e');
       rethrow;
     }
   }
@@ -50,7 +50,7 @@ class DatabaseService {
   }
 
   Stream<List<String>> getUserStoresIDs(String userID) {
-    final ref = database.ref().child('users/${userID}/myStoreList');
+    final ref = database.ref().child('users/$userID/minhasLojas');
     return ref.onValue.map((event) {
       final data = event.snapshot.value;
       if (data == null || data == false) return [];
@@ -80,10 +80,10 @@ class DatabaseService {
     });
   }
 
-  Future<Produtos?> getProdutoById(String produtoId) async {
+  Future<Produto?> getProdutoById(String produtoId) async {
     final snapshot = await database.ref().child('products/$produtoId').get();
     if (snapshot.exists) {
-      return Produtos.fromJson(
+      return Produto.fromJson(
         Map<String, dynamic>.from(snapshot.value as Map),
       );
     }

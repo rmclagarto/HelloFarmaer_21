@@ -1,7 +1,7 @@
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 
 class CartItem{
-  final Produtos product;
+  final Produto product;
   int quantity;
   final bool inStock;
 
@@ -23,13 +23,4 @@ class CartItem{
       'inStock': inStock,
     };
   }
-
-
-  // double _parsePrice(String priceStr) {
-  //   final numericString = priceStr
-  //       .replaceAll('€', '')
-  //       .replaceAll(',', '.')
-  //       .replaceAll(RegExp(r'[^0-9.]'), '');
-  //   return double.tryParse(numericString) ?? 0.0;
-  // }
 }

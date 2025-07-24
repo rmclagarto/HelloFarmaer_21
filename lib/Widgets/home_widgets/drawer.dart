@@ -24,8 +24,8 @@ class AppDrawer extends StatelessWidget {
     
     final user = Provider.of<UserProvider>(context).user!;
     
-    final String userName = user.nomeUser;
-    final String userPhotoUrl = ImageAssets.agricultor;
+    final String userName = user.nomeUtilizador;
+    final String userPhotoUrl = Imagens.agricultor;
 
     // Lista dentro do build para poder usar o context nas funções onTap
     final List<Map<String, dynamic>> menuItems = [
@@ -34,7 +34,7 @@ class AppDrawer extends StatelessWidget {
         'title':'Minha Conta',
         'onTap': () {
           navigator.pop();
-          Navigator.pushNamed(context, Routes.myAccount, arguments: user);
+          Navigator.pushNamed(context, Rotas.meuPerfil, arguments: user);
         }
       },
       {
@@ -61,14 +61,14 @@ class AppDrawer extends StatelessWidget {
           );
         },
       },
-      {
-        'icon': Icons.help,
-        'title': 'Ajuda',
-        'onTap': () {
-          navigator.pop();
-          // ação para Ajuda
-        },
-      },
+      // {
+      //   'icon': Icons.help,
+      //   'title': 'Ajuda',
+      //   'onTap': () {
+      //     navigator.pop();
+      //     // ação para Ajuda
+      //   },
+      // },
       {
         'icon': Icons.settings,
         'title': 'Definições',
@@ -76,7 +76,7 @@ class AppDrawer extends StatelessWidget {
           navigator.pop();
           Navigator.pushNamed(
             context,
-            Routes.setting,
+            Rotas.configuracoes,
             arguments: {
               'isDarkTheme': themeNotifier.value == ThemeMode.dark,
               'onThemeChanged': (bool isDark) {
@@ -92,7 +92,7 @@ class AppDrawer extends StatelessWidget {
         'onTap': () async {
           // await AuthService().logout();
           navigator.pop();
-          navigator.pushReplacementNamed(Routes.login);
+          navigator.pushReplacementNamed(Rotas.login);
         },
       },
     ];
@@ -102,7 +102,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: Constants.primaryColor),
+            decoration: const BoxDecoration(color: PaletaCores.corPrimaria),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
 import 'package:hellofarmer/Services/database_service.dart';
@@ -15,8 +15,8 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  final DatabaseService _dbService = DatabaseService();
-  List<Produtos> _favorites = [];
+  final BancoDadosServico _dbService = BancoDadosServico();
+  List<Produto> _favorites = [];
   bool _isLoading = true;
 
   @override
@@ -31,7 +31,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     try {
       // 1. Buscar lista de IDs de favoritos
       final favoritesSnapshot = await _dbService.read(
-        path: 'users/${user?.idUser}/favoritos',
+        path: 'users/${user?.idUtilizador}/favoritos',
       );
 
       if (favoritesSnapshot == null || favoritesSnapshot.value == null) {
@@ -51,7 +51,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       }
 
       // 2. Buscar detalhes de cada produto favorito
-      List<Produtos> loadedFavorites = [];
+      List<Produto> loadedFavorites = [];
       for (String productId in favoriteIds) {
         final productSnapshot = await _dbService.read(
           path: 'products/$productId',
@@ -59,7 +59,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
         if (productSnapshot != null && productSnapshot.value != null) {
           loadedFavorites.add(
-            Produtos.fromJson(
+            Produto.fromJson(
               Map<String, dynamic>.from(productSnapshot.value as Map),
             ),
           );
@@ -84,7 +84,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     try {
       // 1. Buscar lista atual
       final favoritesSnapshot = await _dbService.read(
-        path: 'users/${user?.idUser}/favorites',
+        path: 'users/${user?.idUtilizador}/favorites',
       );
 
       if (favoritesSnapshot == null || favoritesSnapshot.value == null) return;
@@ -102,7 +102,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
       // 3. Atualizar no Firebase
       await _dbService.update(
-        path: 'users/${user?.idUser}/favorites',
+        path: 'users/${user?.idUtilizador}/favorites',
         data: favoriteIds,
       );
 
@@ -130,7 +130,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -150,7 +150,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   padding: const EdgeInsets.all(16),
                   itemCount: _favorites.length,
                   itemBuilder: (context, index) {
-                    final Produtos produto = _favorites[index];
+                    final Produto produto = _favorites[index];
 
                     return Dismissible(
                       key: Key(produto.idProduto),
@@ -173,7 +173,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.asset(
-                              ImageAssets.alface,// produto.imagem,
+                              Imagens.alface,// produto.imagem,
                               width: 60,
                               height: 60,
                               fit: BoxFit.cover,
@@ -201,7 +201,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               MaterialPageRoute(
                                 builder:
                                     (_) =>
-                                        ProductDetailScreen(product: produto),
+                                        ProductDetailScreen(produto: produto),
                               ),
                             );
                           },

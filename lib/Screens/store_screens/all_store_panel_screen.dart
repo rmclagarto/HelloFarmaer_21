@@ -16,7 +16,7 @@ class ListStorePanelScreen extends StatefulWidget {
 }
 
 class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
   List<Store> _stores = [];
   bool _isLoading = true;
   String? _errorMessage;
@@ -43,7 +43,7 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
 
       // Buscar cada loja individualmente pelos IDs
 
-      for (final storeId in user.myStoreList ?? []) {
+      for (final storeId in user.minhasLojas ?? []) {
         final storeData = await _dbService.read(path: 'stores/$storeId');
         if (storeData?.value != null) {
           loadedStores.add(
@@ -146,7 +146,7 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
           "Minhas Lojas",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         centerTitle: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -172,7 +172,7 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
                 },
               ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         onPressed: () => _createNewStore(context),
         child: const Icon(Icons.add, color: Colors.white),
       ),

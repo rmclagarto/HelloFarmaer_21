@@ -23,7 +23,7 @@ class FinanceReportService {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return [
-            // Cabeçalho
+            
             pw.Header(
               level: 0,
               child: pw.Text(
@@ -36,7 +36,7 @@ class FinanceReportService {
             ),
             pw.SizedBox(height: 20),
 
-            // 1. Resumo Financeiro
+            
             pw.Text(
               "Resumo Financeiro",
               style: pw.TextStyle(
@@ -54,28 +54,7 @@ class FinanceReportService {
               ],
             ),
             pw.SizedBox(height: 30),
-
-            // 2. Faturamento Mensal
-            pw.Text(
-              'Faturamento Mensal',
-              style: pw.TextStyle(
-                fontSize: 18,
-                fontWeight: pw.FontWeight.bold,
-                color: PdfColors.blue,
-              ),
-            ),
             
-            pw.SizedBox(height: 30),
-
-            // 3. Canais de Vendas
-            pw.Text(
-              'Canais de Vendas',
-              style: pw.TextStyle(
-                fontSize: 18,
-                fontWeight: pw.FontWeight.bold,
-                color: PdfColors.blue,
-              ),
-            ),
           ];
         },
       ),

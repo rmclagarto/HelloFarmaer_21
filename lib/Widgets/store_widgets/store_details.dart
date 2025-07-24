@@ -35,7 +35,7 @@ class StoreDetails extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
-                        ImageAssets.quinta,
+                        Imagens.quinta,
                         height: 220,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -137,7 +137,7 @@ class StoreDetails extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 24, color: Constants.primaryColor),
+        Icon(icon, size: 24, color: PaletaCores.corPrimaria),
         const SizedBox(width: 12),
         Expanded(
           child: Text(

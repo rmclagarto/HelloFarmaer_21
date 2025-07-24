@@ -4,14 +4,17 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/user.dart';
 import 'package:hellofarmer/Screens/historico_encomendas_screen.dart';
 // import 'package:hellofarmer/l10n/app_localizations.dart';
 
-class MyAccountScreen extends StatelessWidget {
-  final CustomUser user;
+class MeuPerfilTela extends StatelessWidget {
+  final Utilizador user;
 
-  const MyAccountScreen({super.key, required this.user});
+  const MeuPerfilTela({
+    super.key, 
+    required this.user
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class MyAccountScreen extends StatelessWidget {
           "Minha Conta",
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -66,13 +69,13 @@ class MyAccountScreen extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: Constants.primaryColor.withOpacity(0.3),
+              color: PaletaCores.corPrimaria,
               width: 3,
             ),
           ),
           child: ClipOval(
             child: Image.asset(
-              ImageAssets.agricultor,
+              Imagens.agricultor,
               fit: BoxFit.cover,
             ),
           ),
@@ -94,7 +97,7 @@ class MyAccountScreen extends StatelessWidget {
             _buildInfoTile(
               icon: Icons.person_outline,
               title: 'Nome Completo',
-              value: user.nomeUser,
+              value: user.nomeUtilizador,
             ),
             const Divider(height: 24, thickness: 0.5),
             _buildInfoTile(
@@ -122,7 +125,7 @@ class MyAccountScreen extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 24, color: Constants.primaryColor),
+        Icon(icon, size: 24, color: PaletaCores.corPrimaria),
         const SizedBox(width: 16),
         Expanded(
           child: Column(
@@ -164,7 +167,7 @@ class MyAccountScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => HistoricoEncomendasScreen(
-                    userId: user.idUser,
+                    userId: user.idUtilizador,
                   ),
                 ),
               );
@@ -192,10 +195,10 @@ class MyAccountScreen extends StatelessWidget {
             width: 100,
             height: 56,
             decoration: BoxDecoration(
-              color: Constants.primaryColor.withOpacity(0.1),
+              color: PaletaCores.corPrimaria,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, size: 28, color: Constants.primaryColor),
+            child: Icon(icon, size: 28, color: PaletaCores.corPrimaria),
           ),
           const SizedBox(height: 8),
           Text(

@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/user.dart';
 import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 
 class UserProvider with ChangeNotifier {
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
   final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
 
   
-  CustomUser? _user;
-  CustomUser? get user => _user;
+  Utilizador? _user;
+  Utilizador? get user => _user;
 
   Future<void> loadUserAccount(String uid) async {
     final snapshot = await _dbService.read(path: 'users/$uid');
@@ -21,21 +21,20 @@ class UserProvider with ChangeNotifier {
        if (data['historicoCompras'] is! List) {
       data['historicoCompras'] = [];
     }
-    if (data['myStoreList'] is! List) {
-      data['myStoreList'] = [];
+    if (data['minhasLojas'] is! List) {
+      data['minhasLojas'] = [];
     }
 
-    if (data['myFavProductList'] is! List) data['myFavProductList'] = [];
+    if (data['meusProdutosFavoritos'] is! List) data['meusProdutosFavoritos'] = [];
 
-      final user = CustomUser(
-        idUser: data['idUser'],
-        nomeUser: data['nomeUser'],
+      final user = Utilizador(
+        idUtilizador: data['idUtilizador'],
+        nomeUtilizador: data['nomeUtilizador'],
         email: data['email'],
         telefone: data['telefone'],
-        grupo: data['grupo'],
         historicoCompras: List<String>.from(data['historicoCompras'] ?? []),
-        myStoreList: List<String>.from(data['myStoreList'] ?? []),
-        myFavProductList: List<String>.from(data['myFavProductList'] ?? []),
+        minhasLojas: List<String>.from(data['minhasLojas'] ?? []),
+        meusProdutosFavoritos: List<String>.from(data['meusProdutosFavoritos'] ?? []),
         imagemPerfil: data['imagemPerfil'],
       );
 
@@ -76,31 +75,31 @@ class UserProvider with ChangeNotifier {
   Future<void> addStoreToUser(String storeId) async {
   if (_user == null) return;
   
-  final currentStores = List<String>.from(_user!.myStoreList ?? []);
+  final currentStores = List<String>.from(_user!.minhasLojas ?? []);
   
   if (!currentStores.contains(storeId)) {
     currentStores.add(storeId);
     
     // Use set() em vez de update() para listas
     await _dbService.update(
-      path: 'users/${_user!.idUser}',
+      path: 'users/${_user!.idUtilizador}',
       data: {
-        'myStoreList': currentStores,
+        'minhasLojas': currentStores,
       },
     );
     
-    _user = _user!.copyWith(myStoreList: currentStores);
+    _user = _user!.copyWith(minhasLojas: currentStores);
     notifyListeners();
   }
  
 }
 
-  void setUser(CustomUser user) {
+  void setUser(Utilizador user) {
     _user = user;
     notifyListeners();
   }
 
-  void updateUser(CustomUser updatedUser) {
+  void updateUser(Utilizador updatedUser) {
     _user = updatedUser;
     notifyListeners();
   }

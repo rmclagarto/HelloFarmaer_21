@@ -26,7 +26,7 @@ class PriceQuantityRow extends StatelessWidget {
         Text(
           '${pricePerUnit.toStringAsFixed(2)}€/unidade',
           style: TextStyle(
-            color: Constants.primaryColor,
+            color: PaletaCores.corPrimaria,
             fontWeight: FontWeight.bold,
           ),
         ),

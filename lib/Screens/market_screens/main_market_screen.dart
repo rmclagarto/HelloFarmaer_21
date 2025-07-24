@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Services/database_service.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/user.dart';
 import 'package:hellofarmer/Widgets/market_widgets/search_box.dart';
 import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';
 import 'package:hellofarmer/Screens/market_screens/cart_screen.dart';
@@ -11,7 +11,7 @@ import 'package:hellofarmer/Widgets/market_widgets/category_selector.dart';
 // import 'package:hellofarmer/Widgets/market_widgets/category_horizontal_list.dart';
 
 class MarketScreen extends StatefulWidget {
-  final CustomUser user;
+  final Utilizador user;
 
   const MarketScreen({super.key, required this.user});
 
@@ -21,15 +21,15 @@ class MarketScreen extends StatefulWidget {
 
 class _MarketScreenState extends State<MarketScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
 
   int _currentIndex = 0;
   int _selectedCategory = 0;
 
   final List<String> categories = ['Todos', 'Ofertas', 'Vegetais', 'Frutas'];
 
-  List<Produtos> _allProducts = [];
-  List<Produtos> _filteredProducts = [];
+  List<Produto> _allProducts = [];
+  List<Produto> _filteredProducts = [];
   // bool _isLoading = true;
 
   @override
@@ -55,7 +55,7 @@ class _MarketScreenState extends State<MarketScreen> {
     });
   }
 
-  Future<List<Produtos>> fetchProdutos() async {
+  Future<List<Produto>> fetchProdutos() async {
     try {
       // Get all products
       final allProductsSnapshot = await _dbService.read(path: 'products');
@@ -65,7 +65,7 @@ class _MarketScreenState extends State<MarketScreen> {
 
       // Get user's stores
       final myStoreListSnapshot = await _dbService.read(
-        path: 'users/${widget.user.idUser}/myStoreList',
+        path: 'users/${widget.user.idUtilizador}/minhasLojas',
       );
 
       // If user has no stores, return all products
@@ -79,10 +79,10 @@ class _MarketScreenState extends State<MarketScreen> {
         return _convertProductsData(allProductsSnapshot.value!);
       }
 
-      // Get product IDs from all user's stores
+    
       final productIdsFromStores = await _getProductIdsFromStores(storesIds);
 
-      // Filter out products that belong to user's stores
+    
       return _filterProducts(allProductsSnapshot.value!, productIdsFromStores);
     } catch (e) {
       debugPrint('Error fetching products: $e');
@@ -121,11 +121,11 @@ class _MarketScreenState extends State<MarketScreen> {
     return productIdsFromStores;
   }
 
-  List<Produtos> _filterProducts(
+  List<Produto> _filterProducts(
     dynamic allProductsData,
     Set<String> productIdsToExclude,
   ) {
-    final List<Produtos> products = [];
+    final List<Produto> products = [];
 
     if (allProductsData is Map) {
       for (var productId in allProductsData.keys) {
@@ -134,7 +134,7 @@ class _MarketScreenState extends State<MarketScreen> {
           if (productData != null && productData is Map) {
             try {
               products.add(
-                Produtos.fromJson(Map<String, dynamic>.from(productData)),
+                Produto.fromJson(Map<String, dynamic>.from(productData)),
               );
             } catch (e) {
               debugPrint('Error parsing product $productId: $e');
@@ -146,19 +146,19 @@ class _MarketScreenState extends State<MarketScreen> {
     return products;
   }
 
-  List<Produtos> _convertProductsData(dynamic productsData) {
+  List<Produto> _convertProductsData(dynamic productsData) {
     if (productsData is! Map) return [];
 
     return productsData.entries
         .map((entry) {
           try {
-            return Produtos.fromJson(Map<String, dynamic>.from(entry.value));
+            return Produto.fromJson(Map<String, dynamic>.from(entry.value));
           } catch (e) {
             debugPrint('Error converting product ${entry.key}: $e');
             return null;
           }
         })
-        .whereType<Produtos>()
+        .whereType<Produto>()
         .toList();
   }
 
@@ -166,7 +166,7 @@ class _MarketScreenState extends State<MarketScreen> {
     final query = _searchController.text.toLowerCase();
 
     setState(() {
-      List<Produtos> baseList;
+      List<Produto> baseList;
 
       if (_selectedCategory == 0) {
         // Todos - todos os produtos que não são do usuário
@@ -198,7 +198,7 @@ class _MarketScreenState extends State<MarketScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         title: Text(
           "Mercado",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -282,7 +282,7 @@ class _MarketScreenState extends State<MarketScreen> {
         BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
       ],
       currentIndex: 0,
-      selectedItemColor: Constants.primaryColor,
+      selectedItemColor: PaletaCores.corPrimaria,
       unselectedItemColor: Colors.grey,
       onTap: (index) {
         setState(() {

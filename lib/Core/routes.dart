@@ -1,56 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
-import 'package:hellofarmer/Screens/ad_screens/publicar_anuncio_screnn.dart';
-import 'package:hellofarmer/Screens/auth_screens/login_screen.dart';
-import 'package:hellofarmer/Screens/auth_screens/recover_password_screen.dart';
-import 'package:hellofarmer/Screens/auth_screens/register_screen.dart';
+import 'package:hellofarmer/Model/user.dart';
+import 'package:hellofarmer/Screens/ad_screens/criar_anuncio_tela.dart';
+import 'package:hellofarmer/Screens/auth_screens/login_tela.dart';
+import 'package:hellofarmer/Screens/auth_screens/recuperar_senha_tela.dart';
+import 'package:hellofarmer/Screens/auth_screens/registrar_tela.dart';
 import 'package:hellofarmer/Screens/home_screen/home_screen.dart';
 import 'package:hellofarmer/Screens/my_account_screen.dart';
 import 'package:hellofarmer/Screens/setting_screen.dart';
 import 'package:hellofarmer/Screens/splash_screen.dart';
 
-class Routes {
+class Rotas {
   static const splash = '/splash';
   static const login = '/login';
-  static const register = '/register';
-  static const recoverPassword = '/recover-password';
+  static const registrar = '/registrar';
+  static const recuperarSenha = '/recuperar-senha';
   static const home = '/home';
   static const storePanel = '/store-panel';
   static const mainStore = '/main-store';
   static const storeDetails = '/store-details';
-  static const publicarAnuncio = '/publicar-anuncio';
-  static const setting = '/settings';
-  static const myAccount = '/my-account';
+  static const criarAnuncio = '/publicar-anuncio';
+  static const configuracoes = '/configuracoes';
+  static const meuPerfil = '/perfil';
 
   // static const market = '/market';
 
-  static Map<String, WidgetBuilder> get routes => {
+  static Map<String, WidgetBuilder> get rotas => {
     splash: (context) => const Splash(),
-    login: (context) => const Login(),
-    register: (context) => const RegisterScreen(),
-    recoverPassword: (context) => const RecoverPasswordScreen(),
+    login: (context) => const LoginTela(),
+    registrar: (context) => const RegistrarTela(),
+    recuperarSenha: (context) => const RecuperarSenhaTela(),
     home: (context) => const Home(),
 
-    // storePanel:
-    //     (context) => ChangeNotifierProvider(
-    //       create: (context) => LojaProvider(),
-    //       child: const StorePanelScreen(), // Use consistent naming
-    //     ),
+    criarAnuncio: (context) => const CriarAnuncioTela(),
 
-    // mainStore: (context) {
-    //   // You need to pass a Store object here, perhaps from route arguments
-    //   final loja = ModalRoute.of(context)!.settings.arguments as Store;
-    //   return MainStoreScreen(loja: loja);
-    // },
-
-    // storeDetails: (context) {
-    //   final store = ModalRoute.of(context)!.settings.arguments as Store;
-    //   return StoreDetailsScreen(store: store);
-    // },
-    publicarAnuncio: (context) => const PublicarAnuncioScreen(),
-
-    // market: (context) => const MarketScreen(),
-    setting: (context) {
+    
+    configuracoes: (context) {
       final args =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 
@@ -60,12 +44,12 @@ class Routes {
       );
     },
 
-    myAccount: (context) {
+    meuPerfil: (context) {
       final args = ModalRoute.of(context)?.settings.arguments;
-      if (args is CustomUser) {
-        return MyAccountScreen(user: args);
+      if (args is Utilizador) {
+        return MeuPerfilTela(user: args);
       } else {
-        return const Login(); // fallback caso não tenha user
+        return const LoginTela(); 
       }
     },
   };

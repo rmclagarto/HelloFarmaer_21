@@ -4,45 +4,53 @@ import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/routes.dart';
 
 
-class RegisterFrom extends StatefulWidget {
-  final Function(String nome,String email, String password, String telefone, String confirmPassword) onRegister;
+class RegistrarFormulario extends StatefulWidget {
+  final Function(
+    String nome,
+    String email, 
+    String senha,
+    String confirmarSenha, 
+    String telefone) onRegister;
 
-  const RegisterFrom({super.key, required this.onRegister});
+  const RegistrarFormulario({
+    super.key, 
+    required this.onRegister
+  });
 
   @override
-  State<RegisterFrom> createState() => _RegisterFromState();
+  State<RegistrarFormulario> createState() => _RegistrarFormularioState();
 }
 
-class _RegisterFromState extends State<RegisterFrom> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _telefoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmarPasswordController =TextEditingController();
-  bool _obscurePassword = true;
+class _RegistrarFormularioState extends State<RegistrarFormulario> {
+  final _chaveFormulario = GlobalKey<FormState>();
+  final TextEditingController _controladorNome = TextEditingController();
+  final TextEditingController _controladorEmail = TextEditingController();
+  final TextEditingController _controladorTelefone = TextEditingController();
+  final TextEditingController _controladorSenha = TextEditingController();
+  final TextEditingController _controladorConfirmarSenha =TextEditingController();
+  bool _senhaOculta = true;
 
   @override
   void dispose() {
-    _nomeController.dispose();
-    _emailController.dispose();
-    _telefoneController.dispose();
-    _passwordController.dispose();
-    _confirmarPasswordController.dispose();
+    _controladorNome.dispose();
+    _controladorEmail.dispose();
+    _controladorTelefone.dispose();
+    _controladorSenha.dispose();
+    _controladorConfirmarSenha.dispose();
     super.dispose();
   }
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
+  void _enviarFormulario() {
+    if (_chaveFormulario.currentState!.validate()) {
       widget.onRegister(
-        _nomeController.text.trim(),
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-        _telefoneController.text.trim(),
-        _confirmarPasswordController.text.trim(),
+        _controladorNome.text.trim(),
+        _controladorEmail.text.trim(),
+        _controladorSenha.text.trim(),
+        _controladorTelefone.text.trim(),
+        _controladorConfirmarSenha.text.trim(),
       );
 
-      Navigator.pushReplacementNamed(context, Routes.home);
+      Navigator.pushReplacementNamed(context, Rotas.home);
     }
   }
 
@@ -56,25 +64,28 @@ class _RegisterFromState extends State<RegisterFrom> {
       child: Padding(
         padding: const EdgeInsets.all(28.0),
         child: Form(
-          key: _formKey,
+          key: _chaveFormulario,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                _buildTitle(),
+                const Text(
+                  "Registrar",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 40),
-                _buildNomeField(),
+                _campoNome(),
                 const SizedBox(height: 10),
-                _buildEmailField(),
+                _campoEmail(),
                 const SizedBox(height: 10),
-                _buildTelefoneFiled(),
+                _campoTelefone(),
                 const SizedBox(height: 10),
-                _buildPasswordField(),
+                _campoSenha(),
                 const SizedBox(height: 10),
-                _buildComfirmPasswordField(),
+                _campoConfirmarSenha(),
                 const SizedBox(height: 40),
-                _buildRegisterButton(),
+                _botaoRegistrar(),
                 const SizedBox(height: 20),
-                _buildSignUp(context),
+                _botaoIrParaLogin(context),
               ],
             ),
           ),
@@ -83,16 +94,10 @@ class _RegisterFromState extends State<RegisterFrom> {
     );
   }
 
-  Widget _buildTitle() {
-    return const Text(
-      "Registrar",
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    );
-  }
 
-  Widget _buildNomeField() {
+  Widget _campoNome() {
     return TextFormField(
-      controller: _nomeController,
+      controller: _controladorNome,
       keyboardType: TextInputType.name,
       textInputAction: TextInputAction.next,
       cursorColor: Colors.grey,
@@ -110,19 +115,13 @@ class _RegisterFromState extends State<RegisterFrom> {
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira seu Nome';
-        }
-
-        return null;
-      },
+      validator: (valor) => valor == null || valor.isEmpty ? 'Por favor, insira seu nome' : null,
     );
   }
 
-  Widget _buildEmailField() {
+  Widget _campoEmail() {
     return TextFormField(
-      controller: _emailController,
+      controller: _controladorEmail,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       cursorColor: Colors.grey,
@@ -140,21 +139,17 @@ class _RegisterFromState extends State<RegisterFrom> {
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira seu email';
-        }
-        if (!value.contains('@') || !value.contains('.')) {
-          return 'Por favor, insira um email válido';
-        }
+      validator: (valor) {
+        if (valor == null || valor.isEmpty) return 'Por favor, insira seu email';
+        if (!valor.contains('@') || !valor.contains('.')) return 'Por favor, insira um email válido';
         return null;
       },
     );
   }
 
-  Widget _buildTelefoneFiled(){
+  Widget _campoTelefone(){
     return TextFormField(
-      controller: _telefoneController,
+      controller: _controladorTelefone,
       keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.next,
       cursorColor: Colors.grey,
@@ -173,20 +168,18 @@ class _RegisterFromState extends State<RegisterFrom> {
         ),
         
       ),
-      validator: (value){
-        if(value == null || value.length < 9){
-          return 'Por favor, insira sua senha';
-        }
+      validator: (valor) {
+        if (valor == null || valor.length < 9) return 'Por favor, insira um número válido';
         return null;
       },
-      onFieldSubmitted: (_) => _submitForm(),
+      onFieldSubmitted: (_) => _enviarFormulario(),
     );
   }
 
-  Widget _buildPasswordField() {
+  Widget _campoSenha() {
     return TextFormField(
-      controller: _passwordController,
-      obscureText: _obscurePassword,
+      controller: _controladorSenha,
+      obscureText: _senhaOculta,
       textInputAction: TextInputAction.done,
       cursorColor: Colors.grey,
       decoration: InputDecoration(
@@ -195,11 +188,11 @@ class _RegisterFromState extends State<RegisterFrom> {
         prefixIcon: const Icon(Icons.lock),
         suffixIcon: IconButton(
           icon: Icon(
-            _obscurePassword ? Icons.visibility : Icons.visibility_off,
+            _senhaOculta ? Icons.visibility : Icons.visibility_off,
           ),
           onPressed: () {
             setState(() {
-              _obscurePassword = !_obscurePassword;
+              _senhaOculta = !_senhaOculta;
             });
           },
         ),
@@ -213,20 +206,15 @@ class _RegisterFromState extends State<RegisterFrom> {
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira sua senha';
-        }
-        return null;
-      },
-      onFieldSubmitted: (_) => _submitForm(),
+      validator: (valor) => valor == null || valor.isEmpty ? 'Por favor, insira sua senha' : null,
+      onFieldSubmitted: (_) => _enviarFormulario(),
     );
   }
 
-  Widget _buildComfirmPasswordField() {
+  Widget _campoConfirmarSenha() {
     return TextFormField(
-      controller: _confirmarPasswordController,
-      obscureText: _obscurePassword,
+      controller: _controladorConfirmarSenha,
+      obscureText: _senhaOculta,
       textInputAction: TextInputAction.done,
       cursorColor: Colors.grey,
       decoration: InputDecoration(
@@ -235,11 +223,11 @@ class _RegisterFromState extends State<RegisterFrom> {
         prefixIcon: const Icon(Icons.lock),
         suffixIcon: IconButton(
           icon: Icon(
-            _obscurePassword ? Icons.visibility : Icons.visibility_off,
+            _senhaOculta ? Icons.visibility : Icons.visibility_off,
           ),
           onPressed: () {
             setState(() {
-              _obscurePassword = !_obscurePassword;
+              _senhaOculta = !_senhaOculta;
             });
           },
         ),
@@ -253,23 +241,18 @@ class _RegisterFromState extends State<RegisterFrom> {
           borderSide: const BorderSide(color: Colors.grey),
         ),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira sua senha';
-        }
-        return null;
-      },
-      onFieldSubmitted: (_) => _submitForm(),
+      validator: (valor) => valor == null || valor.isEmpty ? 'Por favor, confirme sua senha' : null,
+      onFieldSubmitted: (_) => _enviarFormulario(),
     );
   }
 
-  Widget _buildRegisterButton() {
+  Widget _botaoRegistrar() {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: _submitForm,
+        onPressed: _enviarFormulario,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.secondaryColor,
+          backgroundColor: PaletaCores.corSecundaria,
           padding: const EdgeInsets.symmetric(
             vertical: 15,
           ),
@@ -285,9 +268,9 @@ class _RegisterFromState extends State<RegisterFrom> {
     );
   }
 
-  Widget _buildSignUp(BuildContext context) {
+  Widget _botaoIrParaLogin(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.pushReplacementNamed(context, Routes.login),
+      onPressed: () => Navigator.pushReplacementNamed(context, Rotas.login),
       child: RichText(
         text: const TextSpan(
           style: TextStyle(color: Colors.black, fontSize: 16),

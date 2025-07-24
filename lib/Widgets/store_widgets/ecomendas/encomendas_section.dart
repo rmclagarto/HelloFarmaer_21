@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/user.dart';
 // import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 // import 'package:hellofarmer/Model/produtos.dart';
@@ -21,11 +21,11 @@ class _EncomendasSectionState extends State<EncomendasSection>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late List<Encomenda> _encomendas = [];
-  final Map<String, Produtos> _produtosCache = {};
-  final Map<String, CustomUser> _usersCache = {};
+  final Map<String, Produto> _produtosCache = {};
+  final Map<String, Utilizador> _usersCache = {};
   Store? _store;
 
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
 
   @override
   void initState() {
@@ -450,7 +450,7 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
           "Encomendas",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),

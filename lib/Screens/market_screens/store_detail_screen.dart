@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
 import 'package:hellofarmer/Services/database_service.dart';
@@ -19,13 +19,13 @@ class StoreDetailScreen extends StatefulWidget {
 }
 
 class _StoreDetailScreenState extends State<StoreDetailScreen> {
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
   Store? _store;
   bool _isLoading = true;
   String? _errorMessage;
   bool _loadingProducts = true;
   String? _productsError;
-  List<Produtos> _produtos = [];
+  List<Produto> _produtos = [];
   bool _productsLoaded = false;
 
   @override
@@ -118,7 +118,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
 
     final productIds = List<String>.from(productsIdSnapshot.value as List);
     debugPrint('IDs de produtos encontrados: $productIds');
-    final List<Produtos> loadedProducts = [];
+    final List<Produto> loadedProducts = [];
 
     for (final id in productIds) {
       try {
@@ -131,7 +131,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
           final productMap = Map<String, dynamic>.from(productData as Map);
           
           loadedProducts.add(
-            Produtos.fromJson(productMap),
+            Produto.fromJson(productMap),
           );
         }
       } catch (e) {
@@ -171,7 +171,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     if (_errorMessage != null || _store == null) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Constants.primaryColor,
+          backgroundColor: PaletaCores.corPrimaria,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Center(
@@ -182,7 +182,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: ListView(
@@ -190,7 +190,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
-              ImageAssets.quinta,
+              Imagens.quinta,
               height: 200,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -250,14 +250,14 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                 
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.phone, color: Constants.primaryColor),
+                  leading: const Icon(Icons.phone, color: PaletaCores.corPrimaria),
                   title: Text(_store!.telefone),
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(
                     Icons.location_on,
-                    color: Constants.primaryColor,
+                    color: PaletaCores.corPrimaria,
                   ),
                   title: Text(
                     '${_store!.endereco['rua']}, ${_store!.endereco["cidade"]}',
@@ -310,7 +310,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
 
 // Widget de card de produto
 class ProductCard extends StatelessWidget {
-  final Produtos produto;
+  final Produto produto;
 
   const ProductCard({super.key, required this.produto});
 
@@ -321,7 +321,7 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ProductDetailScreen(product: produto),
+            builder: (_) => ProductDetailScreen(produto: produto),
           ),
         );
       },
@@ -340,13 +340,13 @@ class ProductCard extends StatelessWidget {
                     produto.isAsset
                         ? Image.asset(
                           // produto.imagem,
-                          ImageAssets.alface,
+                          Imagens.alface,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         )
                         : Image.network(
                           // produto.imagem,
-                          ImageAssets.alface,
+                          Imagens.alface,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
@@ -370,7 +370,7 @@ class ProductCard extends StatelessWidget {
                   Text(
                     '${produto.preco}€',
                     style: TextStyle(
-                      color: Constants.primaryColor,
+                      color: PaletaCores.corPrimaria,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),

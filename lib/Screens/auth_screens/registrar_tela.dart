@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/custom_user.dart';
+import 'package:hellofarmer/Model/user.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 import 'package:hellofarmer/Services/firebase_auth_service.dart';
-import 'package:hellofarmer/Widgets/auth_widgets/forms/register_from.dart';
+import 'package:hellofarmer/Widgets/autenticacao_widgets/formularios/resgistar_formulario.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class RegistrarTela extends StatefulWidget {
+  const RegistrarTela({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<RegistrarTela> createState() => _RegistrarTelaState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final FirebaseAuthService _authService = FirebaseAuthService();
+class _RegistrarTelaState extends State<RegistrarTela> {
+  final AutenticacaoFirebaseServico _autenticacao = AutenticacaoFirebaseServico();
 
-  void _handleRegister(
+  void _registrar(
     String nome,
     String email,
-    String password,
+    String senha,
     String telefone,
-    String confirmPassword,
+    String confirmarSenha,
   ) async {
-    if (password != confirmPassword) {
+    if (senha != confirmarSenha) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('As passwords não coincidem')),
+        const SnackBar(content: Text('As senhas não coincidem')),
       );
       return;
     }
@@ -39,35 +39,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context) => const Center(child: CircularProgressIndicator()),
       );
 
-      final firebaseUser = await _authService.registerWithEmailPassword(
+      final firebaseUser = await _autenticacao.registerWithEmailPassword(
         email,
-        password,
+        senha,
       );
 
       if (!mounted) return;
 
       if (firebaseUser != null) {
-        final user = CustomUser(
-          idUser: firebaseUser.idUser,
-          nomeUser: nome,
+        final novoUser = Utilizador(
+          idUtilizador: firebaseUser.idUtilizador,
+          nomeUtilizador: nome,
           email: firebaseUser.email,
           telefone: telefone,
-          grupo: 'cliente',
           historicoCompras: [],
           imagemPerfil: '',
         );
 
-        // 👉 SALVA NO REALTIME DATABASE
-        final dbService = DatabaseService();
-        await dbService.create(
-          path: 'users/${user.idUser}',
-          data: user.toJson(),
+        // Salvar no banco de dados
+        final banco = BancoDadosServico();
+        await banco.criar(
+          caminho: 'users/${novoUser.idUtilizador}',
+          dados: novoUser.toJson(),
         );
 
-        // 👉 PASSA O USER PARA O PROVIDER
-        Provider.of<UserProvider>(context, listen: false).setUser(user);
+        
+        Provider.of<UserProvider>(context, listen: false).setUser(novoUser);
 
-        Navigator.pushReplacementNamed(context, '/home', arguments: user);
+        Navigator.pushReplacementNamed(context, '/home', arguments: novoUser);
       } else {
         ScaffoldMessenger.of(
           context,
@@ -81,10 +80,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  Widget _buildLogoHeaderImage() {
+  Widget _cabecalhoComLogo() {
     return Center(
       child: Image.asset(
-        ImageAssets.logotipo,
+        Imagens.logotipo,
         height: 120,
         fit: BoxFit.contain,
       ),
@@ -94,14 +93,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.primaryColor,
+      backgroundColor: PaletaCores.corPrimaria,
       body: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Column(
           children: <Widget>[
-            _buildLogoHeaderImage(),
+            _cabecalhoComLogo(),
             Expanded(
-              child: Center(child: RegisterFrom(onRegister: _handleRegister)),
+              child: Center(child: RegistrarFormulario(onRegister: _registrar)),
             ),
           ],
         ),

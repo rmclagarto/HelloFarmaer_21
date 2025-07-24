@@ -37,7 +37,7 @@ class PreviewAd extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         title: const Text('HelloFarmer'),
         centerTitle: true,
       ),
@@ -49,7 +49,7 @@ class PreviewAd extends StatelessWidget {
             ProductHeader(productName: nome),
             const SizedBox(height: 16),
 
-            ProductImage(imagePath: ImageAssets.produto),
+            ProductImage(imagePath: Imagens.alface),
 
             const SizedBox(height: 16),
 

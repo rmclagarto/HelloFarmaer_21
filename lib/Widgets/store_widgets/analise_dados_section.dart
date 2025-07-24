@@ -23,7 +23,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
 
   double _faturamentoTotal = 0.0;
   double _despesas = 0;
@@ -180,7 +180,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
           "Análises Financeiras",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         centerTitle: true,
@@ -232,7 +232,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
         icon: const Icon(Icons.download, color: Colors.white),
         label: const Text('Relatório', style: TextStyle(color: Colors.white)),
         onPressed: _salvarOuCompartilharRelatorio,
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
       ),
     );
   }

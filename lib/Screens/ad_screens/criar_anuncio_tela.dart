@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Screens/ad_screens/pre_ver_anuncio.dart';
 
-class PublicarAnuncioScreen extends StatefulWidget {
-  const PublicarAnuncioScreen({super.key});
+class CriarAnuncioTela extends StatefulWidget {
+  const CriarAnuncioTela({super.key});
 
   @override
-  State<PublicarAnuncioScreen> createState() => _PublicarAnuncioScreenState();
+  State<CriarAnuncioTela> createState() => _CriarAnuncioTelaState();
 }
 
-class _PublicarAnuncioScreenState extends State<PublicarAnuncioScreen> {
+class _CriarAnuncioTelaState extends State<CriarAnuncioTela> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _descricaoController = TextEditingController();
@@ -71,7 +71,7 @@ class _PublicarAnuncioScreenState extends State<PublicarAnuncioScreen> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -315,7 +315,7 @@ class _PublicarAnuncioScreenState extends State<PublicarAnuncioScreen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Constants.primaryColor,
+                    backgroundColor: PaletaCores.corPrimaria,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: const Text(

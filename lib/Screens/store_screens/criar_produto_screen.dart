@@ -70,7 +70,7 @@ class _PublicarProdutoScreenState extends State<PublicarProdutoScreen> {
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
       ),
       body: SingleChildScrollView(
         child: Padding(

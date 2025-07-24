@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Model/store.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 
 class StoreProvider with ChangeNotifier {
   final List<Store> _stores = [];
-  final List<Produtos> _products = [];
+  final List<Produto> _products = [];
 
   List<Store> get userStore => _stores;
 
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
 
   Stream<List<Store>> getUserStores(String userId) {
     return _dbService.getUserStoresIDs(userId).asyncExpand((storeIds) {
@@ -25,7 +25,7 @@ class StoreProvider with ChangeNotifier {
     });
   }
 
-  Stream<List<Produtos>> getStoreProducts(String storeId) {
+  Stream<List<Produto>> getStoreProducts(String storeId) {
     return _dbService.getProdutosIdsDaLoja(storeId).asyncExpand((productIds) {
       if (productIds.isEmpty) return Stream.value([]);
 
@@ -33,7 +33,7 @@ class StoreProvider with ChangeNotifier {
           productIds.map((id) => _dbService.getProdutoById(id)).toList();
 
       return Stream.fromFuture(Future.wait(productFutures)).map((products) {
-        return products.whereType<Produtos>().toList();
+        return products.whereType<Produto>().toList();
       });
     });
   }
@@ -41,13 +41,13 @@ class StoreProvider with ChangeNotifier {
   Future<void> addProductToStore({
     required String storeId,
     required String productId,
-    required Produtos produto,
+    required Produto produto,
   }) async {
     try {
       // 1. Adiciona o produto à coleção geral
-      await _dbService.create(
-        path: 'products/$productId',
-        data: produto.toJson(),
+      await _dbService.criar(
+        caminho: 'products/$productId',
+        dados: produto.toJson(),
       );
 
       // 2. Adiciona o ID à lista da loja
@@ -106,7 +106,7 @@ class StoreProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateProduct(Produtos produto) async {
+  Future<void> updateProduct(Produto produto) async {
     try {
       await _dbService.update(
         path: 'products/${produto.idProduto}',
@@ -156,7 +156,7 @@ class StoreProvider with ChangeNotifier {
 
       // 2. Remover a loja da lista do usuário
       final userSnapshot = await _dbService.read(
-        path: 'users/$userID/myStoreList',
+        path: 'users/$userID/minhasLojas',
       );
       if (userSnapshot?.value is List) {
         final List<String> currentList = List<String>.from(
@@ -167,7 +167,7 @@ class StoreProvider with ChangeNotifier {
 
           // CORREÇÃO AQUI - usar set com o caminho completo
           await _dbService.update(
-            path: 'users/$userID/myStoreList',
+            path: 'users/$userID/minhasLojas',
             data: updatedList,
           );
           debugPrint('Loja removida da lista do usuário');

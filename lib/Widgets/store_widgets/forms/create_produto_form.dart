@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +18,7 @@ class ProdutoForm extends StatefulWidget {
 }
 
 class ProdutoFormState extends State<ProdutoForm> {
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
 
   String? _selectedCategory;
   String? _selectedUnit;
@@ -159,7 +159,7 @@ class ProdutoFormState extends State<ProdutoForm> {
         final productRef = _dbService.database.ref().child('products').push();
         final productId = productRef.key!;
 
-        final produto = Produtos(
+        final produto = Produto(
           idProduto: productId,
           idLoja: widget.storeId,
           nomeProduto: _nomeController.text,

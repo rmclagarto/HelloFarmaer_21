@@ -62,7 +62,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           "Criação de Loja",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
@@ -291,7 +291,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.primaryColor,
+          backgroundColor: PaletaCores.corPrimaria,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -329,9 +329,9 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         );
 
         // final _dbService = DatabaseService();
-        await DatabaseService().create(
-          path: "stores/$idLoja",
-          data: minhaNovaLoja.toJson(),
+        await BancoDadosServico().criar(
+          caminho: "stores/$idLoja",
+          dados: minhaNovaLoja.toJson(),
         );
 
         if (!mounted) return;

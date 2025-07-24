@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Providers/store_provider.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 import 'package:provider/provider.dart';
 
 class MyProductDetailScreen extends StatefulWidget {
-  final Produtos produto;
+  final Produto produto;
 
   const MyProductDetailScreen({super.key, required this.produto});
 
@@ -53,7 +53,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         actions: [
           IconButton(
             onPressed: () => _confirmDelete(context),
@@ -69,7 +69,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
-                ImageAssets.alface,
+                Imagens.alface,
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
@@ -78,7 +78,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
             const SizedBox(height: 16),
             Text(
               "${widget.produto.preco.toString()}€ / ${widget.produto.unidadeMedida}",
-              style: TextStyle(fontSize: 18, color: Constants.secondaryColor),
+              style: TextStyle(fontSize: 18, color: PaletaCores.corSecundaria),
             ),
             const SizedBox(height: 4),
             Text(
@@ -161,7 +161,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.primaryColor,
+                  backgroundColor: PaletaCores.corPrimaria,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   textStyle: const TextStyle(fontSize: 16),
                 ),
@@ -188,9 +188,9 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                 icon: const Icon(Icons.trending_up),
                 label: const Text('Promover Produto'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: Constants.primaryColor,
+                  foregroundColor: PaletaCores.corPrimaria,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  side: BorderSide(color: Constants.primaryColor, width: 2),
+                  side: BorderSide(color: PaletaCores.corPrimaria, width: 2),
                 ),
                 onPressed: () => _showPromotionSheet(context),
               ),
@@ -212,7 +212,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
       ),
       child: Row(
         children: [
-          Icon(icon, color: Constants.primaryColor),
+          Icon(icon, color: PaletaCores.corPrimaria),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -241,7 +241,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
 
   Widget _buildPlanTile({required String title,required String subtitle, required IconData icon, required VoidCallback onTap}) {
     return ListTile(
-      leading: Icon(icon, color: Constants.primaryColor),
+      leading: Icon(icon, color: PaletaCores.corPrimaria),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.radio_button_off),
@@ -252,7 +252,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
 
   void _promoverProduto(int dias, double valor) async {
     final storeProvider = Provider.of<StoreProvider>(context, listen: false);
-    final DatabaseService _dbService = DatabaseService();
+    final BancoDadosServico _dbService = BancoDadosServico();
 
 
     try{
@@ -350,7 +350,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                   icon: const Icon(Icons.check_circle_outline),
                   label: const Text('Confirmar e Pagar'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Constants.primaryColor,
+                    backgroundColor: PaletaCores.corPrimaria,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onPressed: () {

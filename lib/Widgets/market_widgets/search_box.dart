@@ -19,7 +19,7 @@ class SearchBox extends StatelessWidget {
       width: double.infinity,
       height: 160,
       decoration: BoxDecoration(
-        color: Constants.primaryColor,
+        color: PaletaCores.corPrimaria,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),

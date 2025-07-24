@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
+import 'package:hellofarmer/Model/user.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/database_service.dart';
@@ -28,10 +29,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   double discount = 0.0;
   String deliveryMethod = 'pickup'; // 'pickup' ou 'delivery'
   bool hasAvailableItems = false;
-  final DatabaseService _dbService = DatabaseService();
+  final BancoDadosServico _dbService = BancoDadosServico();
 
-  // List<CartItem> _availableItems = [];
-  // List<CartItem> _outOfStockItems = [];
+
 
   @override
   void initState() {
@@ -41,8 +41,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _checkAvailableItems() {
-    // _availableItems = [];
-    // _outOfStockItems = [];
 
     for (var i = 0; i < widget.cartItems.length; i++) {
       if (widget.cartItems[i].inStock == true) {
@@ -63,7 +61,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   Future<void> createOrder(int code) async {
     final user = Provider.of<UserProvider>(context, listen: false).user;
-    String compradorId = user!.idUser;
+    String compradorId = user!.idUtilizador;
 
     for (var cartItem in widget.cartItems) {
       final newOrderRef = _dbService.database.ref().child('orders').push();
@@ -78,20 +76,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         vendedorId: vendedorId,
         dataPedido: DateTime.now(),
         code: code,
-        valor: (cartItem.quantity *  produto.preco),
+        valor: (cartItem.quantity * produto.preco),
         compradorInfo: {
-          "nome": user.nomeUser,
+          "nome": user.nomeUtilizador,
           "email": user.email,
           "telemovel": user.telefone,
         },
         quantidade: cartItem.quantity,
         produtosInfo: [
-    {
-      'id': cartItem.product.idProduto,
-      'nome': cartItem.product.nomeProduto,
-      'quantidade': cartItem.quantity,
-    }
-  ],
+          {
+            'id': cartItem.product.idProduto,
+            'nome': cartItem.product.nomeProduto,
+            'quantidade': cartItem.quantity,
+          },
+        ],
       );
 
       await _dbService.update(
@@ -145,10 +143,77 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           data: cartList,
         );
       }
+
+
+
+      await _atualizarEstoqueProduto(produto.idProduto, cartItem.quantity);
+      await _atualizarFaturamentoLoja(vendedorId, (cartItem.quantity * produto.preco));
+      // await _removerProdutoDoCarrinho(compradorId, produto.idProduto);
+      await _registrarClienteNaLoja(vendedorId, user);
+    }
+  }
+
+  Future<void> _atualizarEstoqueProduto(String produtoId, int quantidadeComprada) async{
+    final snapshot = await _dbService.read(path: "products/$produtoId");
+    if(snapshot != null && snapshot.value is Map){
+      final data = Map<String, dynamic>.from(snapshot.value as Map);
+      int estoqueAtual = data['quantidade'] ?? 0;
+      int novoEstoque = (estoqueAtual - quantidadeComprada);
+
+      await _dbService.update(
+        path: "products/$produtoId", 
+        data: {'quantidade': novoEstoque},
+      );
+    }
+  }
+
+  Future<void> _atualizarFaturamentoLoja(String lojaId, double valor) async{
+    final snapshot = await _dbService.read(path: 'stores/$lojaId/faturamento');
+    double atual = 0;
+
+    if(snapshot != null && snapshot.value != null){
+      atual = double.tryParse(snapshot.value.toString()) ?? 0;
     }
 
-    print("\n\n\n\n\n\n");
+    await _dbService.update(
+      path: 'stores/$lojaId', 
+      data: {'faturamento': atual + valor}
+    );
   }
+
+  Future<void> _registrarClienteNaLoja(String vendedorId, Utilizador user) async{
+    final snapshot = await _dbService.read(path: "stores/$vendedorId/clientes");
+    List<dynamic> clientes = [];
+
+    if(snapshot != null  && snapshot.value is List){
+      clientes = List<dynamic>.from(snapshot.value as List);
+    }
+
+    final clienteJaExiste = clientes.any((cliente) =>
+      cliente is Map && cliente['id'] == user.idUtilizador
+    );
+
+    if(!clienteJaExiste){
+      final novoCliente = {
+        "id": user.idUtilizador,
+        "nome": user.nomeUtilizador,
+        "email": user.email,
+      };
+
+      clientes.add(novoCliente);
+
+      await _dbService.update(
+        path: "stores/$vendedorId",
+        data: {"clientes": clientes},
+      );
+
+      clientes.clear();
+    }   
+  }
+  
+  // Future<void> _removerProdutoDoCarrinho(String compradorId, String produtoId) async {
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +224,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
@@ -305,7 +370,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               color:
                   isDiscount
                       ? Colors.red
-                      : (isTotal ? Constants.primaryColor : Colors.black),
+                      : (isTotal ? PaletaCores.corPrimaria : Colors.black),
             ),
           ),
         ],
@@ -319,7 +384,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.primaryColor,
+          backgroundColor: PaletaCores.corPrimaria,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

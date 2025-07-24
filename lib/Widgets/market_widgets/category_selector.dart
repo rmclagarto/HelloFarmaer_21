@@ -34,7 +34,7 @@ class CategorySelector extends StatelessWidget {
                   ),
                 ),
                 selected: isSelected,
-                selectedColor: Constants.primaryColor,
+                selectedColor: PaletaCores.corPrimaria,
                 backgroundColor: Colors.white,
                 onSelected: (selected) {
                   if (selected) {

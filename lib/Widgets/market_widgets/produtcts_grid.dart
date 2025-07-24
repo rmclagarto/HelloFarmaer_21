@@ -1,12 +1,12 @@
 
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 
 
 import 'product_card.dart';
 import 'package:flutter/material.dart';
 
 class ProductsGrid extends StatelessWidget {
-  final List<Produtos> products;
+  final List<Produto> products;
 
   const ProductsGrid({super.key, required this.products});
 

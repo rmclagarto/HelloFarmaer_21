@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Screens/store_screens/my_product_detail_screen.dart';
 
 class ProdutoCard extends StatelessWidget {
-  final Produtos produto;
+  final Produto produto;
   final VoidCallback onDelete;
-  final Function(Produtos) onUpdate;
+  final Function(Produto) onUpdate;
 
   const ProdutoCard({
     super.key,
@@ -33,7 +33,7 @@ class ProdutoCard extends StatelessWidget {
             ),
           );
 
-          if (updatedProduto is Produtos) {
+          if (updatedProduto is Produto) {
             onUpdate(updatedProduto);
           }
         },
@@ -46,7 +46,7 @@ class ProdutoCard extends StatelessWidget {
                 child: SizedBox(
                   width: 80,
                   height: 80,
-                  child: buildProductImage(ImageAssets.fruta, produto.isAsset),
+                  child: buildProductImage(Imagens.fruta, produto.isAsset),
                 ),
               ),
               const SizedBox(width: 12),
@@ -61,7 +61,7 @@ class ProdutoCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       produto.preco.toString(),
-                      style: TextStyle(color: Constants.secondaryColor),
+                      style: TextStyle(color: PaletaCores.corSecundaria),
                     ),
                     const SizedBox(height: 6),
                     Text(

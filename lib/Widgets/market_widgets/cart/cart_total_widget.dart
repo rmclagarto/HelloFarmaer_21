@@ -64,7 +64,7 @@ class CartTotalWidget extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Constants.primaryColor,
+          backgroundColor: PaletaCores.corPrimaria,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -129,7 +129,7 @@ class CartTotalWidget extends StatelessWidget {
               color:
                   isDiscount
                       ? Colors.red
-                      : (isTotal ? Constants.primaryColor : Colors.black),
+                      : (isTotal ? PaletaCores.corPrimaria : Colors.black),
             ),
           ),
         ],

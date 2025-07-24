@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
 
 
 class ProductCard extends StatelessWidget {
-  final Produtos product;
+  final Produto product;
   const ProductCard({super.key, required this.product});
 
   @override
@@ -21,7 +21,7 @@ class ProductCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductDetailScreen(product: product),
+              builder: (context) => ProductDetailScreen(produto: product),
             ),
           );
         },
@@ -34,7 +34,7 @@ class ProductCard extends StatelessWidget {
                 height: 80,
                 alignment: Alignment.center,
                 child: Image.asset(
-                  ImageAssets.alface, // product.imagem,
+                  Imagens.alface, // product.imagem,
                   width: 80,
                   fit: BoxFit.cover,
                 ),
@@ -59,7 +59,7 @@ class ProductCard extends StatelessWidget {
                       '${product.preco.toStringAsFixed(2)} / ${product.unidadeMedida}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Constants.primaryColor,
+                        color: PaletaCores.corPrimaria,
                         fontSize: 14,
                       ),
                       maxLines: 1,

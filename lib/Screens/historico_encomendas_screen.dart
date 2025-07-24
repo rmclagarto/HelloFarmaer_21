@@ -8,7 +8,7 @@ class HistoricoEncomendasScreen extends StatelessWidget {
   const HistoricoEncomendasScreen({super.key, required this.userId});
 
   Future<List<Encomenda>> _fetchEncomendas() async {
-    final DatabaseService _dbService = DatabaseService();
+    final BancoDadosServico _dbService = BancoDadosServico();
     final querySnapshot = await _dbService.read(path: 'users/$userId/listEncomendasId');
 
     if (querySnapshot == null || !querySnapshot.exists) {
@@ -58,7 +58,7 @@ class HistoricoEncomendasScreen extends StatelessWidget {
         ),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<Encomenda>>(

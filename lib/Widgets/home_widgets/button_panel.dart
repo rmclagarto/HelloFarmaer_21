@@ -1,11 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Model/produto.dart';
 
 
 class BottomPanel extends StatelessWidget {
-  final List<String> ads;
-  final void Function(String ad)? onAdTap;
+  final List<Produto> ads;
+  final void Function(Produto ad)? onAdTap;
 
   const BottomPanel({super.key, required this.ads, this.onAdTap});
 
@@ -68,7 +69,7 @@ class BottomPanel extends StatelessWidget {
             final ad = ads[index];
             return GestureDetector(
               onTap: () => onAdTap?.call(ad),
-              child: _buildAdCard(ad),
+              child: _buildAdCard(ad.nomeProduto),
             );
           },
         ),
@@ -81,7 +82,7 @@ class BottomPanel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Card(
         elevation: 3,
-        color: Constants.primaryColor,
+        color: PaletaCores.corPrimaria,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),

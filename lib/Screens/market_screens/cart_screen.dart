@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/constants.dart';
 import 'package:hellofarmer/Core/image_assets.dart';
 import 'package:hellofarmer/Model/cart_item.dart';
-import 'package:hellofarmer/Model/produtos.dart';
+import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Providers/user_provider.dart';
 import 'package:hellofarmer/Services/database_service.dart';
 import 'package:hellofarmer/Widgets/market_widgets/cart/cart_item_widget.dart';
@@ -17,7 +17,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<Produtos> cartProducts = [];
+  List<Produto> cartProducts = [];
   Map<String, int> quantities = {};
   bool isLoading = true;
 
@@ -29,12 +29,12 @@ class _CartScreenState extends State<CartScreen> {
 
   Future<void> _loadProdutos() async {
     final user = Provider.of<UserProvider>(context, listen: false).user;
-    final dbService = DatabaseService();
+    final dbService = BancoDadosServico();
 
     try {
       // 1. Buscar lista de IDs no carrinho
       final cartSnapshot = await dbService.read(
-        path: "users/${user?.idUser}/cartProductsList",
+        path: "users/${user?.idUtilizador}/cartProductsList",
       );
 
       if (cartSnapshot != null && cartSnapshot.value != null) {
@@ -43,7 +43,7 @@ class _CartScreenState extends State<CartScreen> {
         );
 
         // 2. Buscar detalhes de cada produto
-        final List<Produtos> products = [];
+        final List<Produto> products = [];
         final Map<String, int> productQuantities = {};
 
         for (String id in productIds) {
@@ -79,7 +79,7 @@ class _CartScreenState extends State<CartScreen> {
     final product = cartProducts.firstWhere(
       (p) => p.idProduto == productId,
       orElse:
-          () => Produtos(
+          () => Produto(
             idProduto: '',
             nomeProduto: '',
             preco: 0,
@@ -118,12 +118,12 @@ class _CartScreenState extends State<CartScreen> {
 
   Future<void> _removeItem(String productId) async {
     final user = Provider.of<UserProvider>(context, listen: false).user;
-    final dbService = DatabaseService();
+    final dbService = BancoDadosServico();
 
     try {
       // 1. Buscar lista atual
       final cartSnapshot = await dbService.read(
-        path: "users/${user?.idUser}/cartProductsList",
+        path: "users/${user?.idUtilizador}/cartProductsList",
       );
 
       if (cartSnapshot != null && cartSnapshot.value != null) {
@@ -134,7 +134,7 @@ class _CartScreenState extends State<CartScreen> {
 
         // 3. Atualizar no banco
         await dbService.update(
-          path: "users/${user?.idUser}/cartProductsList",
+          path: "users/${user?.idUtilizador}/cartProductsList",
           data: productIds,
         );
 
@@ -166,7 +166,7 @@ class _CartScreenState extends State<CartScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: PaletaCores.corPrimaria,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -190,7 +190,7 @@ class _CartScreenState extends State<CartScreen> {
                             'price': product.preco,
                             'quantity': quantities[product.idProduto] ?? 1.0,
                             'maxQuantity': product.quantidade,
-                            'image': ImageAssets.alface,
+                            'image': Imagens.alface,
                             'inStock': product.quantidade > 0,
                           },
                           onQuantityChanged: (newQuantity) {
