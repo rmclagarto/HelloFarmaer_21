@@ -1,16 +1,16 @@
 // main_store.dart
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/store.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Providers/store_provider.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Model/loja.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Providers/loja_provider.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
 import 'package:hellofarmer/Widgets/store_widgets/gestao_section.dart';
 import 'package:hellofarmer/Widgets/store_widgets/store_details.dart';
 import 'package:provider/provider.dart';
 
 class MainStoreScreen extends StatefulWidget {
-  final Store loja;
+  final Loja loja;
 
   const MainStoreScreen({super.key, required this.loja});
 
@@ -81,13 +81,13 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
 
     if (!mounted || confimar != true) return;
 
-    final storeProvider = Provider.of<StoreProvider>(context, listen: false);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final storeProvider = Provider.of<LojaProvider>(context, listen: false);
+    final userProvider = Provider.of<UtilizadorProvider>(context, listen: false);
 
     try {
-      await storeProvider.deleteStore(
-        userID: userProvider.user!.idUtilizador,
-        storeID: widget.loja.idLoja,
+      await storeProvider.removerLoja(
+        utilizadorId: userProvider.utilizador!.idUtilizador,
+        lojaId: widget.loja.idLoja,
       );
 
       if (mounted) {
@@ -113,7 +113,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -199,7 +199,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        foregroundColor: isActive ? PaletaCores.corPrimaria : Colors.grey,
+        foregroundColor: isActive ? PaletaCores.corPrimaria(context) : Colors.grey,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

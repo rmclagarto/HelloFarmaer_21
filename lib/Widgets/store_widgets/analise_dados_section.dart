@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Services/database_service.dart';
-import 'package:hellofarmer/Services/finance_report_service.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Services/basedados.dart';
+import 'package:hellofarmer/Services/relatorio_financeiro.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,7 +42,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
 
   Future<void> _loadFinancialData() async {
     try {
-      final snapshot = await _dbService.read(path: 'stores/${widget.storeId}');
+      final snapshot = await _dbService.read(caminho: 'stores/${widget.storeId}');
       if(snapshot?.value == null){
         throw Exception('Loja não encontrada');
       }
@@ -72,7 +72,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
   }
 
   Future<void> _salvarOuCompartilharRelatorio() async {
-    final service = FinanceReportService(
+    final service = RelatorioFinanceiro(
       faturamentoTotal: _faturamentoTotal,
       despesas: _despesas,
       lucro: (_faturamentoTotal - _despesas),
@@ -80,7 +80,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
 
     try {
       // 1. Gerar PDF
-      final pdfBytes = await service.generatePDF();
+      final pdfBytes = await service.gerarPDF();
 
       // 2. Mostrar opções ao usuário
       final action = await _mostrarDialogoOpcoes(context);
@@ -180,7 +180,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
           "Análises Financeiras",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         centerTitle: true,
@@ -232,7 +232,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
         icon: const Icon(Icons.download, color: Colors.white),
         label: const Text('Relatório', style: TextStyle(color: Colors.white)),
         onPressed: _salvarOuCompartilharRelatorio,
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
       ),
     );
   }

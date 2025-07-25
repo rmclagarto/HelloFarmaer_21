@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Widgets/autenticacao_widgets/formularios/recuperar_senha_formulario.dart';
 
 
@@ -50,7 +50,7 @@ class _RecuperarSenhaTelaState extends State<RecuperarSenhaTela> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PaletaCores.corPrimaria,
+      backgroundColor: PaletaCores.corPrimaria(context),
       body: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Column(

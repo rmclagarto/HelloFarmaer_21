@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Core/routes.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
+import 'package:hellofarmer/Core/rotas.dart';
 
 
 
@@ -27,7 +27,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PaletaCores.corPrimaria,
+      backgroundColor: PaletaCores.corPrimaria(context),
       body: const Center(child: Image(image: AssetImage(Imagens.logotipo))),
     );
   }

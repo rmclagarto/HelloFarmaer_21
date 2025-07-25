@@ -3,19 +3,20 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 
-class FinanceReportService {
+class RelatorioFinanceiro {
   final double faturamentoTotal;
   final double despesas;
   final double lucro;
 
 
-  FinanceReportService({
+  RelatorioFinanceiro({
     required this.faturamentoTotal,
     required this.despesas,
     required this.lucro,
   });
 
-  Future<Uint8List> generatePDF() async {
+  // Gera um documento PDF com o resumo financeiro.
+  Future<Uint8List> gerarPDF() async {
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -23,7 +24,6 @@ class FinanceReportService {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return [
-            
             pw.Header(
               level: 0,
               child: pw.Text(

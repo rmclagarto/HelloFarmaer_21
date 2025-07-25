@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Providers/store_provider.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Providers/loja_provider.dart';
+import 'package:hellofarmer/Services/basedados.dart';
+import 'package:hellofarmer/Services/gestor_envio_imagens.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 class ProdutoForm extends StatefulWidget {
@@ -156,7 +158,25 @@ class ProdutoFormState extends State<ProdutoForm> {
       }
 
       try {
-        final productRef = _dbService.database.ref().child('products').push();
+
+        // final gestorImagens = GestorEnvioImagens();
+        // final caminhoImagemStorage = 'produtos/${DateTime.now().millisecondsSinceEpoch}_${path.basename(_selectedImages[0]!.path)}';
+      
+        // final urlImagem = await gestorImagens.enviarImagem(
+        //   imagemLocal: File(_selectedImages[0]!.path),
+        //   caminhoStorage: caminhoImagemStorage,
+        // );
+
+
+        // if (urlImagem == null) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text('Erro ao enviar a imagem')),
+        //   );
+        //   return;
+        // }
+
+
+        final productRef = _dbService.bancoDados.ref().child('products').push();
         final productId = productRef.key!;
 
         final produto = Produto(
@@ -164,7 +184,7 @@ class ProdutoFormState extends State<ProdutoForm> {
           idLoja: widget.storeId,
           nomeProduto: _nomeController.text,
           categoria: _selectedCategory!,
-          imagem: _selectedImages[0]!.path,
+          imagem: _selectedImages[0]!.path, // urlImagem,
           isAsset: true,
           descricao: _descricaoController.text,
           preco: double.parse(_precoController.text),
@@ -173,13 +193,13 @@ class ProdutoFormState extends State<ProdutoForm> {
           data: DateTime.now(),
         );
 
-        final storeProvider = Provider.of<StoreProvider>(
+        final storeProvider = Provider.of<LojaProvider>(
           context,
           listen: false,
         );
-        await storeProvider.addProductToStore(
-          storeId: widget.storeId,
-          productId: productId,
+        await storeProvider.adicionarProdutoALoja(
+          lojaId: widget.storeId,
+          produtoId: productId,
           produto: produto,
         );
 

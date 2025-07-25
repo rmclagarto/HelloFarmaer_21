@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 
 
 class AddToCartButton extends StatelessWidget {
@@ -15,7 +15,7 @@ class AddToCartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         minimumSize: const Size(double.infinity, 50),
       ),
       onPressed: onPressed,

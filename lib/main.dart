@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/routes.dart';
+import 'package:hellofarmer/Core/rotas.dart';
 
-import 'package:hellofarmer/Providers/store_provider.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
-import 'package:hellofarmer/Services/notification_service.dart';
+import 'package:hellofarmer/Providers/loja_provider.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
+import 'package:hellofarmer/Services/notificacoes.dart';
 import 'package:hellofarmer/firebase_options.dart';
 // import 'package:hellofarmer/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,7 @@ final ValueNotifier<Locale> localeNotifier = ValueNotifier(const Locale('pt'));
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await initNotifications();
+  await inicializarNotificacoes();
   await solicitarPermissoesNotificacoes();
   runApp(const MainApp());
 }
@@ -34,8 +34,8 @@ class MainApp extends StatelessWidget {
           builder: (_, Locale currentLocale, _) {
             return MultiProvider(
               providers: [
-                ChangeNotifierProvider(create: (_) => StoreProvider()),
-                ChangeNotifierProvider(create: (_) => UserProvider()),
+                ChangeNotifierProvider(create: (_) => LojaProvider()),
+                ChangeNotifierProvider(create: (_) => UtilizadorProvider()),
               ],
               child: MaterialApp(
                 theme: ThemeData.light(),
@@ -53,8 +53,6 @@ class MainApp extends StatelessWidget {
                 // supportedLocales: const [
                 //   Locale('en'),
                 //   Locale('pt'),
-                //   Locale('fr'),
-                //   Locale('es'),
                 // ],
 
                 routes: Rotas.rotas,

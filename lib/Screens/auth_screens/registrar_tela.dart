@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/user.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
-import 'package:hellofarmer/Services/database_service.dart';
-import 'package:hellofarmer/Services/firebase_auth_service.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
+import 'package:hellofarmer/Model/utilizador.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
+import 'package:hellofarmer/Services/basedados.dart';
+import 'package:hellofarmer/Services/autenticacao_firebase.dart';
 import 'package:hellofarmer/Widgets/autenticacao_widgets/formularios/resgistar_formulario.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +39,7 @@ class _RegistrarTelaState extends State<RegistrarTela> {
         builder: (context) => const Center(child: CircularProgressIndicator()),
       );
 
-      final firebaseUser = await _autenticacao.registerWithEmailPassword(
+      final firebaseUser = await _autenticacao.registarComEmailEPassword(
         email,
         senha,
       );
@@ -58,13 +58,13 @@ class _RegistrarTelaState extends State<RegistrarTela> {
 
         // Salvar no banco de dados
         final banco = BancoDadosServico();
-        await banco.criar(
+        await banco.create(
           caminho: 'users/${novoUser.idUtilizador}',
           dados: novoUser.toJson(),
         );
 
         
-        Provider.of<UserProvider>(context, listen: false).setUser(novoUser);
+        Provider.of<UtilizadorProvider>(context, listen: false).setUser(novoUser);
 
         Navigator.pushReplacementNamed(context, '/home', arguments: novoUser);
       } else {
@@ -93,7 +93,7 @@ class _RegistrarTelaState extends State<RegistrarTela> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PaletaCores.corPrimaria,
+      backgroundColor: PaletaCores.corPrimaria(context),
       body: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Column(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 import 'package:hellofarmer/main.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Widgets/home_widgets/drawer.dart';
 import 'package:hellofarmer/Widgets/home_widgets/map_widget.dart';
 import 'package:hellofarmer/Widgets/home_widgets/button_panel.dart';
@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<List<Produto>> fetchAds() async {
-    final snapshot = await BancoDadosServico().read(path: "products");
+    final snapshot = await BancoDadosServico().read(caminho: "products");
     if(snapshot == null) return [];
 
 
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
 
 
-    final user = Provider.of<UserProvider>(context).user;
+    final user = Provider.of<UtilizadorProvider>(context).utilizador;
     if(user == null){
       return Scaffold(
         body: Center(child: CircularProgressIndicator(),),
@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
           'HelloFarmer',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),

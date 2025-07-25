@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Widgets/store_widgets/forms/create_produto_form.dart';
 
 class PublicarProdutoScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _PublicarProdutoScreenState extends State<PublicarProdutoScreen> {
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
       ),
       body: SingleChildScrollView(
         child: Padding(

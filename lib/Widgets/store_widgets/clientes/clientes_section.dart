@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/user.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/utilizador.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 
 class ClientesSection extends StatefulWidget {
   final String storeId;
@@ -59,7 +59,7 @@ class _ClientesSectionState extends State<ClientesSection> {
 
 
   Future<List<Map<String, dynamic>>> lerClientesDaLoja(String storeId) async {
-  final snapshot = await _dbService.read(path: 'stores/$storeId/clientes');
+  final snapshot = await _dbService.read(caminho: 'stores/$storeId/clientes');
 
   if (snapshot == null || snapshot.value == null) return [];
 
@@ -88,7 +88,7 @@ class _ClientesSectionState extends State<ClientesSection> {
           'Clientes da Loja',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         centerTitle: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),

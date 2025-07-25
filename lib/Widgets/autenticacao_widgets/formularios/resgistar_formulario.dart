@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/routes.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/rotas.dart';
 
 
 class RegistrarFormulario extends StatefulWidget {
@@ -252,7 +252,7 @@ class _RegistrarFormularioState extends State<RegistrarFormulario> {
       child: ElevatedButton(
         onPressed: _enviarFormulario,
         style: ElevatedButton.styleFrom(
-          backgroundColor: PaletaCores.corSecundaria,
+          backgroundColor: PaletaCores.corSecundaria(context),
           padding: const EdgeInsets.symmetric(
             vertical: 15,
           ),

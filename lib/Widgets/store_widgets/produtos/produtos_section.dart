@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Providers/store_provider.dart';
+import 'package:hellofarmer/Providers/loja_provider.dart';
 import 'package:hellofarmer/Screens/store_screens/criar_produto_screen.dart';
 import 'package:hellofarmer/Widgets/store_widgets/produtos/produto_card.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +16,14 @@ class ProdutosSection extends StatefulWidget {
 }
 
 class _ProdutosSectionState extends State<ProdutosSection> {
-  late final StoreProvider _storeProvider;
+  late final LojaProvider _storeProvider;
   late Stream<List<Produto>> _produtosStream;
 
   @override
   void initState() {
     super.initState();
-     _storeProvider = Provider.of<StoreProvider>(context, listen: false);
-    _produtosStream = _storeProvider.getStoreProducts(widget.storeId);
+     _storeProvider = Provider.of<LojaProvider>(context, listen: false);
+    _produtosStream = _storeProvider.obterProdutosDaLoja(widget.storeId);
   }
 
   @override
@@ -40,7 +40,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
           ),
         ),
         elevation: 0,
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -84,7 +84,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToAddProduct(context),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -99,9 +99,9 @@ class _ProdutosSectionState extends State<ProdutosSection> {
     );
     
     if (novoProduto != null && mounted) {
-      await _storeProvider.addProductToStore(
-        storeId: widget.storeId,
-        productId: novoProduto.idProduto,
+      await _storeProvider.adicionarProdutoALoja(
+        lojaId: widget.storeId,
+        produtoId: novoProduto.idProduto,
         produto: novoProduto,
       );
     }
@@ -109,9 +109,9 @@ class _ProdutosSectionState extends State<ProdutosSection> {
 
   Future<void> _deleteProduct(BuildContext context, String productId) async {
     try {
-      await _storeProvider.deleteProduct(
-        storeId: widget.storeId,
-        productId: productId,
+      await _storeProvider.removerProduto(
+        lojaId: widget.storeId,
+        produtoId: productId,
       );
       
       if (mounted) {
@@ -130,10 +130,10 @@ class _ProdutosSectionState extends State<ProdutosSection> {
 
   Future<void> _updateProduct(BuildContext context, Produto produto) async {
     try {
-      await _storeProvider.updateProduct(produto);
+      await _storeProvider.atualizarProduto(produto);
       
       setState(() {
-      _produtosStream = _storeProvider.getStoreProducts(widget.storeId);
+      _produtosStream = _storeProvider.obterProdutosDaLoja(widget.storeId);
     });
 
       if (mounted) {

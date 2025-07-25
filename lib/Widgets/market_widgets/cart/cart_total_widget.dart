@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/cart_item.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/carrinho.dart';
 import 'package:hellofarmer/Screens/market_screens/checkout_screen.dart';
 
 class CartTotalWidget extends StatelessWidget {
-  final List<CartItem> cartItems;
+  final List<Carrinho> cartItems;
   final double subtotal;
 
   const CartTotalWidget({
@@ -35,11 +35,11 @@ class CartTotalWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildSubtotal(subtotal),
+          _buildSubtotal(subtotal, context),
           const SizedBox(height: 12),
           const Divider(height: 1),
           const SizedBox(height: 12),
-          _buildTotal(total),
+          _buildTotal(total, context),
           const SizedBox(height: 20),
           _buildContinueButton(context),
         ],
@@ -48,13 +48,13 @@ class CartTotalWidget extends StatelessWidget {
   }
 
   // Widget para Subtotal
-  Widget _buildSubtotal(double value) {
-    return _buildTotalRow('Subtotal:', value);
+  Widget _buildSubtotal(double value, BuildContext context) {
+    return _buildTotalRow('Subtotal:', value, context: context);
   }
 
   // Widget para Total
-  Widget _buildTotal(double value) {
-    return _buildTotalRow('Total:', value, isTotal: true);
+  Widget _buildTotal(double value, BuildContext context) {
+    return _buildTotalRow('Total:', value, context: context, isTotal: true);
   }
 
   // Botão "Continuar"
@@ -64,7 +64,7 @@ class CartTotalWidget extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: PaletaCores.corPrimaria,
+          backgroundColor: PaletaCores.corPrimaria(context),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -105,9 +105,11 @@ class CartTotalWidget extends StatelessWidget {
   Widget _buildTotalRow(
     String label,
     double value, {
-    bool isDiscount = false,
-    bool isTotal = false,
-  }) {
+      required BuildContext context,
+      bool isDiscount = false,
+      bool isTotal = false,
+    }
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -128,8 +130,8 @@ class CartTotalWidget extends StatelessWidget {
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               color:
                   isDiscount
-                      ? Colors.red
-                      : (isTotal ? PaletaCores.corPrimaria : Colors.black),
+                      ? PaletaCores.dangerColor(context)
+                      : (isTotal ? PaletaCores.corPrimaria(context) : Colors.black),
             ),
           ),
         ],

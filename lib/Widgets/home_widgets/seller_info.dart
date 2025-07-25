@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 
 
 class SellerInfo extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
 
@@ -57,9 +57,9 @@ class ProductCard extends StatelessWidget {
                   Flexible(
                     child: Text(
                       '${product.preco.toStringAsFixed(2)} / ${product.unidadeMedida}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: PaletaCores.corPrimaria,
+                        color: PaletaCores.corPrimaria(context),
                         fontSize: 14,
                       ),
                       maxLines: 1,

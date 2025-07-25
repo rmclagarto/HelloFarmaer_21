@@ -2,11 +2,11 @@ import 'dart:math';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
-import 'package:hellofarmer/Services/accelarometer_service.dart';
-import 'package:hellofarmer/Services/location_service.dart';
+import 'package:hellofarmer/Services/acelarometro.dart';
+import 'package:hellofarmer/Services/localizacao.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 
@@ -19,8 +19,8 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
-  final _locationService = LocationService();
-  final _accelerometerService = AccelerometerService();
+  final _locationService = Localizacao();
+  final _accelerometerService = Acelarometro();
   final _mapCtrl = MapController();
   LatLng? _pos;
   bool _mapReady = false;
@@ -38,9 +38,9 @@ class MapWidgetState extends State<MapWidget> {
 
   Future<void> _init() async {
     try {
-      await _locationService.ensurePermissions();
+      await _locationService.garantirPermissoes();
 
-      _pos = await _locationService.getCurrentPosition();
+      _pos = await _locationService.obterPosicaoAtual();
       if (mounted) setState(() {});
 
       _setupMovementDetection();
@@ -52,7 +52,7 @@ class MapWidgetState extends State<MapWidget> {
 
   void _setupMovementDetection() {
     _movementSub?.cancel();
-    _movementSub = _accelerometerService.movementStream.listen((isMoving) {
+    _movementSub = _accelerometerService.fluxoMovimento.listen((isMoving) {
       if (!mounted) return;
 
       if (isMoving) {
@@ -61,13 +61,13 @@ class MapWidgetState extends State<MapWidget> {
         _positionSub?.cancel();
       }
     }, onError: (error) => debugPrint("Erro no acelaromentro: $error"));
-    _accelerometerService.startMovementDetection();
+    _accelerometerService.iniciarDetecaoMovimento();
   }
 
   void _updatePosition() {
     _positionSub?.cancel();
     _positionSub = _locationService
-        .getPositionStream(highAccuracy: true)
+        .obterStreamDePosicao(altaPrecisao: true)
         .take(1) // Pega apenas uma atualização
         .listen((newPos) {
           if (!mounted) return;

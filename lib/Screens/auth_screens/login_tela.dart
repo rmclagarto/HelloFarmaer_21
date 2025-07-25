@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Core/routes.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
-import 'package:hellofarmer/Services/firebase_auth_service.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
+import 'package:hellofarmer/Core/rotas.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
+import 'package:hellofarmer/Services/autenticacao_firebase.dart';
 import 'package:hellofarmer/Widgets/autenticacao_widgets/formularios/login_formulario.dart';
 import 'package:provider/provider.dart';
 
@@ -39,13 +39,13 @@ class _LoginTelaState extends State<LoginTela> {
     });
 
     try {
-      final user = await _firebaseAuthService.signInWithEmailPassword(email, password);
+      final user = await _firebaseAuthService.iniciarSessaoComEmailEPassword(email, password);
       if (!mounted) return;
 
       if(user != null){
 
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        await userProvider.loadUserAccount(user.idUtilizador);
+        final userProvider = Provider.of<UtilizadorProvider>(context, listen: false);
+        await userProvider.carregarContaUtilizador(user.idUtilizador);
 
         if (!mounted) return;
         Navigator.pushReplacementNamed(context, Rotas.home);
@@ -84,7 +84,7 @@ class _LoginTelaState extends State<LoginTela> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PaletaCores.corPrimaria,
+      backgroundColor: PaletaCores.corPrimaria(context),
       body: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Column(

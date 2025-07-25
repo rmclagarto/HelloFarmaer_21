@@ -1,17 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/cart_item.dart';
-import 'package:hellofarmer/Model/user.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/carrinho.dart';
+import 'package:hellofarmer/Model/utilizador.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
-import 'package:hellofarmer/Services/database_service.dart';
-import 'package:hellofarmer/Services/notification_service.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
+import 'package:hellofarmer/Services/basedados.dart';
+import 'package:hellofarmer/Services/notificacoes.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  final List<CartItem> cartItems;
+  final List<Carrinho> cartItems;
   final double subtotal;
 
   const CheckoutScreen({
@@ -37,7 +37,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void initState() {
     super.initState();
     _checkAvailableItems();
-    initNotifications();
+    inicializarNotificacoes();
   }
 
   void _checkAvailableItems() {
@@ -60,14 +60,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> criarEncomenda(int codigo) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = Provider.of<UtilizadorProvider>(context, listen: false).utilizador;
     String compradorId = user!.idUtilizador;
 
     for (var cartItem in widget.cartItems) {
-      final novaEncomendaRef = _dbService.database.ref().child('orders').push();
+      final novaEncomendaRef = _dbService.bancoDados.ref().child('orders').push();
       final novaEncomendaId = novaEncomendaRef.key!;
 
-      final produto = cartItem.product;
+      final produto = cartItem.produto;
       final vendedorId = produto.idLoja;
 
       final encomenda = Encomenda(
@@ -76,29 +76,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         vendedorId: vendedorId,
         dataPedido: DateTime.now(),
         code: codigo,
-        valor: (cartItem.quantity * produto.preco),
+        valor: (cartItem.quantidade * produto.preco),
         compradorInfo: {
           "nome": user.nomeUtilizador,
           "email": user.email,
           "telemovel": user.telefone,
         },
-        quantidade: cartItem.quantity,
+        quantidade: cartItem.quantidade,
         produtosInfo: [
           {
-            'id': cartItem.product.idProduto,
-            'nome': cartItem.product.nomeProduto,
-            'quantidade': cartItem.quantity,
+            'id': cartItem.produto.idProduto,
+            'nome': cartItem.produto.nomeProduto,
+            'quantidade': cartItem.quantidade,
           },
         ],
       );
 
       await _dbService.update(
-        path: "orders/$novaEncomendaId",
-        data: encomenda.toJson(),
+        caminho: "orders/$novaEncomendaId",
+        dados: encomenda.toJson(),
       );
 
       final lojaSnapshot = await _dbService.read(
-        path: "stores/$vendedorId/listEncomendasId",
+        caminho: "stores/$vendedorId/listEncomendasId",
       );
 
       List<dynamic> listaLoja = [];
@@ -108,14 +108,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       if (!listaLoja.contains(novaEncomendaId)) {
         listaLoja.add(novaEncomendaId);
         await _dbService.update(
-          path: "stores/$vendedorId/listEncomendasId",
-          data: listaLoja,
+          caminho: "stores/$vendedorId/listEncomendasId",
+          dados: listaLoja,
         );
       }
 
       // 5. Atualizar lista de encomendas do usuário
       final userSnapshot = await _dbService.read(
-        path: "users/$compradorId/listEncomendasId",
+        caminho: "users/$compradorId/listEncomendasId",
       );
 
       List<dynamic> listaUser = [];
@@ -125,29 +125,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       if (!listaUser.contains(novaEncomendaId)) {
         listaUser.add(novaEncomendaId);
         await _dbService.update(
-          path: "users/$compradorId/listEncomendasId",
-          data: listaUser,
+          caminho: "users/$compradorId/listEncomendasId",
+          dados: listaUser,
         );
       }
 
       // Remover o produto específico do carrinho do utilizador
       final cartSnapshot = await _dbService.read(
-        path: "users/$compradorId/cartProductsList",
+        caminho: "users/$compradorId/cartProductsList",
       );
 
       if (cartSnapshot != null && cartSnapshot.value is List) {
         List<dynamic> cartList = List<dynamic>.from(cartSnapshot.value as List);
-        cartList.remove(cartItem.product.idProduto);
+        cartList.remove(cartItem.produto.idProduto);
         await _dbService.update(
-          path: "users/$compradorId/cartProductsList",
-          data: cartList,
+          caminho: "users/$compradorId/cartProductsList",
+          dados: cartList,
         );
       }
 
 
 
-      await _atualizarEstoqueProduto(produto.idProduto, cartItem.quantity);
-      await _atualizarFaturamentoLoja(vendedorId, (cartItem.quantity * produto.preco));
+      await _atualizarEstoqueProduto(produto.idProduto, cartItem.quantidade);
+      await _atualizarFaturamentoLoja(vendedorId, (cartItem.quantidade * produto.preco));
       await _atualizarQuantidadeComprada(produto.idProduto);
       // await _removerProdutoDoCarrinho(compradorId, produto.idProduto);
       await _registrarClienteNaLoja(vendedorId, user);
@@ -155,21 +155,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _atualizarEstoqueProduto(String produtoId, int quantidadeComprada) async{
-    final snapshot = await _dbService.read(path: "products/$produtoId");
+    final snapshot = await _dbService.read(caminho: "products/$produtoId");
     if(snapshot != null && snapshot.value is Map){
       final data = Map<String, dynamic>.from(snapshot.value as Map);
       int estoqueAtual = data['quantidade'] ?? 0;
       int novoEstoque = (estoqueAtual - quantidadeComprada);
 
       await _dbService.update(
-        path: "products/$produtoId", 
-        data: {'quantidade': novoEstoque}
+        caminho: "products/$produtoId", 
+        dados: {'quantidade': novoEstoque}
       );
     }
   }
 
   Future<void> _atualizarFaturamentoLoja(String lojaId, double valor) async{
-    final snapshot = await _dbService.read(path: 'stores/$lojaId/faturamento');
+    final snapshot = await _dbService.read(caminho: 'stores/$lojaId/faturamento');
     double atual = 0;
 
     if(snapshot != null && snapshot.value != null){
@@ -178,28 +178,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 
     await _dbService.update(
-      path: 'stores/$lojaId', 
-      data: {'faturamento': atual + valor,
+      caminho: 'stores/$lojaId', 
+      dados: {'faturamento': atual + valor,
       }
     );
   }
 
 
   Future<void> _atualizarQuantidadeComprada(String produtoId) async {
-    final snapshot = await _dbService.read(path: 'products/$produtoId');
+    final snapshot = await _dbService.read(caminho: 'products/$produtoId');
     if(snapshot != null && snapshot.value is Map){
       final data = Map<String, dynamic>.from(snapshot.value as Map);
       int quantidadeComprada = data['comprado'] ?? 0;
 
       await _dbService.update(
-        path: 'products/$produtoId', 
-        data: {'comprado': (quantidadeComprada + 1)}
+        caminho: 'products/$produtoId', 
+        dados: {'comprado': (quantidadeComprada + 1)}
       );
     }
   }
 
   Future<void> _registrarClienteNaLoja(String vendedorId, Utilizador user) async{
-    final snapshot = await _dbService.read(path: "stores/$vendedorId/clientes");
+    final snapshot = await _dbService.read(caminho: "stores/$vendedorId/clientes");
     List<dynamic> clientes = [];
 
     if(snapshot != null  && snapshot.value is List){
@@ -220,8 +220,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       clientes.add(novoCliente);
 
       await _dbService.update(
-        path: "stores/$vendedorId",
-        data: {"clientes": clientes},
+        caminho: "stores/$vendedorId",
+        dados: {"clientes": clientes},
       );
 
       clientes.clear();
@@ -241,7 +241,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
@@ -285,10 +285,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
       widgets.add(
         ListTile(
-          title: Text(item.product.nomeProduto),
-          subtitle: Text('Qtd: ${item.quantity}'),
+          title: Text(item.produto.nomeProduto),
+          subtitle: Text('Qtd: ${item.quantidade}'),
           trailing: Text(
-            '${(item.product.preco * item.quantity).toStringAsFixed(2)} €',
+            '${(item.produto.preco * item.quantidade).toStringAsFixed(2)} €',
           ),
         ),
       );
@@ -353,9 +353,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget _buildTotalSection() {
     return Column(
       children: [
-        _buildRow('Subtotal:', widget.subtotal),
+        _buildRow('Subtotal:',context: context, widget.subtotal),
         const Divider(height: 20),
-        _buildRow('Total:', total, isTotal: true),
+        _buildRow('Total:', total, context: context, isTotal: true),
       ],
     );
   }
@@ -363,9 +363,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget _buildRow(
     String label,
     double value, {
-    bool isDiscount = false,
-    bool isTotal = false,
-  }) {
+      required BuildContext context,
+      bool isDiscount = false,
+      bool isTotal = false,
+    }
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -386,8 +388,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               color:
                   isDiscount
-                      ? Colors.red
-                      : (isTotal ? PaletaCores.corPrimaria : Colors.black),
+                      ? PaletaCores.dangerColor(context)
+                      : (isTotal ? PaletaCores.corPrimaria(context) : Colors.black),
             ),
           ),
         ],
@@ -401,7 +403,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: PaletaCores.corPrimaria,
+          backgroundColor: PaletaCores.corPrimaria(context),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

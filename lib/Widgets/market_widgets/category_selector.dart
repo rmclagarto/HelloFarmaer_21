@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 
 
 class CategorySelector extends StatelessWidget {
@@ -34,7 +34,7 @@ class CategorySelector extends StatelessWidget {
                   ),
                 ),
                 selected: isSelected,
-                selectedColor: PaletaCores.corPrimaria,
+                selectedColor: PaletaCores.corPrimaria(context),
                 backgroundColor: Colors.white,
                 onSelected: (selected) {
                   if (selected) {

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 
 
 class SearchBox extends StatelessWidget {
@@ -19,7 +19,7 @@ class SearchBox extends StatelessWidget {
       width: double.infinity,
       height: 160,
       decoration: BoxDecoration(
-        color: PaletaCores.corPrimaria,
+        color: PaletaCores.corPrimaria(context),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),

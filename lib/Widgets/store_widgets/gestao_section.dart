@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/loja.dart';
 import 'package:hellofarmer/Widgets/store_widgets/analise_dados_section.dart';
 import 'package:hellofarmer/Widgets/store_widgets/clientes/clientes_section.dart';
 import 'package:hellofarmer/Widgets/store_widgets/ecomendas/encomendas_section.dart';
 import 'package:hellofarmer/Widgets/store_widgets/produtos/produtos_section.dart';
 
 class GestaoSection extends StatelessWidget {
-  final Store store;
+  final Loja store;
 
   const GestaoSection({super.key, required this.store});
 
@@ -59,7 +59,7 @@ class GestaoSection extends StatelessWidget {
       'Gestão da Loja',
       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.bold,
-        color: PaletaCores.corPrimaria,
+        color: PaletaCores.corPrimaria(context),
       ),
     );
   }
@@ -79,7 +79,7 @@ class GestaoSection extends StatelessWidget {
                     (item) => SizedBox(
                       width: cardWidth,
                       height: cardHeight,
-                      child: _buildGestaoCard(item),
+                      child: _buildGestaoCard(item, context),
                     ),
                   )
                   .toList(),
@@ -88,7 +88,7 @@ class GestaoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildGestaoCard(_CardItem item) {
+  Widget _buildGestaoCard(_CardItem item, BuildContext context) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -100,7 +100,7 @@ class GestaoSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(item.icon, size: 30, color: PaletaCores.corPrimaria),
+              Icon(item.icon, size: 30, color: PaletaCores.corPrimaria(context)),
               const SizedBox(height: 8),
               Text(
                 item.title,

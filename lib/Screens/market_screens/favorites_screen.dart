@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -26,12 +26,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   Future<void> _loadFavorites() async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = Provider.of<UtilizadorProvider>(context, listen: false).utilizador;
 
     try {
       // 1. Buscar lista de IDs de favoritos
       final favoritesSnapshot = await _dbService.read(
-        path: 'users/${user?.idUtilizador}/favoritos',
+        caminho: 'users/${user?.idUtilizador}/favoritos',
       );
 
       if (favoritesSnapshot == null || favoritesSnapshot.value == null) {
@@ -54,7 +54,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       List<Produto> loadedFavorites = [];
       for (String productId in favoriteIds) {
         final productSnapshot = await _dbService.read(
-          path: 'products/$productId',
+          caminho: 'products/$productId',
         );
 
         if (productSnapshot != null && productSnapshot.value != null) {
@@ -79,12 +79,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   Future<void> _removeFavorite(String productId) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = Provider.of<UtilizadorProvider>(context, listen: false).utilizador;
 
     try {
       // 1. Buscar lista atual
       final favoritesSnapshot = await _dbService.read(
-        path: 'users/${user?.idUtilizador}/favorites',
+        caminho: 'users/${user?.idUtilizador}/favorites',
       );
 
       if (favoritesSnapshot == null || favoritesSnapshot.value == null) return;
@@ -102,8 +102,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
       // 3. Atualizar no Firebase
       await _dbService.update(
-        path: 'users/${user?.idUtilizador}/favorites',
-        data: favoriteIds,
+        caminho: 'users/${user?.idUtilizador}/favorites',
+        dados: favoriteIds,
       );
 
       // 4. Atualizar lista local
@@ -130,7 +130,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),

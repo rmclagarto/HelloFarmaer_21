@@ -3,12 +3,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Model/loja.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 
 class StoreDetailScreen extends StatefulWidget {
   final String lojaId;
@@ -20,7 +20,7 @@ class StoreDetailScreen extends StatefulWidget {
 
 class _StoreDetailScreenState extends State<StoreDetailScreen> {
   final BancoDadosServico _dbService = BancoDadosServico();
-  Store? _store;
+  Loja? _store;
   bool _isLoading = true;
   String? _errorMessage;
   bool _loadingProducts = true;
@@ -60,7 +60,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
 
   Future<void> _loadStoreInfo(String lojaId) async {
     try {
-      final storeSnapshot = await _dbService.read(path: 'stores/$lojaId');
+      final storeSnapshot = await _dbService.read(caminho: 'stores/$lojaId');
       
       if (!mounted) return;
       
@@ -76,7 +76,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
       final storeInfo = Map<String, dynamic>.from(storeData as Map);
 
       setState(() {
-        _store = Store.fromJson(storeInfo);
+        _store = Loja.fromJson(storeInfo);
         _errorMessage = null;
       });
     } catch (e, stackTrace) {
@@ -101,7 +101,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     });
     
     final productsIdSnapshot = await _dbService.read(
-      path: 'stores/$lojaId/listProductsId',
+      caminho: 'stores/$lojaId/listProductsId',
     );
 
     debugPrint('Produtos ID Snapshot: ${productsIdSnapshot?.value}');
@@ -122,11 +122,11 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
 
     for (final id in productIds) {
       try {
-        final productSnapshot = await _dbService.read(path: 'products/$id');
+        final productSnapshot = await _dbService.read(caminho: 'products/$id');
         debugPrint('Produto $id: ${productSnapshot?.value}');
         
         if (productSnapshot != null && productSnapshot.value != null) {
-          // Fix the type casting issue here
+          
           final productData = productSnapshot.value;
           final productMap = Map<String, dynamic>.from(productData as Map);
           
@@ -171,7 +171,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     if (_errorMessage != null || _store == null) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: PaletaCores.corPrimaria,
+          backgroundColor: PaletaCores.corPrimaria(context),
           iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Center(
@@ -182,7 +182,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: ListView(
@@ -250,14 +250,14 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                 
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.phone, color: PaletaCores.corPrimaria),
+                  leading: Icon(Icons.phone, color: PaletaCores.corPrimaria(context)),
                   title: Text(_store!.telefone),
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
+                  leading:  Icon(
                     Icons.location_on,
-                    color: PaletaCores.corPrimaria,
+                    color: PaletaCores.corPrimaria(context),
                   ),
                   title: Text(
                     '${_store!.endereco['rua']}, ${_store!.endereco["cidade"]}',
@@ -370,7 +370,7 @@ class ProductCard extends StatelessWidget {
                   Text(
                     '${produto.preco}€',
                     style: TextStyle(
-                      color: PaletaCores.corPrimaria,
+                      color: PaletaCores.corPrimaria(context),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),

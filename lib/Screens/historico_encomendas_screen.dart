@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 
 class HistoricoEncomendasScreen extends StatelessWidget {
   final String userId;
@@ -9,7 +9,7 @@ class HistoricoEncomendasScreen extends StatelessWidget {
 
   Future<List<Encomenda>> _fetchEncomendas() async {
     final BancoDadosServico _dbService = BancoDadosServico();
-    final querySnapshot = await _dbService.read(path: 'users/$userId/listEncomendasId');
+    final querySnapshot = await _dbService.read(caminho: 'users/$userId/listEncomendasId');
 
     if (querySnapshot == null || !querySnapshot.exists) {
       return [];
@@ -19,7 +19,7 @@ class HistoricoEncomendasScreen extends StatelessWidget {
     final encomendasIds = querySnapshot.value as List<dynamic>;
 
     for (var id in encomendasIds) {
-      final encomendaSnapshot = await _dbService.read(path: 'orders/$id');
+      final encomendaSnapshot = await _dbService.read(caminho: 'orders/$id');
       if (encomendaSnapshot != null && encomendaSnapshot.exists) {
         try {
           final encomendaData = Map<String, dynamic>.from(encomendaSnapshot.value as Map);
@@ -58,7 +58,7 @@ class HistoricoEncomendasScreen extends StatelessWidget {
         ),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<Encomenda>>(

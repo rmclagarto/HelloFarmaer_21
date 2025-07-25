@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/user.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/utilizador.dart';
 import 'package:hellofarmer/Widgets/market_widgets/search_box.dart';
 import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';
 import 'package:hellofarmer/Screens/market_screens/cart_screen.dart';
@@ -58,14 +58,14 @@ class _MarketScreenState extends State<MarketScreen> {
   Future<List<Produto>> fetchProdutos() async {
     try {
       // Get all products
-      final allProductsSnapshot = await _dbService.read(path: 'products');
+      final allProductsSnapshot = await _dbService.read(caminho: 'products');
       if (allProductsSnapshot == null || allProductsSnapshot.value == null) {
         return [];
       }
 
       // Get user's stores
       final myStoreListSnapshot = await _dbService.read(
-        path: 'users/${widget.user.idUtilizador}/minhasLojas',
+        caminho: 'users/${widget.user.idUtilizador}/minhasLojas',
       );
 
       // If user has no stores, return all products
@@ -105,7 +105,7 @@ class _MarketScreenState extends State<MarketScreen> {
     for (var storeId in storesIds) {
       try {
         final storeProducts = await _dbService.read(
-          path: 'stores/$storeId/listProductsId',
+          caminho: 'stores/$storeId/listProductsId',
         );
 
         if (storeProducts != null &&
@@ -198,7 +198,7 @@ class _MarketScreenState extends State<MarketScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         title: Text(
           "Mercado",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -214,7 +214,7 @@ class _MarketScreenState extends State<MarketScreen> {
             SearchBox(
               controller: _searchController,
               onSubmitted: (pesquisa) {
-                // Usar as query para pesquisar na loja
+                
                 debugPrint('Pesquisa executada: $pesquisa');
               },
             ),
@@ -282,7 +282,7 @@ class _MarketScreenState extends State<MarketScreen> {
         BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
       ],
       currentIndex: 0,
-      selectedItemColor: PaletaCores.corPrimaria,
+      selectedItemColor: PaletaCores.corPrimaria(context),
       unselectedItemColor: Colors.grey,
       onTap: (index) {
         setState(() {

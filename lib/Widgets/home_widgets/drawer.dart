@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Core/routes.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
+import 'package:hellofarmer/Core/rotas.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/main_market_screen.dart';
 import 'package:hellofarmer/Screens/store_screens/all_store_panel_screen.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context); // Guarda o NavigatorState
     
-    final user = Provider.of<UserProvider>(context).user!;
+    final user = Provider.of<UtilizadorProvider>(context).utilizador!;
     
     final String userName = user.nomeUtilizador;
     final String userPhotoUrl = Imagens.agricultor;
@@ -102,7 +102,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: PaletaCores.corPrimaria),
+            decoration:  BoxDecoration(color: PaletaCores.corPrimaria(context)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,

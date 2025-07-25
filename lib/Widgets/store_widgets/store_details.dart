@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
+import 'package:hellofarmer/Model/loja.dart';
 
 
 class StoreDetails extends StatelessWidget {
-  final Store store;
+  final Loja store;
 
   const StoreDetails({super.key, required this.store});
 
@@ -137,7 +137,7 @@ class StoreDetails extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 24, color: PaletaCores.corPrimaria),
+        Icon(icon, size: 24, color: PaletaCores.corPrimaria(context)),
         const SizedBox(width: 12),
         Expanded(
           child: Text(

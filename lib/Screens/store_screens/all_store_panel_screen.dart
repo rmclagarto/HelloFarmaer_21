@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/store.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/loja.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
 import 'package:hellofarmer/Screens/store_screens/my_strore_screen.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 import 'package:hellofarmer/Widgets/store_widgets/forms/create_store_form.dart';
 import 'package:hellofarmer/Widgets/store_widgets/store_card.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,7 @@ class ListStorePanelScreen extends StatefulWidget {
 
 class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
   final BancoDadosServico _dbService = BancoDadosServico();
-  List<Store> _stores = [];
+  List<Loja> _stores = [];
   bool _isLoading = true;
   String? _errorMessage;
 
@@ -28,8 +28,8 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
   }
 
   Future<void> _loadUserStores() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final user = userProvider.user;
+    final userProvider = Provider.of<UtilizadorProvider>(context, listen: false);
+    final user = userProvider.utilizador;
 
     if (user == null) {
       setState(() {
@@ -39,15 +39,15 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
       return;
     }
     try {
-      final List<Store> loadedStores = [];
+      final List<Loja> loadedStores = [];
 
       // Buscar cada loja individualmente pelos IDs
 
       for (final storeId in user.minhasLojas ?? []) {
-        final storeData = await _dbService.read(path: 'stores/$storeId');
+        final storeData = await _dbService.read(caminho: 'stores/$storeId');
         if (storeData?.value != null) {
           loadedStores.add(
-            Store.fromJson(Map<String, dynamic>.from(storeData!.value as Map)),
+            Loja.fromJson(Map<String, dynamic>.from(storeData!.value as Map)),
           );
         }
       }
@@ -146,7 +146,7 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
           "Minhas Lojas",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         centerTitle: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -172,14 +172,14 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
                 },
               ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         onPressed: () => _createNewStore(context),
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  Future<void> _navigateToStore(BuildContext context, Store store) async {
+  Future<void> _navigateToStore(BuildContext context, Loja store) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => MainStoreScreen(loja: store)),
@@ -193,14 +193,14 @@ class _ListStorePanelScreenState extends State<ListStorePanelScreen> {
   }
 
   Future<void> _createNewStore(BuildContext context) async {
-    final newStore = await Navigator.push<Store>(
+    final newStore = await Navigator.push<Loja>(
       context,
       MaterialPageRoute(builder: (_) => const CreateStoreForm()),
     );
 
     if (newStore != null) {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      await userProvider.addStoreToUser(newStore.idLoja);
+      final userProvider = Provider.of<UtilizadorProvider>(context, listen: false);
+      await userProvider.adicionarLojaAoUtilizador(newStore.idLoja);
       await _loadUserStores();
     }
   }

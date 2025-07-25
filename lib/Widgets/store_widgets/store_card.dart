@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/store.dart';
+import 'package:hellofarmer/Model/loja.dart';
 
 
 class StoreCard extends StatelessWidget {
-  final Store store;
+  final Loja store;
   final VoidCallback onTap;
 
   const StoreCard({super.key, required this.store, required this.onTap});

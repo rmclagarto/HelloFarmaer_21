@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Model/produto.dart';
 
 
@@ -69,7 +69,7 @@ class BottomPanel extends StatelessWidget {
             final ad = ads[index];
             return GestureDetector(
               onTap: () => onAdTap?.call(ad),
-              child: _buildAdCard(ad.nomeProduto),
+              child: _buildAdCard(context, ad.nomeProduto),
             );
           },
         ),
@@ -77,12 +77,12 @@ class BottomPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildAdCard(String adText) {
+  Widget _buildAdCard(BuildContext context, String adText) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Card(
         elevation: 3,
-        color: PaletaCores.corPrimaria,
+        color: PaletaCores.corPrimaria(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),

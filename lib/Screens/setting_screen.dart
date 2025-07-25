@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 // import 'package:hellofarmer/l10n/app_localizations.dart';
 import 'package:hellofarmer/main.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -63,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -94,9 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   value: _selectedLanguage,
                   items: [
                     DropdownMenuItem(value: 'pt', child: Text("Português")),
-                    DropdownMenuItem(value: 'es', child: Text("Espanhol")),
                     DropdownMenuItem(value: 'en', child: Text("Inglês")),
-                    DropdownMenuItem(value: 'fr', child: Text("Francês")),
                   ],
                   onChanged: (value) {
                     setState(() {
@@ -173,7 +171,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SwitchListTile(
                 title: Text("Tema escuro"),
                 value: isDarkTheme,
-                activeColor: PaletaCores.corPrimaria,
+                activeColor: PaletaCores.corPrimaria(context),
                 activeTrackColor: Colors.grey[400],
                 inactiveThumbColor: Colors.grey,
                 inactiveTrackColor: Colors.grey[400],
@@ -222,7 +220,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
             ],
           ),
-          // BOTÃO PARA REPORTAR ERROS
           ListTile(
             leading: const Icon(Icons.bug_report, color: Colors.redAccent),
             title: Text("Reportar Erros"),

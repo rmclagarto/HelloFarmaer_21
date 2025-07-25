@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-final FlutterLocalNotificationsPlugin notifications = 
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _notificacoes = FlutterLocalNotificationsPlugin();
 
-Future<void> initNotifications() async {
-  const AndroidInitializationSettings androidSettings = 
+
+// Inicializa o sistema de notificações locais
+Future<void> inicializarNotificacoes() async {
+  const AndroidInitializationSettings definicoesAndroid = 
       AndroidInitializationSettings('@mipmap/ic_launcher');
   
-  await notifications.initialize(
-    const InitializationSettings(android: androidSettings),
+  await _notificacoes.initialize(
+    const InitializationSettings(android: definicoesAndroid),
   );
 }
 
+// Mostra uma notificação com uma determinada mensagem.
 Future<void> mostrarNotificacao(String mensagem, BuildContext context) async {
-  // Criação do canal de notificação
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'pedidos_channel',
+  const AndroidNotificationChannel canal = AndroidNotificationChannel(
+    'canal_pedidos',
     'Notificações de Pedido',
     importance: Importance.max,
-    //  sound: UriAndroidNotificationSound('content://settings/system/notification_sound'),
     playSound: true,
   );
 
-  await notifications
+  // Cria o canal, se ainda não existir
+  await _notificacoes
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+      ?.createNotificationChannel(canal);
 
   // Configuração da notificação
-  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-    'pedidos_channel',
+  const AndroidNotificationDetails detalhesAndroid = AndroidNotificationDetails(
+    'canal_pedidos',
     'Notificações de Pedido',
     channelDescription: 'Notificações sobre status de pedidos',
     importance: Importance.max,
@@ -38,16 +39,16 @@ Future<void> mostrarNotificacao(String mensagem, BuildContext context) async {
     playSound: true,
   );
 
-  const NotificationDetails platformDetails = NotificationDetails(
-    android: androidDetails,
+  const NotificationDetails detalhesNotificacao = NotificationDetails(
+    android: detalhesAndroid,
   );
 
   try {
-    await notifications.show(
+    await _notificacoes.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
       'Pedido Confirmado',
       'Código: $mensagem',
-      platformDetails,
+      detalhesNotificacao,
     );
   } catch (e) {
     debugPrint('Erro ao mostrar notificação: $e');
@@ -59,18 +60,18 @@ Future<void> mostrarNotificacao(String mensagem, BuildContext context) async {
   }
 }
 
-// Nova versão da função de permissões
+// Solicita permissões para mostrar notificações.
 Future<void> solicitarPermissoesNotificacoes() async {
   try {
-    final androidPlugin = notifications.resolvePlatformSpecificImplementation<
+    final androidPlugin = _notificacoes.resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>();
     
     if (androidPlugin != null) {
       // Verifica se as notificações estão habilitadas
-      final bool? enabled = await androidPlugin.areNotificationsEnabled();
+      final bool? estaAtivo = await androidPlugin.areNotificationsEnabled();
       
-      if (enabled == false) {
-        // Solicita permissão (método disponível a partir da versão 13+)
+      if (estaAtivo == false) {
+        // Solicita permissão
         await androidPlugin.requestNotificationsPermission();
       }
     }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/user.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/utilizador.dart';
 // import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Model/store.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Model/loja.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 // import 'package:hellofarmer/Model/produtos.dart';
 
 class EncomendasSection extends StatefulWidget {
@@ -23,7 +23,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
   late List<Encomenda> _encomendas = [];
   final Map<String, Produto> _produtosCache = {};
   final Map<String, Utilizador> _usersCache = {};
-  Store? _store;
+  Loja? _store;
 
   final BancoDadosServico _dbService = BancoDadosServico();
 
@@ -41,7 +41,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
   Future<void> _loadStoreAndEcomendas() async {
     // Primeiro busca a store
     final storeSnapshot = await _dbService.read(
-      path: 'stores/${widget.storeId}',
+      caminho: 'stores/${widget.storeId}',
     );
     if (storeSnapshot == null || storeSnapshot.value == null) {
       debugPrint('Loja não encontrada');
@@ -53,7 +53,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
       storeData['listEncomendasId'] ?? [],
     );
 
-    _store = Store.fromJson(storeData);
+    _store = Loja.fromJson(storeData);
 
     // Verificar se há encomendas
     if (listaIDs.isEmpty) {
@@ -66,7 +66,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
     List<Encomenda> encomendas = [];
 
     for (String id in listaIDs) {
-      final doc = await _dbService.read(path: 'orders/$id');
+      final doc = await _dbService.read(caminho: 'orders/$id');
       if (doc != null && doc.value != null) {
         try {
           final docData = Map<String, dynamic>.from(doc.value as Map);
@@ -89,8 +89,8 @@ class _EncomendasSectionState extends State<EncomendasSection>
   ) async {
     try {
       await _dbService.update(
-        path: 'orders/$orderId',
-        data: {'status': newStatus.toString().split('.').last},
+        caminho: 'orders/$orderId',
+        dados: {'status': newStatus.toString().split('.').last},
       );
 
       // Reload data
@@ -450,7 +450,7 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
           "Encomendas",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),

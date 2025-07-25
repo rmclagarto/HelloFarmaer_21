@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Model/user.dart';
-import 'package:hellofarmer/Screens/ad_screens/criar_anuncio_tela.dart';
+import 'package:hellofarmer/Model/utilizador.dart';
+
 import 'package:hellofarmer/Screens/auth_screens/login_tela.dart';
 import 'package:hellofarmer/Screens/auth_screens/recuperar_senha_tela.dart';
 import 'package:hellofarmer/Screens/auth_screens/registrar_tela.dart';
@@ -31,23 +31,23 @@ class Rotas {
     recuperarSenha: (context) => const RecuperarSenhaTela(),
     home: (context) => const Home(),
 
-    criarAnuncio: (context) => const CriarAnuncioTela(),
+    // criarAnuncio: (context) => const CriarAnuncioTela(),
 
     
     configuracoes: (context) {
-      final args =
+      final argumentos =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 
       return SettingsScreen(
-        isDarkTheme: args?['isDarkTheme'] ?? false,
-        onThemeChanged: args?['onThemeChanged'] ?? (val) {},
+        isDarkTheme: argumentos?['isDarkTheme'] ?? false,
+        onThemeChanged: argumentos?['onThemeChanged'] ?? (val) {},
       );
     },
 
     meuPerfil: (context) {
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args is Utilizador) {
-        return MeuPerfilTela(user: args);
+        return MeuPerfilTela(utilizador: args);
       } else {
         return const LoginTela(); 
       }

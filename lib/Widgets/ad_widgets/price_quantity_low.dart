@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
+import 'package:hellofarmer/Core/cores.dart';
 
 
 class PriceQuantityRow extends StatelessWidget {
@@ -26,7 +26,7 @@ class PriceQuantityRow extends StatelessWidget {
         Text(
           '${pricePerUnit.toStringAsFixed(2)}€/unidade',
           style: TextStyle(
-            color: PaletaCores.corPrimaria,
+            color: PaletaCores.corPrimaria(context),
             fontWeight: FontWeight.bold,
           ),
         ),

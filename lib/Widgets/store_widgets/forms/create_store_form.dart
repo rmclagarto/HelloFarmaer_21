@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Model/store.dart';
-import 'package:hellofarmer/Providers/store_provider.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Model/loja.dart';
+import 'package:hellofarmer/Providers/loja_provider.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -62,7 +62,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           "Criação de Loja",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
@@ -291,7 +291,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: PaletaCores.corPrimaria,
+          backgroundColor: PaletaCores.corPrimaria(context),
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -313,7 +313,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         
         final String idLoja = storeRef.key!;
 
-        final minhaNovaLoja = Store.myStore(
+        final minhaNovaLoja = Loja.minhaLoja(
           idLoja: idLoja,
           nomeLoja: _nameController.text.trim(),
           descricao: _descricaoController.text.trim(),
@@ -329,18 +329,18 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         );
 
         // final _dbService = DatabaseService();
-        await BancoDadosServico().criar(
+        await BancoDadosServico().create(
           caminho: "stores/$idLoja",
           dados: minhaNovaLoja.toJson(),
         );
 
         if (!mounted) return;
-        final usr = Provider.of<UserProvider>(context, listen: false);
-        await usr.addStoreToUser(minhaNovaLoja.idLoja);
+        final usr = Provider.of<UtilizadorProvider>(context, listen: false);
+        await usr.adicionarLojaAoUtilizador(minhaNovaLoja.idLoja);
 
         
         if (!mounted) return;
-        Provider.of<StoreProvider>(context,listen: false,).addStore(minhaNovaLoja);
+        Provider.of<LojaProvider>(context,listen: false,).adicionarLoja(minhaNovaLoja);
 
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(

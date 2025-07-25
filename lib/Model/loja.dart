@@ -1,4 +1,4 @@
-class Store {
+class Loja {
   final String idLoja;
   final String nomeLoja;
   final String descricao;
@@ -11,7 +11,7 @@ class Store {
   List<String>? listClientsId;
   List<String>? listEncomendasId;
 
-  Store.myStore({
+  Loja.minhaLoja({
     required this.idLoja,
     required this.nomeLoja,
     required this.descricao,
@@ -41,8 +41,8 @@ class Store {
     };
   }
 
-  factory Store.fromJson(Map<String, dynamic> json) {
-    return Store.myStore(
+  factory Loja.fromJson(Map<String, dynamic> json) {
+    return Loja.minhaLoja(
       idLoja: json['idLoja'],
       nomeLoja: json['nomeLoja'],
       descricao: json['descricao'],
@@ -58,7 +58,7 @@ class Store {
   }
 
 
-   Store copyWith({
+  Loja copiar({
     String? idLoja,
     String? nomeLoja,
     String? descricao,
@@ -71,7 +71,7 @@ class Store {
     List<String>? listClientsId,
     List<String>? listEncomendasId,
   }) {
-    return Store.myStore(
+    return Loja.minhaLoja(
       idLoja: idLoja ?? this.idLoja,
       nomeLoja: nomeLoja ?? this.nomeLoja,
       descricao: descricao ?? this.descricao,

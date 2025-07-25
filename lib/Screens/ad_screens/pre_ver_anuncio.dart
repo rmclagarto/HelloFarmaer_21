@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Widgets/ad_widgets/add_to_cart_button.dart';
 import 'package:hellofarmer/Widgets/ad_widgets/delivery_option.dart';
 import 'package:hellofarmer/Widgets/ad_widgets/description_section.dart';
@@ -37,7 +37,7 @@ class PreviewAd extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         title: const Text('HelloFarmer'),
         centerTitle: true,
       ),

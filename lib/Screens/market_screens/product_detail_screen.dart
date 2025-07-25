@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
-import 'package:hellofarmer/Model/cart_item.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
+import 'package:hellofarmer/Model/carrinho.dart';
 import 'package:hellofarmer/Model/produto.dart';
 // import 'package:hellofarmer/Model/store.dart';
-import 'package:hellofarmer/Providers/store_provider.dart';
-import 'package:hellofarmer/Providers/user_provider.dart';
+import 'package:hellofarmer/Providers/loja_provider.dart';
+import 'package:hellofarmer/Providers/utilizador_provider.dart';
 import 'package:hellofarmer/Screens/market_screens/checkout_screen.dart';
 import 'package:hellofarmer/Screens/market_screens/store_detail_screen.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -30,13 +30,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (!mounted || _isLoading) return;
     setState(() => _isLoading = true);
 
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<UtilizadorProvider>(context, listen: false);
     final dbService = BancoDadosServico();
     final productId = widget.produto.idProduto;
 
     try {
       final cartSnapshot = await dbService.read(
-        path: 'users/${user.user?.idUtilizador}/cartProductsList',
+        caminho: 'users/${user.utilizador?.idUtilizador}/cartProductsList',
       );
 
       if (!mounted) return;
@@ -67,8 +67,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       // Atualizar o carrinho no Firebase
       await dbService.update(
-        path: "users/${user.user?.idUtilizador}/cartProductsList",
-        data: updatedCart,
+        caminho: "users/${user.utilizador?.idUtilizador}/cartProductsList",
+        dados: updatedCart,
       );
 
       if (!mounted) return;
@@ -86,9 +86,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Future<void> _toggleFavorite(BuildContext context) async {
     if (!mounted || _isLoading) return;
 
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<UtilizadorProvider>(context, listen: false);
 
-    if (user.user?.idUtilizador == null) {
+    if (user.utilizador?.idUtilizador == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor, faça login primeiro')),
       );
@@ -99,7 +99,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     try {
       final snapshot = await _db.read(
-        path: 'users/${user.user?.idUtilizador}/favoritos',
+        caminho: 'users/${user.utilizador?.idUtilizador}/favoritos',
       );
 
       List<String> favoritos = [];
@@ -124,8 +124,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
 
       await _db.update(
-        path: 'users/${user.user?.idUtilizador}/favoritos',
-        data: favoritos,
+        caminho: 'users/${user.utilizador?.idUtilizador}/favoritos',
+        dados: favoritos,
       );
 
       if (!mounted) return;
@@ -165,8 +165,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       final currentCliks = widget.produto.cliques ?? 0;
 
       await _db.update(
-        path: 'products/${widget.produto.idProduto}',
-        data: {'cliques': currentCliks + 1},
+        caminho: 'products/${widget.produto.idProduto}',
+        dados: {'cliques': currentCliks + 1},
       );
     } catch (e) {
       debugPrint('Erro ao atualizar cliques: $e');
@@ -176,17 +176,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Future<void> _checkIfFavorite() async {
     if (!mounted) return;
 
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<UtilizadorProvider>(context, listen: false);
 
     // Verificar se o usuário está autenticado
-    if (user.user?.idUtilizador == null) {
+    if (user.utilizador?.idUtilizador == null) {
       setState(() => _isFavorite = false);
       return;
     }
 
     try {
       final snapshot = await _db.read(
-        path: 'users/${user.user?.idUtilizador}/favoritos',
+        caminho: 'users/${user.utilizador?.idUtilizador}/favoritos',
       );
 
       if (snapshot?.value != null) {
@@ -215,7 +215,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Future<void> getQuantidadePreco() async {
     try {
       final snapshot = await _db.read(
-        path: "products/${widget.produto.idProduto}",
+        caminho: "products/${widget.produto.idProduto}",
       );
 
       final rawData = snapshot?.value;
@@ -246,10 +246,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _checkIfFavorite();
     getQuantidadePreco();
 
-    final user = Provider.of<UserProvider>(context, listen: false);
-    if (user.user?.idUtilizador != null) {
+    final user = Provider.of<UtilizadorProvider>(context, listen: false);
+    if (user.utilizador?.idUtilizador != null) {
       _favoritesSubscription = _db
-          .readAsStream(path: 'users/${user.user?.idUtilizador}/favoritos')
+          .readAsStream(caminho: 'users/${user.utilizador?.idUtilizador}/favoritos')
           .listen((event) {
             if (mounted && event.snapshot.exists) {
               List<String> favoritos = [];
@@ -282,7 +282,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
@@ -333,10 +333,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 const SizedBox(height: 8),
                 Text(
                   '${widget.produto.preco}€',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
-                    color: PaletaCores.corPrimaria,
+                    color: PaletaCores.corPrimaria(context),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -381,7 +381,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ElevatedButton.icon(
                   onPressed: () {
                     
-                    final storeProvider = Provider.of<StoreProvider>(
+                    final storeProvider = Provider.of<LojaProvider>(
                       context,
                       listen: false,
                     );
@@ -420,7 +420,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     icon: const Icon(Icons.add_shopping_cart),
                     label: const Text('Adicionar'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: PaletaCores.corPrimaria,
+                      backgroundColor: PaletaCores.corPrimaria(context),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -435,9 +435,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     onPressed:
                         isAvailable
                             ? () {
-                              final itemUnico = CartItem(
-                                product: widget.produto,
-                                quantity: 1,
+                              final itemUnico = Carrinho(
+                                produto: widget.produto,
+                                quantidade: 1,
                                 inStock: true,
                               );
                               Navigator.push(

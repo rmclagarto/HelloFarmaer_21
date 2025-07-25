@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/routes.dart' show Rotas;
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/rotas.dart' show Rotas;
 
 
 
@@ -89,7 +89,7 @@ class _RecuperarSenhaFormularioState extends State<RecuperarSenhaFormulario> {
                   const SizedBox(height: 30),
                   _botaoEnviarLink(),
                   const SizedBox(height: 20),
-                  _linkVoltarLogin(),
+                  _linkVoltarLogin(context),
                 ],
               ),
             ),
@@ -133,7 +133,7 @@ class _RecuperarSenhaFormularioState extends State<RecuperarSenhaFormulario> {
       child: ElevatedButton(
         onPressed: _carregando ? null : _enviarLinkRecuperacao,
         style: ElevatedButton.styleFrom(
-          backgroundColor: PaletaCores.corSecundaria,
+          backgroundColor: PaletaCores.corSecundaria(context),
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
@@ -149,13 +149,13 @@ class _RecuperarSenhaFormularioState extends State<RecuperarSenhaFormulario> {
     );
   }
 
-  Widget _linkVoltarLogin() {
+  Widget _linkVoltarLogin(BuildContext context) {
     return TextButton(
       onPressed: _voltarParaLogin,
-      child: const Text(
+      child:  Text(
         'Voltar ao Login',
         style: TextStyle(
-          color: PaletaCores.corSecundaria,
+          color: PaletaCores.corSecundaria(context),
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),

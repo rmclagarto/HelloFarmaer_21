@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Screens/store_screens/my_product_detail_screen.dart';
 
@@ -61,7 +61,7 @@ class ProdutoCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       produto.preco.toString(),
-                      style: TextStyle(color: PaletaCores.corSecundaria),
+                      style: TextStyle(color: PaletaCores.corSecundaria(context)),
                     ),
                     const SizedBox(height: 6),
                     Text(

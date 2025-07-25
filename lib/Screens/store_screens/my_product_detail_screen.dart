@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hellofarmer/Core/constants.dart';
-import 'package:hellofarmer/Core/image_assets.dart';
+import 'package:hellofarmer/Core/cores.dart';
+import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Providers/store_provider.dart';
-import 'package:hellofarmer/Services/database_service.dart';
+import 'package:hellofarmer/Providers/loja_provider.dart';
+import 'package:hellofarmer/Services/basedados.dart';
 import 'package:provider/provider.dart';
 
 class MyProductDetailScreen extends StatefulWidget {
@@ -53,7 +53,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: PaletaCores.corPrimaria,
+        backgroundColor: PaletaCores.corPrimaria(context),
         actions: [
           IconButton(
             onPressed: () => _confirmDelete(context),
@@ -80,7 +80,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
             
             Text(
               "${widget.produto.preco.toString()}€ / ${widget.produto.unidadeMedida}",
-              style: TextStyle(fontSize: 18, color: PaletaCores.corSecundaria),
+              style: TextStyle(fontSize: 18, color: PaletaCores.corSecundaria(context)),
             ),
             
             const SizedBox(height: 4),
@@ -176,7 +176,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: PaletaCores.corPrimaria,
+                  backgroundColor: PaletaCores.corPrimaria(context),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   textStyle: const TextStyle(fontSize: 16),
                 ),
@@ -204,9 +204,9 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                 icon: const Icon(Icons.trending_up),
                 label: const Text('Promover Produto'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: PaletaCores.corPrimaria,
+                  foregroundColor: PaletaCores.corPrimaria(context),
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  side: BorderSide(color: PaletaCores.corPrimaria, width: 2),
+                  side: BorderSide(color: PaletaCores.corPrimaria(context), width: 2),
                 ),
                 onPressed: () => _showPromotionSheet(context),
               ),
@@ -228,7 +228,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
       ),
       child: Row(
         children: [
-          Icon(icon, color: PaletaCores.corPrimaria),
+          Icon(icon, color: PaletaCores.corPrimaria(context)),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -257,7 +257,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
 
   Widget _buildPlanTile({required String title,required String subtitle, required IconData icon, required VoidCallback onTap}) {
     return ListTile(
-      leading: Icon(icon, color: PaletaCores.corPrimaria),
+      leading: Icon(icon, color: PaletaCores.corPrimaria(context)),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.radio_button_off),
@@ -267,17 +267,17 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
 
 
   void _promoverProduto(int dias, double valor) async {
-    final storeProvider = Provider.of<StoreProvider>(context, listen: false);
+    final storeProvider = Provider.of<LojaProvider>(context, listen: false);
     final BancoDadosServico _dbService = BancoDadosServico();
 
 
     try{
-      final storeId = await storeProvider.findStoreIdForProduct(widget.produto.idProduto);
+      final storeId = await storeProvider.encontrarIdLojaDoProduto(widget.produto.idProduto);
       if(storeId == null){
         throw Exception("Loja não encontrada para este produto");
       }
 
-      final snapshot = await _dbService.read(path: 'stores/$storeId/despesas');
+      final snapshot = await _dbService.read(caminho: 'stores/$storeId/despesas');
       final double despesasAtuais;
 
       if (snapshot?.value == null) {
@@ -293,8 +293,8 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
       }
 
       await _dbService.update(
-        path: 'stores/$storeId',
-        data: {'despesas': (despesasAtuais + valor)}
+        caminho: 'stores/$storeId',
+        dados: {'despesas': (despesasAtuais + valor)}
       );
 
       final atualizado = widget.produto.copyWith(
@@ -303,7 +303,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
       );
 
 
-      await storeProvider.updateProduct(atualizado);
+      await storeProvider.atualizarProduto(atualizado);
 
       if(!mounted) return;
 
@@ -366,7 +366,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                   icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
                   label:  Text('Confirmar e Pagar', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: PaletaCores.corPrimaria,
+                    backgroundColor: PaletaCores.corPrimaria(context),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onPressed: () {
@@ -387,7 +387,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
   }
 
   void _confirmDelete(BuildContext context) {
-    final storeProvider = Provider.of<StoreProvider>(context, listen: false);
+    final storeProvider = Provider.of<LojaProvider>(context, listen: false);
 
     showDialog(
       context: context,
@@ -417,7 +417,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                   );
 
                   try {
-                    final storeId = await storeProvider.findStoreIdForProduct(
+                    final storeId = await storeProvider.encontrarIdLojaDoProduto(
                       widget.produto.idProduto,
                     );
 
@@ -436,9 +436,9 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                     }
 
                     
-                    await storeProvider.deleteProduct(
-                      storeId: storeId,
-                      productId: widget.produto.idProduto,
+                    await storeProvider.removerProduto(
+                      lojaId: storeId,
+                      produtoId: widget.produto.idProduto,
                     );
 
                     
