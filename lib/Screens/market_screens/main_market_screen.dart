@@ -4,10 +4,10 @@ import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Model/utilizador.dart';
 import 'package:hellofarmer/Widgets/market_widgets/search_box.dart';
-import 'package:hellofarmer/Widgets/market_widgets/product_card.dart';
+import 'package:hellofarmer/Widgets/market_widgets/cartao_produto.dart';
 import 'package:hellofarmer/Screens/market_screens/cart_screen.dart';
 import 'package:hellofarmer/Screens/market_screens/favorites_screen.dart';
-import 'package:hellofarmer/Widgets/market_widgets/category_selector.dart';
+import 'package:hellofarmer/Widgets/market_widgets/selecionador_categoria.dart';
 // import 'package:hellofarmer/Widgets/market_widgets/category_horizontal_list.dart';
 
 class MarketScreen extends StatefulWidget {
@@ -211,7 +211,7 @@ class _MarketScreenState extends State<MarketScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SearchBox(
+            CaixaPesquisa(
               controller: _searchController,
               onSubmitted: (pesquisa) {
                 
@@ -219,10 +219,10 @@ class _MarketScreenState extends State<MarketScreen> {
               },
             ),
 
-            CategorySelector(
-              categories: categories,
-              selectedIndex: _selectedCategory,
-              onSelected: (index) {
+            SeletorCategoria(
+              categorias: categories,
+              indiceSelecionado: _selectedCategory,
+              aoSelecionar: (index) {
                 setState(() {
                   _selectedCategory = index;
                   _onSearchChanged();
@@ -256,7 +256,7 @@ class _MarketScreenState extends State<MarketScreen> {
                             ),
                         itemBuilder: (context, index) {
                           final product = _filteredProducts[index];
-                          return ProductCard(product: product);
+                          return CartaoProduto(produto: product);
                         },
                       ),
             ),

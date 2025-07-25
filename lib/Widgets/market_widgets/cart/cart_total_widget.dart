@@ -4,13 +4,13 @@ import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Model/carrinho.dart';
 import 'package:hellofarmer/Screens/market_screens/checkout_screen.dart';
 
-class CartTotalWidget extends StatelessWidget {
-  final List<Carrinho> cartItems;
+class TotalCarrinhoWidget extends StatelessWidget {
+  final List<Carrinho> itensCarrinho;
   final double subtotal;
 
-  const CartTotalWidget({
+  const TotalCarrinhoWidget({
     super.key,
-    required this.cartItems,
+    required this.itensCarrinho,
     required this.subtotal,
   });
 
@@ -34,31 +34,31 @@ class CartTotalWidget extends StatelessWidget {
         ],
       ),
       child: Column(
-        children: [
-          _buildSubtotal(subtotal, context),
+        children: <Widget>[
+          _subTotal(subtotal, context),
           const SizedBox(height: 12),
           const Divider(height: 1),
           const SizedBox(height: 12),
-          _buildTotal(total, context),
+          _total(total, context),
           const SizedBox(height: 20),
-          _buildContinueButton(context),
+          _botaoContinuar(context),
         ],
       ),
     );
   }
 
-  // Widget para Subtotal
-  Widget _buildSubtotal(double value, BuildContext context) {
-    return _buildTotalRow('Subtotal:', value, context: context);
+
+  Widget _subTotal(double value, BuildContext context) {
+    return _linha('Subtotal:', value, context: context);
   }
 
-  // Widget para Total
-  Widget _buildTotal(double value, BuildContext context) {
-    return _buildTotalRow('Total:', value, context: context, isTotal: true);
+
+  Widget _total(double value, BuildContext context) {
+    return _linha('Total:', value, context: context, isTotal: true);
   }
 
   // Botão "Continuar"
-  Widget _buildContinueButton(BuildContext context) {
+  Widget _botaoContinuar(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -70,7 +70,7 @@ class CartTotalWidget extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          if (cartItems.isEmpty) {
+          if (itensCarrinho.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -86,7 +86,7 @@ class CartTotalWidget extends StatelessWidget {
             MaterialPageRoute(
               builder:
                   (context) =>
-                      CheckoutScreen(cartItems: cartItems, subtotal: subtotal),
+                      CheckoutScreen(cartItems: itensCarrinho, subtotal: subtotal),
             ),
           );
         },
@@ -102,7 +102,7 @@ class CartTotalWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTotalRow(
+  Widget _linha(
     String label,
     double value, {
       required BuildContext context,

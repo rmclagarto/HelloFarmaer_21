@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/cores.dart';
 
 
-class SearchBox extends StatelessWidget {
+class CaixaPesquisa extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String>? onSubmitted;
 
-  const SearchBox({
+  const CaixaPesquisa({
     super.key,
     required this.controller,
     this.onSubmitted,

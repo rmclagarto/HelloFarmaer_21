@@ -5,9 +5,9 @@ import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Screens/market_screens/product_detail_screen.dart';
 
 
-class ProductCard extends StatelessWidget {
-  final Produto product;
-  const ProductCard({super.key, required this.product});
+class CartaoProduto extends StatelessWidget {
+  final Produto produto;
+  const CartaoProduto({super.key, required this.produto});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ProductCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductDetailScreen(produto: product),
+              builder: (context) => ProductDetailScreen(produto: produto),
             ),
           );
         },
@@ -41,7 +41,7 @@ class ProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                product.nomeProduto,
+                produto.nomeProduto,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -50,13 +50,13 @@ class ProductCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
 
-              const SizedBox(height: 8), // Espaço manual no lugar do Spacer
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
                     child: Text(
-                      '${product.preco.toStringAsFixed(2)} / ${product.unidadeMedida}',
+                      '${produto.preco.toStringAsFixed(2)} / ${produto.unidadeMedida}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: PaletaCores.corPrimaria(context),

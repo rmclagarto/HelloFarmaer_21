@@ -136,7 +136,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       ),
       body:
           _isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator(color: Colors.blueAccent,))
               : _favorites.isEmpty
               ? const Center(
                 child: Text(

@@ -2,13 +2,13 @@
 import 'package:hellofarmer/Model/produto.dart';
 
 
-import 'product_card.dart';
+import 'cartao_produto.dart';
 import 'package:flutter/material.dart';
 
-class ProductsGrid extends StatelessWidget {
-  final List<Produto> products;
+class GradeProdutos extends StatelessWidget {
+  final List<Produto> produtos;
 
-  const ProductsGrid({super.key, required this.products});
+  const GradeProdutos({super.key, required this.produtos});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +23,10 @@ class ProductsGrid extends StatelessWidget {
           mainAxisSpacing: 16,
           childAspectRatio: 0.75,
         ),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return ProductCard(product: product);
+        itemCount: produtos.length,
+        itemBuilder: (context, indice) {
+          final produto = produtos[indice];
+          return CartaoProduto(produto: produto);
         },
       ),
     );

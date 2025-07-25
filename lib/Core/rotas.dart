@@ -22,8 +22,7 @@ class Rotas {
   static const configuracoes = '/configuracoes';
   static const meuPerfil = '/perfil';
 
-  // static const market = '/market';
-
+  
   static Map<String, WidgetBuilder> get rotas => {
     splash: (context) => const Splash(),
     login: (context) => const LoginTela(),
@@ -31,9 +30,6 @@ class Rotas {
     recuperarSenha: (context) => const RecuperarSenhaTela(),
     home: (context) => const Home(),
 
-    // criarAnuncio: (context) => const CriarAnuncioTela(),
-
-    
     configuracoes: (context) {
       final argumentos =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;

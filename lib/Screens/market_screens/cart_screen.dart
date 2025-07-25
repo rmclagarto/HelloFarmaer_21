@@ -50,7 +50,6 @@ class _CartScreenState extends State<CartScreen> {
           final produto = await dbService.obterProdutoPorId(id);
           if (produto != null) {
             products.add(produto);
-            // Inicializa quantidade como 1 ou mantém a existente
             productQuantities[id] = quantities[id] ?? 1;
           }
         }
@@ -68,6 +67,8 @@ class _CartScreenState extends State<CartScreen> {
       }
     } catch (e) {
       setState(() => isLoading = false);
+
+      if(!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Erro ao carregar carrinho: $e')));
@@ -75,7 +76,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> _updateQuantity(String productId, int newQuantity) async {
-    // Find the product to check available quantity
+    
     final product = cartProducts.firstWhere(
       (p) => p.idProduto == productId,
       orElse:
@@ -84,21 +85,23 @@ class _CartScreenState extends State<CartScreen> {
             nomeProduto: '',
             preco: 0,
             quantidade: 0,
-            idLoja: '', // Added required field
-            categoria: '', // Added required field
-            imagem: '', // Added required field
-            isAsset: false, // Added required field
-            descricao: '', // Added required field
-            unidadeMedida: '', // Added required field
-            data: DateTime.now(), // Added required field
+            idLoja: '', 
+            categoria: '', 
+            imagem: '', 
+            isAsset: false, 
+            descricao: '',
+            unidadeMedida: '', 
+            data: DateTime.now(),
           ),
     );
 
-    // Enforce quantity limits
+    
     if (newQuantity < 1) {
-      newQuantity = 1; // Minimum quantity
+      newQuantity = 1; 
+
     } else if (newQuantity > product.quantidade) {
-      newQuantity = product.quantidade; // Maximum available quantity
+      newQuantity = product.quantidade; 
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -132,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
         // 2. Remover o item
         productIds.remove(productId);
 
-        // 3. Atualizar no banco
+        // 3. Atualizar na base de dados
         await dbService.update(
           caminho: "users/${user?.idUtilizador}/cartProductsList",
           dados: productIds,
@@ -145,6 +148,7 @@ class _CartScreenState extends State<CartScreen> {
         });
       }
     } catch (e) {
+      if(!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Erro ao remover item: $e')));
@@ -175,7 +179,7 @@ class _CartScreenState extends State<CartScreen> {
           Expanded(
             child:
                 isLoading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator(color: Colors.blueAccent,))
                     : cartProducts.isEmpty
                     ? const Center(child: Text('Seu carrinho está vazio'))
                     : ListView.separated(
@@ -184,7 +188,7 @@ class _CartScreenState extends State<CartScreen> {
 
                       itemBuilder: (context, index) {
                         final product = cartProducts[index];
-                        return CartItemWidget(
+                        return ItemCarrinhoWidget(
                           item: {
                             'name': product.nomeProduto,
                             'price': product.preco,
@@ -193,10 +197,10 @@ class _CartScreenState extends State<CartScreen> {
                             'image': Imagens.alface,
                             'inStock': product.quantidade > 0,
                           },
-                          onQuantityChanged: (newQuantity) {
+                          aoAlterarQuantidade: (newQuantity) {
                             _updateQuantity(product.idProduto, newQuantity);
                           },
-                          onDelete: () {
+                          aoRemover: () {
                             _removeItem(product.idProduto);
                           },
                         );
@@ -204,8 +208,8 @@ class _CartScreenState extends State<CartScreen> {
                     ),
           ),
           if (cartProducts.isNotEmpty)
-            CartTotalWidget(
-              cartItems:
+            TotalCarrinhoWidget(
+              itensCarrinho:
                   cartProducts
                       .map(
                         (p) => Carrinho(

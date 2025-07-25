@@ -171,7 +171,7 @@ class MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext ctx) {
-    if (_pos == null) return const Center(child: CircularProgressIndicator());
+    if (_pos == null) return const Center(child: CircularProgressIndicator(color: Colors.blueAccent,));
 
     return Stack(
       children: [
@@ -206,14 +206,6 @@ class MapWidgetState extends State<MapWidget> {
             ),
           ],
         ),
-        // Positioned(
-        //   bottom: 20,
-        //   right: 20,
-        //   child: FloatingActionButton(
-        //     onPressed: addRandomMarker,
-        //     child: const Icon(Icons.add_location),
-        //   ),
-        // ),
       ],
     );
   }

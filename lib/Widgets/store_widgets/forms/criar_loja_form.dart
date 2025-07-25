@@ -10,36 +10,36 @@ import 'package:hellofarmer/Services/basedados.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class CreateStoreForm extends StatefulWidget {
-  const CreateStoreForm({super.key});
+class CriarLojaForm extends StatefulWidget {
+  const CriarLojaForm({super.key});
 
   @override
-  State<CreateStoreForm> createState() => _CreateStoreFormState();
+  State<CriarLojaForm> createState() => _CriarLojaFormState();
 }
 
-class _CreateStoreFormState extends State<CreateStoreForm> {
+class _CriarLojaFormState extends State<CriarLojaForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descricaoController = TextEditingController();
-  final TextEditingController _telefoneController = TextEditingController();
-  final TextEditingController _neighborhoodController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _streetController = TextEditingController();
-  final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _controladorNome = TextEditingController();
+  final TextEditingController _controladorDescricao = TextEditingController();
+  final TextEditingController _controladorTelefone = TextEditingController();
+  final TextEditingController _controladorBairro = TextEditingController();
+  final TextEditingController _controladorCidade = TextEditingController();
+  // final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _controladorRua = TextEditingController();
+  final TextEditingController _controladorNumero = TextEditingController();
 
-  File? _selectedImage;
+  File? _imagemSelecionada;
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _descricaoController.dispose();
-    _telefoneController.dispose();
-    _neighborhoodController.dispose();
-    _cityController.dispose();
-    _stateController.dispose();
-    _streetController.dispose();
-    _numberController.dispose();
+    _controladorNome.dispose();
+    _controladorDescricao.dispose();
+    _controladorTelefone.dispose();
+    _controladorBairro.dispose();
+    _controladorCidade.dispose();
+    // _stateController.dispose();
+    _controladorRua.dispose();
+    _controladorNumero.dispose();
     super.dispose();
   }
 
@@ -49,7 +49,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
     if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _imagemSelecionada = File(pickedFile.path);
       });
     }
   }
@@ -120,7 +120,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   Widget _buildNameField() {
     return TextFormField(
-      controller: _nameController,
+      controller: _controladorNome,
       decoration: InputDecoration(
         labelText: 'Nome da Loja*',
         prefixIcon: const Icon(Icons.store),
@@ -150,7 +150,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
               border: Border.all(color: Colors.grey[400]!),
             ),
             child:
-                _selectedImage == null
+                _imagemSelecionada == null
                     ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -164,7 +164,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
                         20,
                       ),
                       child: Image.file(
-                        _selectedImage!,
+                        _imagemSelecionada!,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
@@ -172,7 +172,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
                     ),
           ),
         ),
-        if (_selectedImage != null)
+        if (_imagemSelecionada != null)
           TextButton(onPressed: _pickImage, child: const Text("Alterar foto")),
       ],
     );
@@ -180,7 +180,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   Widget _buildDescricaoField() {
     return TextFormField(
-      controller: _descricaoController,
+      controller: _controladorDescricao,
       maxLines: 3,
       decoration: InputDecoration(
         labelText: 'Descrição*',
@@ -199,7 +199,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   Widget _buildTelefoneField() {
     return TextFormField(
-      controller: _telefoneController,
+      controller: _controladorTelefone,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: 'Telefone*',
@@ -219,7 +219,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   Widget _buildStreetField() {
     return TextFormField(
-      controller: _streetController,
+      controller: _controladorRua,
       decoration: InputDecoration(
         labelText: 'Rua/Avenida*',
         prefixIcon: const Icon(Icons.streetview),
@@ -236,7 +236,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   Widget _buildNumberField() {
     return TextFormField(
-      controller: _numberController,
+      controller: _controladorNumero,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'Número*',
@@ -254,7 +254,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   Widget _buildNeighborhoodField() {
     return TextFormField(
-      controller: _neighborhoodController,
+      controller: _controladorBairro,
       decoration: InputDecoration(
         labelText: 'Bairro*',
         prefixIcon: const Icon(Icons.location_city),
@@ -271,7 +271,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
   Widget _buildCityField() {
     return TextFormField(
-      controller: _cityController,
+      controller: _controladorCidade,
       decoration: InputDecoration(
         labelText: 'Cidade*',
         prefixIcon: const Icon(Icons.location_city),
@@ -315,14 +315,14 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
 
         final minhaNovaLoja = Loja.minhaLoja(
           idLoja: idLoja,
-          nomeLoja: _nameController.text.trim(),
-          descricao: _descricaoController.text.trim(),
-          telefone: _telefoneController.text,
+          nomeLoja: _controladorNome.text.trim(),
+          descricao: _controladorDescricao.text.trim(),
+          telefone: _controladorTelefone.text,
           endereco: {
-            "rua": _streetController.text,
-            "bairro": _neighborhoodController.text,
-            "cidade": _cityController.text,
-            "numero": int.tryParse(_numberController.text) ?? 0,
+            "rua": _controladorRua.text,
+            "bairro": _controladorBairro.text,
+            "cidade": _controladorCidade.text,
+            "numero": int.tryParse(_controladorNumero.text) ?? 0,
           },
           avaliacoes: 0.0,
           faturamento: 0.0,

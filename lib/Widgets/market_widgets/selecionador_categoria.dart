@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/cores.dart';
 
 
-class CategorySelector extends StatelessWidget {
-  final List<String> categories;
-  final int selectedIndex;
-  final ValueChanged<int> onSelected;
+class SeletorCategoria extends StatelessWidget {
+  final List<String> categorias;
+  final int indiceSelecionado;
+  final ValueChanged<int> aoSelecionar;
 
-  const CategorySelector({
+  const SeletorCategoria({
     super.key,
-    required this.categories,
-    required this.selectedIndex,
-    required this.onSelected,
+    required this.categorias,
+    required this.indiceSelecionado,
+    required this.aoSelecionar,
   });
 
   @override
@@ -22,23 +22,23 @@ class CategorySelector extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: List.generate(categories.length, (index) {
-            final bool isSelected = selectedIndex == index;
+          children: List.generate(categorias.length, (indice) {
+            final bool selecionado = indiceSelecionado == indice;
             return Padding(
               padding: const EdgeInsets.only(right: 8),
               child: ChoiceChip(
                 label: Text(
-                  categories[index],
+                  categorias[indice],
                   style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black87,
+                    color: selecionado ? Colors.white : Colors.black87,
                   ),
                 ),
-                selected: isSelected,
+                selected: selecionado,
                 selectedColor: PaletaCores.corPrimaria(context),
                 backgroundColor: Colors.white,
                 onSelected: (selected) {
                   if (selected) {
-                    onSelected(index);
+                    aoSelecionar(indice);
                   }
                 },
               ),

@@ -10,10 +10,10 @@ import 'package:provider/provider.dart';
 
 
 
-class AppDrawer extends StatelessWidget {
+class MenuLateral extends StatelessWidget {
   final ValueNotifier<ThemeMode> themeNotifier;
 
-  const AppDrawer({
+  const MenuLateral({
     super.key, 
     required this.themeNotifier,
   });
@@ -22,19 +22,19 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context); // Guarda o NavigatorState
     
-    final user = Provider.of<UtilizadorProvider>(context).utilizador!;
+    final utilizador = Provider.of<UtilizadorProvider>(context).utilizador!;
     
-    final String userName = user.nomeUtilizador;
-    final String userPhotoUrl = Imagens.agricultor;
+    final String nomeUtilizador = utilizador.nomeUtilizador;
+    final String urlFoto = Imagens.agricultor;
 
-    // Lista dentro do build para poder usar o context nas funções onTap
+    
     final List<Map<String, dynamic>> menuItems = [
       {
         'icon':Icons.person,
         'title':'Minha Conta',
         'onTap': () {
           navigator.pop();
-          Navigator.pushNamed(context, Rotas.meuPerfil, arguments: user);
+          Navigator.pushNamed(context, Rotas.meuPerfil, arguments: utilizador);
         }
       },
       {
@@ -44,7 +44,7 @@ class AppDrawer extends StatelessWidget {
           navigator.pop();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MarketScreen(user: user)),
+            MaterialPageRoute(builder: (context) => MarketScreen(user: utilizador)),
           );
         },
       },
@@ -61,14 +61,6 @@ class AppDrawer extends StatelessWidget {
           );
         },
       },
-      // {
-      //   'icon': Icons.help,
-      //   'title': 'Ajuda',
-      //   'onTap': () {
-      //     navigator.pop();
-      //     // ação para Ajuda
-      //   },
-      // },
       {
         'icon': Icons.settings,
         'title': 'Definições',
@@ -109,11 +101,11 @@ class AppDrawer extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundImage: AssetImage(userPhotoUrl),
+                  backgroundImage: AssetImage(urlFoto),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  userName,
+                  nomeUtilizador,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,

@@ -8,8 +8,8 @@ class SellerInfo extends StatelessWidget {
   final String sellerName;
   final String rating;
   final VoidCallback onTap;
-  final String? address; // Novo parâmetro
-  final String? phone; // Novo parâmetro// Novo parâmetro para as localizações
+  final String? address;
+  final String? phone; 
 
   const SellerInfo({
     super.key,
@@ -58,7 +58,6 @@ class SellerInfo extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             
-            // Informações de contato
             if (phone != null || address != null) ...[
               const Divider(),
               if (phone != null) _buildInfoRow(Icons.phone, phone!),

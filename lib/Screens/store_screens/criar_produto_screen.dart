@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/cores.dart';
-import 'package:hellofarmer/Widgets/store_widgets/forms/create_produto_form.dart';
+import 'package:hellofarmer/Widgets/store_widgets/forms/criar_produto_form.dart';
+
 
 class PublicarProdutoScreen extends StatefulWidget {
   final String storeId;

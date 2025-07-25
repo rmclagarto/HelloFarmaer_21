@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Core/imagens.dart';
@@ -18,7 +18,7 @@ class MeuPerfilTela extends StatelessWidget {
     final bancoDados = BancoDadosServico();
 
     try {
-      /// 1. Obter lista de lojas do usuário
+      /// 1. Obter lista de lojas do utilizador
       final snapshotLojas = await bancoDados.read(
         caminho: 'users/$idUtilizador/minhasLojas',
       );
@@ -77,7 +77,7 @@ class MeuPerfilTela extends StatelessWidget {
         await bancoDados.delete(caminho: 'stores/$lojaId');
       }
 
-      /// 3. Apagar encomendas do usuário (listEncomendas + minhasEncomendas)
+      /// 3. Apagar encomendas do utilizador (listEncomendas + minhasEncomendas)
       final snapshotEncomendasUser1 = await bancoDados.read(
         caminho: 'users/$idUtilizador/listEncomendas',
       );
@@ -110,9 +110,7 @@ class MeuPerfilTela extends StatelessWidget {
       /// 4. Apagar o próprio nó do usuário
       await bancoDados.delete(caminho: 'users/$idUtilizador');
 
-      print('Conta e todos os dados foram apagados com sucesso.');
     } catch (e) {
-      print('Erro ao apagar conta: $e');
       rethrow;
     }
   }
@@ -349,33 +347,23 @@ class MeuPerfilTela extends StatelessWidget {
                   final FirebaseAuth auth = FirebaseAuth.instance;
                   final user = auth.currentUser;
 
-                  if (user == null) {
-                    print('Nenhum utilizador autenticado.');
-                    return;
-                  }
+                  if (user == null) return;
 
                   try {
                     await apagarConta(utilizador.idUtilizador);
                     await user.delete();
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'requires-recent-login') {
-                      print(
-                        'Reautentique o usuário para poder apagar a conta.',
-                      );
-                      // Aqui você pode solicitar que o usuário faça login novamente e depois tente apagar.
-                    } else {
-                      print('Erro na exclusão da conta: ${e.message}');
-                    }
                   } catch (e) {
-                    print('Erro inesperado: $e');
+                    return;
                   }
+                  
 
+                  if (!context.mounted) return;
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (_) => LoginTela()),
                     (route) => false,
                   );
-                  // Adicione aqui a lógica para deletar a conta
+      
                 },
                 child: Text(
                   'Encerrar Conta',

@@ -6,7 +6,7 @@ import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Providers/loja_provider.dart';
 import 'package:hellofarmer/Providers/utilizador_provider.dart';
 import 'package:hellofarmer/Widgets/store_widgets/gestao_section.dart';
-import 'package:hellofarmer/Widgets/store_widgets/store_details.dart';
+import 'package:hellofarmer/Widgets/store_widgets/loja_detalhes.dart';
 import 'package:provider/provider.dart';
 
 class MainStoreScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _MainStoreScreenState extends State<MainStoreScreen> {
   void initState() {
     super.initState();
     _sections.addAll([
-      StoreDetails(key: _sectionsKeys[0], store: widget.loja), // Minha BANCA
+      StoreDetails(key: _sectionsKeys[0], loja: widget.loja), // Minha BANCA
       GestaoSection(key: _sectionsKeys[1], store: widget.loja), // GESTÂO
     ]);
   }

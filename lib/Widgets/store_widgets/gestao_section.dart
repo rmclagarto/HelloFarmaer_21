@@ -13,29 +13,29 @@ class GestaoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardItems = [
-      _CardItem(
+    final opcoesCartoes = [
+      _itemCartao(
         icon: Icons.receipt_long,
-        title: 'Encomendas',
-        subtitles: ['Faturação', 'Compras abandonadas'],
+        titulo: 'Encomendas',
+        subTitulo: ['Faturação', 'Compras abandonadas'],
         onTap: () => _navegarParaEncomendas(context),
       ),
-      _CardItem(
+      _itemCartao(
         icon: Icons.shopping_basket,
-        title: 'Produtos',
-        subtitles: ['Gestão de estoque', 'Gestão de preços', 'Cabazes'],
+        titulo: 'Produtos',
+        subTitulo: ['Gestão de estoque', 'Gestão de preços', 'Cabazes'],
         onTap: () => _navegarParaProdutos(context),
       ),
-      _CardItem(
+      _itemCartao(
         icon: Icons.people,
-        title: 'Clientes',
-        subtitles: ['Base de dados', 'Histórico', 'Grupos'],
+        titulo: 'Clientes',
+        subTitulo: ['Base de dados', 'Histórico', 'Grupos'],
         onTap: () => _navegarParaClientes(context),
       ),
-      _CardItem(
+      _itemCartao(
         icon: Icons.analytics,
-        title: 'Análise de Dados',
-        subtitles: ['Relatórios', 'Canais de venda', 'Finanças'],
+        titulo: 'Análise de Dados',
+        subTitulo: ['Relatórios', 'Canais de venda', 'Finanças'],
         onTap: () => _navegarParaAnalise(context),
       ),
     ];
@@ -45,16 +45,16 @@ class GestaoSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(context),
+          _cabecalho(context),
 
           const SizedBox(height: 30),
-          _buildGridCards(cardItems),
+          gradeCartoes(opcoesCartoes),
         ],
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _cabecalho(BuildContext context) {
     return Text(
       'Gestão da Loja',
       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -64,22 +64,22 @@ class GestaoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildGridCards(List<_CardItem> items) {
+  Widget gradeCartoes(List<_itemCartao> itens) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final cardWidth = (constraints.maxWidth - 16) / 2;
-        final cardHeight = cardWidth * 1.2;
+        final larguraCartao = (constraints.maxWidth - 16) / 2;
+        final alturaCartao = larguraCartao * 1.2;
 
         return Wrap(
           spacing: 16,
           runSpacing: 16,
           children:
-              items
+              itens
                   .map(
                     (item) => SizedBox(
-                      width: cardWidth,
-                      height: cardHeight,
-                      child: _buildGestaoCard(item, context),
+                      width: larguraCartao,
+                      height: alturaCartao,
+                      child: _construirCartaoGestao(item, context),
                     ),
                   )
                   .toList(),
@@ -88,7 +88,7 @@ class GestaoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildGestaoCard(_CardItem item, BuildContext context) {
+  Widget _construirCartaoGestao(_itemCartao item, BuildContext context) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -103,14 +103,14 @@ class GestaoSection extends StatelessWidget {
               Icon(item.icon, size: 30, color: PaletaCores.corPrimaria(context)),
               const SizedBox(height: 8),
               Text(
-                item.title,
+                item.titulo,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               const SizedBox(height: 8),
-              ...item.subtitles.map(
+              ...item.subTitulo.map(
                 (sub) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Text('• $sub', style: const TextStyle(fontSize: 12)),
@@ -124,26 +124,23 @@ class GestaoSection extends StatelessWidget {
   }
 
   void _navegarParaEncomendas(BuildContext context) {
-    // Implemente a navegação
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EncomendasSection(storeId: store.idLoja,)),
+      MaterialPageRoute(builder: (context) => EncomendasSection(lojaId: store.idLoja,)),
     );
   }
 
   void _navegarParaProdutos(BuildContext context) {
-    // Implemente a navegação
     Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProdutosSection(storeId: store.idLoja),
+        builder: (context) => ProdutosSection(lojaId: store.idLoja),
       ),
     );
   }
 
   void _navegarParaClientes(BuildContext context) {
-    // Implemente a navegação
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ClientesSection(storeId: store.idLoja,)),
@@ -151,7 +148,6 @@ class GestaoSection extends StatelessWidget {
   }
 
   void _navegarParaAnalise(BuildContext context) {
-    // Implemente a navegação
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AnalisesFinanceirasSection(storeId: store.idLoja)),
@@ -159,16 +155,16 @@ class GestaoSection extends StatelessWidget {
   }
 }
 
-class _CardItem {
+class _itemCartao {
   final IconData icon;
-  final String title;
-  final List<String> subtitles;
+  final String titulo;
+  final List<String> subTitulo;
   final VoidCallback onTap;
 
-  _CardItem({
+  _itemCartao({
     required this.icon,
-    required this.title,
-    required this.subtitles,
+    required this.titulo,
+    required this.subTitulo,
     required this.onTap,
   });
 }

@@ -38,7 +38,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     try {
       setState(() => _isLoading = true);
       
-      await _loadStoreInfo(lojaId);
+      await carregarInfoDaLoja(lojaId);
       
       if (_store != null && mounted) {
         await _loadProdutos(lojaId);
@@ -58,7 +58,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     }
   }
 
-  Future<void> _loadStoreInfo(String lojaId) async {
+  Future<void> carregarInfoDaLoja(String lojaId) async {
     try {
       final storeSnapshot = await _dbService.read(caminho: 'stores/$lojaId');
       
@@ -86,8 +86,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
           _isLoading = false;
         });
       }
-      debugPrint('Erro ao carregar loja: $e');
-      debugPrint('Stack trace: $stackTrace');
+      debugPrint('Erro ao carregar loja: $e, $stackTrace');
     }
   }
 
@@ -164,7 +163,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator(color: Colors.blueAccent,)),
       );
     }
 
@@ -274,7 +273,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                 if (_loadingProducts)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Center(child: CircularProgressIndicator()),
+                    child: Center(child: CircularProgressIndicator(color: Colors.blueAccent,)),
                   )
                 else if (_productsError != null)
                   Text(

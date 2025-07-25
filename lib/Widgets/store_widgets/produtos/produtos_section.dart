@@ -8,33 +8,36 @@ import 'package:provider/provider.dart';
 
 
 class ProdutosSection extends StatefulWidget {
-  final String storeId;
-  const ProdutosSection({super.key, required this.storeId});
+  final String lojaId;
+  const ProdutosSection({
+    super.key, 
+    required this.lojaId
+  });
 
   @override
   State<ProdutosSection> createState() => _ProdutosSectionState();
 }
 
 class _ProdutosSectionState extends State<ProdutosSection> {
-  late final LojaProvider _storeProvider;
+  late final LojaProvider _lojaProvider;
   late Stream<List<Produto>> _produtosStream;
 
   @override
   void initState() {
     super.initState();
-     _storeProvider = Provider.of<LojaProvider>(context, listen: false);
-    _produtosStream = _storeProvider.obterProdutosDaLoja(widget.storeId);
+    _lojaProvider = Provider.of<LojaProvider>(context, listen: false);
+    _produtosStream = _lojaProvider.obterProdutosDaLoja(widget.lojaId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final tema = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Gestão de Produtos',
-          style: theme.textTheme.headlineSmall?.copyWith(
+          style: tema.textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -53,7 +56,7 @@ class _ProdutosSectionState extends State<ProdutosSection> {
                 stream: _produtosStream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(color: Colors.blueAccent,));
                   }
 
                   if (snapshot.hasError) {
@@ -71,8 +74,8 @@ class _ProdutosSectionState extends State<ProdutosSection> {
                     itemBuilder: (context, index) {
                       return ProdutoCard(
                         produto: produtos[index],
-                        onDelete: () => _deleteProduct(context, produtos[index].idProduto),
-                        onUpdate: (produtoAtualizado) => _updateProduct(context, produtoAtualizado),
+                        onDelete: () => _apagarProduto(context, produtos[index].idProduto),
+                        onUpdate: (produtoAtualizado) => _updateProduto(context, produtoAtualizado),
                       );
                     },
                   );
@@ -94,23 +97,23 @@ class _ProdutosSectionState extends State<ProdutosSection> {
     final novoProduto = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => PublicarProdutoScreen(storeId: widget.storeId),
+        builder: (_) => PublicarProdutoScreen(storeId: widget.lojaId),
       ),
     );
     
     if (novoProduto != null && mounted) {
-      await _storeProvider.adicionarProdutoALoja(
-        lojaId: widget.storeId,
+      await _lojaProvider.adicionarProdutoALoja(
+        lojaId: widget.lojaId,
         produtoId: novoProduto.idProduto,
         produto: novoProduto,
       );
     }
   }
 
-  Future<void> _deleteProduct(BuildContext context, String productId) async {
+  Future<void> _apagarProduto(BuildContext context, String productId) async {
     try {
-      await _storeProvider.removerProduto(
-        lojaId: widget.storeId,
+      await _lojaProvider.removerProduto(
+        lojaId: widget.lojaId,
         produtoId: productId,
       );
       
@@ -128,12 +131,12 @@ class _ProdutosSectionState extends State<ProdutosSection> {
     }
   }
 
-  Future<void> _updateProduct(BuildContext context, Produto produto) async {
+  Future<void> _updateProduto(BuildContext context, Produto produto) async {
     try {
-      await _storeProvider.atualizarProduto(produto);
+      await _lojaProvider.atualizarProduto(produto);
       
       setState(() {
-      _produtosStream = _storeProvider.obterProdutosDaLoja(widget.storeId);
+      _produtosStream = _lojaProvider.obterProdutosDaLoja(widget.lojaId);
     });
 
       if (mounted) {

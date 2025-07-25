@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/loja.dart';
 
 
-class StoreCard extends StatelessWidget {
-  final Loja store;
+class CartaoLoja extends StatelessWidget {
+  final Loja loja;
   final VoidCallback onTap;
 
-  const StoreCard({super.key, required this.store, required this.onTap});
+  const CartaoLoja({
+    super.key, 
+    required this.loja, 
+    required this.onTap
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +26,18 @@ class StoreCard extends StatelessWidget {
           contentPadding: const EdgeInsets.all(16),
           leading: const Icon(Icons.store, color: Colors.blueAccent),
           title: Text(
-            store.nomeLoja,
+            loja.nomeLoja,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(store.descricao),
+              Text(loja.descricao),
               const SizedBox(height: 4),
               Text(
-                '📍 ${store.endereco['rua']}, ${store.endereco['numero']} - ${store.endereco['bairro']}',
+                '📍 ${loja.endereco['rua']}, ${loja.endereco['numero']} - ${loja.endereco['bairro']}',
               ),
-              Text('📞 ${store.telefone}'),
+              Text('📞 ${loja.telefone}'),
             ],
           ),
         ),

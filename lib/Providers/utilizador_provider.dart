@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Model/utilizador.dart';
-import 'package:hellofarmer/Model/loja.dart';
+// import 'package:hellofarmer/Model/loja.dart';
 import 'package:hellofarmer/Services/basedados.dart';
 
 class UtilizadorProvider with ChangeNotifier {

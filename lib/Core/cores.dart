@@ -28,7 +28,7 @@ class PaletaCores {
 
 
   static Color textValue(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
+    return Theme.of(context).brightness != Brightness.dark
         ? Colors.white
         : Colors.black87;
   }
@@ -42,13 +42,13 @@ class PaletaCores {
   }
 
   static Color dividerColor(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
+    return Theme.of(context).brightness != Brightness.dark
         ? Colors.grey[700]!
         : Colors.grey[300]!;
   }
 
   static Color dangerColor(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
+    return Theme.of(context).brightness != Brightness.dark
         ? Colors.red[400]!
         : Colors.red;
   }

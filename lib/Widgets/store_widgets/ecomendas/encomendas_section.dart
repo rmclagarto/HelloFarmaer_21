@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Model/utilizador.dart';
-// import 'package:hellofarmer/Model/custom_user.dart';
 import 'package:hellofarmer/Model/encomenda.dart';
 import 'package:hellofarmer/Model/produto.dart';
 import 'package:hellofarmer/Model/loja.dart';
 import 'package:hellofarmer/Services/basedados.dart';
-// import 'package:hellofarmer/Model/produtos.dart';
 
 class EncomendasSection extends StatefulWidget {
-  final String storeId;
+  final String lojaId;
 
-  const EncomendasSection({super.key, required this.storeId});
+  const EncomendasSection({super.key, required this.lojaId});
 
   @override
   State<EncomendasSection> createState() => _EncomendasSectionState();
@@ -23,9 +21,9 @@ class _EncomendasSectionState extends State<EncomendasSection>
   late List<Encomenda> _encomendas = [];
   final Map<String, Produto> _produtosCache = {};
   final Map<String, Utilizador> _usersCache = {};
-  Loja? _store;
+  Loja? _loja;
 
-  final BancoDadosServico _dbService = BancoDadosServico();
+  final _bancoDados = BancoDadosServico();
 
   @override
   void initState() {
@@ -35,72 +33,7 @@ class _EncomendasSectionState extends State<EncomendasSection>
       setState(() {});
     });
 
-    _loadStoreAndEcomendas();
-  }
-
-  Future<void> _loadStoreAndEcomendas() async {
-    // Primeiro busca a store
-    final storeSnapshot = await _dbService.read(
-      caminho: 'stores/${widget.storeId}',
-    );
-    if (storeSnapshot == null || storeSnapshot.value == null) {
-      debugPrint('Loja não encontrada');
-      return;
-    }
-
-    final storeData = Map<String, dynamic>.from(storeSnapshot.value as Map);
-    final List<String> listaIDs = List<String>.from(
-      storeData['listEncomendasId'] ?? [],
-    );
-
-    _store = Loja.fromJson(storeData);
-
-    // Verificar se há encomendas
-    if (listaIDs.isEmpty) {
-      setState(() {
-        _encomendas = [];
-      });
-      return;
-    }
-
-    List<Encomenda> encomendas = [];
-
-    for (String id in listaIDs) {
-      final doc = await _dbService.read(caminho: 'orders/$id');
-      if (doc != null && doc.value != null) {
-        try {
-          final docData = Map<String, dynamic>.from(doc.value as Map);
-          final encomenda = Encomenda.fromJson(docData);
-          encomendas.add(encomenda);
-        } catch (e) {
-          debugPrint("Erro ao processar encomenda $id: $e");
-        }
-      }
-    }
-
-    setState(() {
-      _encomendas = encomendas;
-    });
-  }
-
-  Future<void> _updateOderStatus(
-    String orderId,
-    StatusEncomenda newStatus,
-  ) async {
-    try {
-      await _dbService.update(
-        caminho: 'orders/$orderId',
-        dados: {'status': newStatus.toString().split('.').last},
-      );
-
-      // Reload data
-      await _loadStoreAndEcomendas();
-    } catch (e) {
-      debugPrint('Error updating order status: $e');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Erro ao atualizar status: $e')));
-    }
+    _carregarLojaEncomendas();
   }
 
   @override
@@ -115,216 +48,288 @@ class _EncomendasSectionState extends State<EncomendasSection>
   List<Encomenda> get _concluidas =>
       _encomendas.where((e) => e.status == StatusEncomenda.concluida).toList();
 
- 
+  Future<void> _carregarLojaEncomendas() async {
+    // Buscar os dados da loja no banco de dados
+    final storeSnapshot = await _bancoDados.read(
+      caminho: 'stores/${widget.lojaId}',
+    );
+    if (storeSnapshot == null || storeSnapshot.value == null) {
+      debugPrint('Loja não encontrada');
+      return;
+    }
 
+    // Extrair os dados da loja
+    final dadosLoja = Map<String, dynamic>.from(storeSnapshot.value as Map);
+    final List<String> listaIdsEncomendas = List<String>.from(
+      dadosLoja['listEncomendasId'] ?? [],
+    );
 
+    _loja = Loja.fromJson(dadosLoja);
 
-void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
-  final TextEditingController codigoEntregaController = TextEditingController();
+    // Verificar se há encomendas
+    if (listaIdsEncomendas.isEmpty) {
+      setState(() {
+        _encomendas = [];
+      });
+      return;
+    }
 
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.white,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) => Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const Center(
-              child: Text(
-                "Detalhes da Encomenda",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+    // Carregar as encomendas individualmente
+    List<Encomenda> encomendas = [];
 
-            
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Produtos:",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                if (encomenda.produtosInfo.isEmpty)
-                  const Text("Nenhum produto encontrado")
-                else
-                  Column(
-                    children: encomenda.produtosInfo.map((produto) {
-                      final nome = produto['nome']?.toString() ?? 'Produto desconhecido';
-                      final qtd = produto['quantidade']?.toString() ?? '0';
-                      final precoUnitario = produto['preco'] != null 
-                          ? double.tryParse(produto['preco'].toString()) 
-                          : null;
+    for (String id in listaIdsEncomendas) {
+      final snapshotEncomenda = await _bancoDados.read(caminho: 'orders/$id');
+      if (snapshotEncomenda != null && snapshotEncomenda.value != null) {
+        try {
+          final dadosEncomenda = Map<String, dynamic>.from(
+            snapshotEncomenda.value as Map,
+          );
+          final encomenda = Encomenda.fromJson(dadosEncomenda);
+          encomendas.add(encomenda);
+        } catch (e) {
+          debugPrint("Erro ao processar encomenda $id: $e");
+        }
+      }
+    }
 
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Text('• $nome'),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text('Qtd: $qtd'),
-                            ),
-                            // Expanded(
-                            //   flex: 3,
-                            //   child: Text(
-                            //     precoTotal != null 
-                            //         ? '${precoTotal.toStringAsFixed(2)} €' 
-                            //         : 'Preço indisponível',
-                            //     textAlign: TextAlign.end,
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-              ],
-            ),
+    // Atualizar estado com as encomendas carregadas
+    setState(() {
+      _encomendas = encomendas;
+    });
+  }
 
-            const SizedBox(height: 12),
-            
-            
-            _detailRow("Preço Total", "${encomenda.valor.toStringAsFixed(2)} €"),
-            _detailRow("Comprador", encomenda.compradorInfo['nome'] ?? "Comprador desconhecido"),
-            _detailRow("Email", encomenda.compradorInfo['email'] ?? "Email não disponível"),
-            _detailRow("Telefone", encomenda.compradorInfo['telefone'] ?? "Telefone não disponível"),
-            _detailRow("Data", _formatDate(encomenda.dataPedido)),
-            _detailRow("Estado", _statusLabel(encomenda.status)),
+  Future<void> _atualizarStatusEncomenda(
+    String idEncomenda,
+    StatusEncomenda status,
+  ) async {
+    try {
+      await _bancoDados.update(
+        caminho: 'orders/$idEncomenda',
+        dados: {'status': status.toString().split('.').last},
+      );
 
-            const SizedBox(height: 24),
+      // Recarrega os dados após a atualização
+      await _carregarLojaEncomendas();
+    } catch (e) {
+      debugPrint('Erro ao atualizar status da encomenda: $e');
 
-            if (encomenda.status == StatusEncomenda.pendente) ...[
-              const Text("Código de Entrega", style: TextStyle(fontWeight: FontWeight.w500)),
-              const SizedBox(height: 8),
-              TextField(
-                controller: codigoEntregaController,
-                decoration: InputDecoration(
-                  hintText: "Introduz o código...",
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao atualizar o status da encomenda: $e'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+  }
+
+  void _mostrarDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
+    final TextEditingController codigoEntregaController =
+        TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder:
+          (context) => Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final inputCode = codigoEntregaController.text.trim();
-                      if (inputCode == encomenda.code.toString()) {
-                        await _updateOderStatus(
-                          encomenda.idEncomenda,
-                          StatusEncomenda.concluida
-                        );
-                        if (mounted) Navigator.pop(context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text(
-                      "Confirmar",
+                  ),
+                  const Center(
+                    child: Text(
+                      "Detalhes da Encomenda",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 20),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Produtos:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      if (encomenda.produtosInfo.isEmpty)
+                        const Text("Nenhum produto encontrado")
+                      else
+                        Column(
+                          children:
+                              encomenda.produtosInfo.map((produto) {
+                                final nome = produto['nome']?.toString() ?? 'Produto desconhecido';
+                                final qtd = produto['quantidade']?.toString() ?? '0';
+                                // final precoUnitario =
+                                //     produto['preco'] != null
+                                //         ? double.tryParse(
+                                //           produto['preco'].toString(),
+                                //         )
+                                //         : null;
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(flex: 4, child: Text('• $nome')),
+                                      Expanded(flex: 2, child: Text('Qtd: $qtd'),),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                        ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  _linhaDetalhe(
+                    "Preço Total",
+                    "${encomenda.valor.toStringAsFixed(2)} €",
+                  ),
+                  _linhaDetalhe(
+                    "Comprador",
+                    encomenda.compradorInfo['nome'] ?? "Comprador desconhecido",
+                  ),
+                  _linhaDetalhe(
+                    "Email",
+                    encomenda.compradorInfo['email'] ?? "Email não disponível",
+                  ),
+                  _linhaDetalhe(
+                    "Telefone",
+                    encomenda.compradorInfo['telefone'] ??
+                        "Telefone não disponível",
+                  ),
+                  _linhaDetalhe("Data", _formatarData(encomenda.dataPedido)),
+                  _linhaDetalhe("Estado", _rotuloStatus(encomenda.status)),
+
+                  const SizedBox(height: 24),
+
+                  if (encomenda.status == StatusEncomenda.pendente) ...[
+                    const Text(
+                      "Código de Entrega",
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: codigoEntregaController,
+                      decoration: InputDecoration(
+                        hintText: "Introduz o código...",
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final inputCode =
+                                codigoEntregaController.text.trim();
+                            if (inputCode == encomenda.code.toString()) {
+                              await _atualizarStatusEncomenda(
+                                encomenda.idEncomenda,
+                                StatusEncomenda.concluida,
+                              );
+                              if (mounted) Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text(
+                            "Confirmar",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ] else
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          "Fechar",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
-            ] else
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    "Fechar",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-
-
-
-
-
-  Widget _detailCard(String label, String value) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: Text(
-                label,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
             ),
-            Expanded(
-              flex: 5,
-              child: Text(value, style: const TextStyle(color: Colors.black87)),
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
-  Widget _detailRow(String label, String value) {
+  // Widget _detailCard(String label, String value) {
+  //   return Card(
+  //     margin: const EdgeInsets.symmetric(vertical: 6),
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(12),
+  //       child: Row(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Expanded(
+  //             flex: 3,
+  //             child: Text(
+  //               label,
+  //               style: const TextStyle(fontWeight: FontWeight.w600),
+  //             ),
+  //           ),
+  //           Expanded(
+  //             flex: 5,
+  //             child: Text(value, style: const TextStyle(color: Colors.black87)),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _linhaDetalhe(String rotulo, String valor) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -333,21 +338,21 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
           Expanded(
             flex: 3,
             child: Text(
-              "$label:",
+              "$rotulo:",
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
-          Expanded(flex: 5, child: Text(value)),
+          Expanded(flex: 5, child: Text(valor)),
         ],
       ),
     );
   }
 
-  String _formatDate(DateTime date) {
-    return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
+  String _formatarData(DateTime data) {
+    return "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year}";
   }
 
-  IconData _statusIcon(StatusEncomenda status) {
+  IconData _iconeStatus(StatusEncomenda status) {
     switch (status) {
       case StatusEncomenda.pendente:
         return Icons.pending_actions;
@@ -356,7 +361,7 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
     }
   }
 
-  Color _statusColor(StatusEncomenda status) {
+  Color _corStatus(StatusEncomenda status) {
     switch (status) {
       case StatusEncomenda.pendente:
         return Colors.orange;
@@ -365,7 +370,7 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
     }
   }
 
-  String _statusLabel(StatusEncomenda status) {
+  String _rotuloStatus(StatusEncomenda status) {
     switch (status) {
       case StatusEncomenda.pendente:
         return "Pendente";
@@ -374,7 +379,7 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
     }
   }
 
-  Widget _buildListaEncomendas(List<Encomenda> encomendas) {
+  Widget listaEncomendas(List<Encomenda> encomendas) {
     if (encomendas.isEmpty) {
       return const Center(
         child: Text(
@@ -389,10 +394,6 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
       itemCount: encomendas.length,
       itemBuilder: (context, index) {
         final encomenda = encomendas[index];
-
-        // final produto = encomenda.pedidos != null && encomenda.pedidos!.isNotEmpty
-        //     ? _produtosCache[encomenda.pedidos!.first]
-        //     : null;
         final comprador = _usersCache[encomenda.compradorId];
 
         return Card(
@@ -408,17 +409,16 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
             ),
             leading: CircleAvatar(
               radius: 26,
-              backgroundColor: _statusColor(encomenda.status),
+              backgroundColor: _corStatus(encomenda.status),
               child: Icon(
-                _statusIcon(encomenda.status),
+                _iconeStatus(encomenda.status),
                 color: Colors.white,
                 size: 28,
               ),
             ),
             title: Text(
               encomenda.produtosInfo.isNotEmpty
-                  ? encomenda.produtosInfo.first['nome'] ??
-                      "Produto desconhecido"
+                  ? encomenda.produtosInfo.first['nome'] ?? "Produto desconhecido"
                   : "Produto desconhecido",
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
@@ -430,12 +430,12 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  _formatDate(encomenda.dataPedido),
+                  _formatarData(encomenda.dataPedido),
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
             ),
-            onTap: () => _showDetalhesEncomenda(context, encomenda),
+            onTap: () => _mostrarDetalhesEncomenda(context, encomenda),
           ),
         );
       },
@@ -463,18 +463,14 @@ void _showDetalhesEncomenda(BuildContext context, Encomenda encomenda) {
             fontSize: 16,
           ),
           indicatorColor: Colors.white,
-          tabs: const [
-            Tab(text: "Pendentes"),
-            Tab(text: "Concluídas"),
-            
-          ],
+          tabs: const [Tab(text: "Pendentes"), Tab(text: "Concluídas")],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildListaEncomendas(_pendentes),
-          _buildListaEncomendas(_concluidas),
+          listaEncomendas(_pendentes),
+          listaEncomendas(_concluidas),
         ],
       ),
     );

@@ -13,13 +13,10 @@ class RecuperarSenhaTela extends StatefulWidget {
 }
 
 class _RecuperarSenhaTelaState extends State<RecuperarSenhaTela> {
-  // final AuthService _authService = AuthService();
-  
 
   @override
   void initState() {
     super.initState();
-
   }
 
   Future<void> _enviarLinkRecuperacao(String email) async {

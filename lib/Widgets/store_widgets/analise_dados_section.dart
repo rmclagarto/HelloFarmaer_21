@@ -23,13 +23,13 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final BancoDadosServico _dbService = BancoDadosServico();
+  final _bancoDados = BancoDadosServico();
 
   double _faturamentoTotal = 0.0;
   double _despesas = 0;
   double _lucro = 0;
   bool _isLoading = true;
-  String? _errorMessage;
+  String? _mensagemErro;
 
   
 
@@ -37,21 +37,21 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
   void initState() {
     super.initState();
     _tabController = TabController(length: 1, vsync: this);
-    _loadFinancialData();
+    _carregarDadosFinanceiros();
   }
 
-  Future<void> _loadFinancialData() async {
+  Future<void> _carregarDadosFinanceiros() async {
     try {
-      final snapshot = await _dbService.read(caminho: 'stores/${widget.storeId}');
+      final snapshot = await _bancoDados.read(caminho: 'stores/${widget.storeId}');
       if(snapshot?.value == null){
         throw Exception('Loja não encontrada');
       }
 
-      final data = Map<String, dynamic>.from(snapshot!.value as Map);
+      final dados = Map<String, dynamic>.from(snapshot!.value as Map);
       
       setState(() {
-        _faturamentoTotal = (data['faturamento'] ?? 0).toDouble();
-        _despesas = (data['despesas'] ?? 0).toDouble();
+        _faturamentoTotal = (dados['faturamento'] ?? 0).toDouble();
+        _despesas = (dados['despesas'] ?? 0).toDouble();
         _lucro = _faturamentoTotal - _despesas;
         
         _isLoading = false;
@@ -59,7 +59,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     
     }catch(e){
       setState(() {
-          _errorMessage = 'Erro ao carregar dados: ${e.toString()}';
+          _mensagemErro = 'Erro ao carregar dados: ${e.toString()}';
         _isLoading = false;
       });
     }
@@ -82,13 +82,13 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
       // 1. Gerar PDF
       final pdfBytes = await service.gerarPDF();
 
-      // 2. Mostrar opções ao usuário
+      // 2. Mostrar opções ao utilizador
       final action = await _mostrarDialogoOpcoes(context);
 
       if (action == 'salvar') {
         await _salvarEmLocalEscolhido(pdfBytes);
       } else if (action == 'compartilhar') {
-        await _compartilharRelatorio(pdfBytes);
+        await _partilharRelatorio(pdfBytes);
       }
     } catch (e) {
       if (mounted) {
@@ -120,7 +120,6 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
   }
 
   Future<void> _salvarEmLocalEscolhido(Uint8List pdfBytes) async {
-    // Permitir que o usuário escolha o local
     final String? directoryPath = await FilePicker.platform.getDirectoryPath();
 
     if (directoryPath != null) {
@@ -135,16 +134,16 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     }
   }
 
-  Future<void> _compartilharRelatorio(Uint8List pdfBytes) async {
+  Future<void> _partilharRelatorio(Uint8List pdfBytes) async {
     try {
       // 1. Criar arquivo temporário
       final tempDir = await getTemporaryDirectory();
       final file = File('${tempDir.path}/relatorio_financeiro_hellofarmer.pdf');
       await file.writeAsBytes(pdfBytes);
 
-      // 2. Compartilhar usando o método CORRETO (shareXFiles)
+      // 2. Partilhar 
       await Share.shareXFiles(
-        [XFile(file.path)], // Note o uso de XFile
+        [XFile(file.path)],
         text: 'Relatório Financeiro',
       );
     } catch (e) {
@@ -156,18 +155,18 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     }
   }
 
-  Widget _buildCard(String title, String subtitle, IconData icon, Color color) {
+  Widget _construirCartao(String titulo, String subTitulo, IconData icon, Color cor) {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color,
+          backgroundColor: cor,
           child: Icon(icon, color: Colors.white),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        trailing: Text(subtitle, style: const TextStyle(fontSize: 16)),
+        title: Text(titulo, style: const TextStyle(fontWeight: FontWeight.bold)),
+        trailing: Text(subTitulo, style: const TextStyle(fontSize: 16)),
       ),
     );
   }
@@ -177,7 +176,7 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Análises Financeiras",
+          "Análise Financeira",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: PaletaCores.corPrimaria(context),
@@ -197,27 +196,26 @@ class _AnalisesFinanceirasSectionState extends State<AnalisesFinanceirasSection>
       body: TabBarView(
         controller: _tabController,
         children: [
-          // Tab 1 - Faturamento com gráfico de linha e card resumo
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 20),
-                _buildCard(
-                  'Faturamento Total Ano',
+                _construirCartao(
+                  'Faturamento Total',
                   ' ${_faturamentoTotal.toStringAsFixed(2)} €',
                   Icons.attach_money,
                   Colors.green,
                 ),
                  const SizedBox(height: 20),
-                _buildCard(
+                _construirCartao(
                   'Despesas',
                   ' ${_despesas.toStringAsFixed(2)} €',
                   Icons.money_off,
                   Colors.red,
                 ),
-                _buildCard(
+                _construirCartao(
                   'Lucro',
                   '${_lucro.toStringAsFixed(2)} €',
                   Icons.trending_up,

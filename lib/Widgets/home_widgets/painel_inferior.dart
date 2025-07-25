@@ -4,11 +4,11 @@ import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Model/produto.dart';
 
 
-class BottomPanel extends StatelessWidget {
-  final List<Produto> ads;
-  final void Function(Produto ad)? onAdTap;
+class PainelInferior extends StatelessWidget {
+  final List<Produto> anuncios;
+  final void Function(Produto ad)? aoTocarNoAnuncio;
 
-  const BottomPanel({super.key, required this.ads, this.onAdTap});
+  const PainelInferior({super.key, required this.anuncios, this.aoTocarNoAnuncio});
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +19,15 @@ class BottomPanel extends StatelessWidget {
       builder: (context, scrollController) {
         return LayoutBuilder(
           builder: (context, constraints) {
-            final height = constraints.maxHeight;
-            final bool showContent = height > 120;
+            final altura = constraints.maxHeight;
+            final bool mostrarConteudo = altura > 120;
 
             return Container(
-              decoration: _buildDecoration(),
+              decoration: _decoracao(),
               child: Column(
                 children: [
-                  _buildHandleBar(),
-                  _buildContent(showContent, scrollController),
+                  _indicador(),
+                  _conteudo(mostrarConteudo, scrollController),
                 ],
               ),
             );
@@ -37,14 +37,14 @@ class BottomPanel extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildDecoration() {
+  BoxDecoration _decoracao() {
     return BoxDecoration(
       color: Colors.white,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
     );
   }
 
-  Widget _buildHandleBar() {
+  Widget _indicador() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
@@ -58,18 +58,18 @@ class BottomPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(bool visible, ScrollController scrollController) {
+  Widget _conteudo(bool visible, ScrollController scrollController) {
     return Expanded(
       child: Opacity(
         opacity: visible ? 1.0 : 0.0,
         child: ListView.builder(
           controller: scrollController,
-          itemCount: ads.length,
+          itemCount: anuncios.length,
           itemBuilder: (context, index) {
-            final ad = ads[index];
+            final ad = anuncios[index];
             return GestureDetector(
-              onTap: () => onAdTap?.call(ad),
-              child: _buildAdCard(context, ad.nomeProduto),
+              onTap: () => aoTocarNoAnuncio?.call(ad),
+              child: cartaoAnuncio(context, ad.nomeProduto),
             );
           },
         ),
@@ -77,7 +77,7 @@ class BottomPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildAdCard(BuildContext context, String adText) {
+  Widget cartaoAnuncio(BuildContext context, String adText) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Card(

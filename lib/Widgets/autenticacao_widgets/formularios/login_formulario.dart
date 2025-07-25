@@ -7,15 +7,15 @@ import 'package:hellofarmer/Core/rotas.dart';
 
 
 class LoginForm extends StatefulWidget {
-  final Function(String email, String password) onLogin;
-  final bool isLoading;
-  final String? errorMessage;
+  final Function(String email, String password) aoEntrar;
+  final bool estaCarregando;
+  final String? mensagemErro;
 
   const LoginForm({
     super.key,
-    required this.onLogin,
-    this.isLoading = false,
-    this.errorMessage,
+    required this.aoEntrar,
+    this.estaCarregando = false,
+    this.mensagemErro,
   });
 
   @override
@@ -37,7 +37,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      widget.onLogin(
+      widget.aoEntrar(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
@@ -58,23 +58,21 @@ class _LoginFormState extends State<LoginForm> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                _buildTitle(),
+                _titulo(),
                 const SizedBox(height: 20),
-                _buildEmailField(),
+                _campoEmail(),
                 const SizedBox(height: 20),
-                _buildPasswordField(),
-                if (widget.errorMessage != null) ...[
+                _campoSenha(),
+                if (widget.mensagemErro != null) ...[
                   const SizedBox(height: 10),
-                  _buildErrorText(),
+                  _mensagemErro(),
                 ],
                 const SizedBox(height: 10),
-                _buildForgotPassword(context),
+                _esqueceuSenha(context),
                 const SizedBox(height: 20),
-                _buildLoginButton(),
-                
-                const SizedBox(height: 40 * 4),
-                
-                _buildSignUp(context),
+                _botaoEntrar(),
+                const SizedBox(height: 160),
+                _botaoRegistrar(context),
               ],
             ),
           ),
@@ -83,14 +81,14 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _buildTitle() {
+  Widget _titulo() {
     return const Text(
       "Entrar",
       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
     );
   }
 
-  Widget _buildEmailField() {
+  Widget _campoEmail() {
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
@@ -122,7 +120,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _buildPasswordField() {
+  Widget _campoSenha() {
     return TextFormField(
       controller: _passwordController,
       obscureText: _obscurePassword,
@@ -162,14 +160,14 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _buildErrorText() {
+  Widget _mensagemErro() {
     return Text(
-      widget.errorMessage!,
+      widget.mensagemErro!,
       style: const TextStyle(color: Colors.red, fontSize: 14),
     );
   }
 
-  Widget _buildForgotPassword(BuildContext context) {
+  Widget _esqueceuSenha(BuildContext context) {
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
@@ -184,11 +182,11 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _botaoEntrar() {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: widget.isLoading ? null : _submitForm,
+        onPressed: widget.estaCarregando ? null : _submitForm,
         style: ElevatedButton.styleFrom(
           backgroundColor: PaletaCores.corSecundaria(context),
           foregroundColor: Colors.white,
@@ -201,8 +199,8 @@ class _LoginFormState extends State<LoginForm> {
           elevation: 5,
         ),
         child:
-            widget.isLoading
-                ? const CircularProgressIndicator(color: Colors.white)
+            widget.estaCarregando
+                ? const CircularProgressIndicator(color: Colors.blueAccent)
                 : const Text(
                   "Acessar",
                   style: TextStyle(
@@ -215,11 +213,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  
-
-  
-
-  Widget _buildSignUp(BuildContext context) {
+  Widget _botaoRegistrar(BuildContext context) {
     return TextButton(
       onPressed: () => Navigator.pushReplacementNamed(context, Rotas.registrar),
       child: RichText(

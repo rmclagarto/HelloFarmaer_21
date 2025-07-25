@@ -1,5 +1,4 @@
 class Produto {
-  
   bool isAsset;
 
   String idProduto;
@@ -18,7 +17,6 @@ class Produto {
   bool? promovido;
   int? diasPromovido;
 
-
   Produto({
     required this.idProduto,
     required this.idLoja,
@@ -34,9 +32,8 @@ class Produto {
     this.cliques = 0,
     this.comprado = 0,
     this.promovido = false,
-    this.diasPromovido = 0
+    this.diasPromovido = 0,
   });
-  
 
   factory Produto.fromJson(Map<String, dynamic> json) {
     return Produto(
@@ -57,7 +54,8 @@ class Produto {
       diasPromovido: json['diasPromovido'] ?? 0,
     );
   }
-Map<String, dynamic> toJson() {
+
+  Map<String, dynamic> toJson() {
     return {
       'idProduto': idProduto,
       'idLoja': idLoja,
@@ -76,7 +74,6 @@ Map<String, dynamic> toJson() {
       'diasPromovido': diasPromovido,
     };
   }
-
 
   Produto copyWith({
     String? idProduto,

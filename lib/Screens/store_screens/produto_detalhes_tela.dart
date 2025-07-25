@@ -16,24 +16,24 @@ class MyProductDetailScreen extends StatefulWidget {
 }
 
 class _MyProductDetailScreen extends State<MyProductDetailScreen> {
-  late TextEditingController _precoController;
-  late TextEditingController _stockController;
+  late TextEditingController _controladorPreco;
+  late TextEditingController _controladorEstoque;
 
   @override
   void initState() {
     super.initState();
-    _precoController = TextEditingController(
+    _controladorPreco = TextEditingController(
       text: widget.produto.preco.toString(),
     );
-    _stockController = TextEditingController(
+    _controladorEstoque = TextEditingController(
       text: widget.produto.quantidade.toString(),
     );
   }
 
   @override
   void dispose() {
-    _precoController.dispose();
-    _stockController.dispose();
+    _controladorPreco.dispose();
+    _controladorEstoque.dispose();
     super.dispose();
   }
 
@@ -140,7 +140,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
             const SizedBox(height: 12),
 
             TextField(
-              controller: _precoController,
+              controller: _controladorPreco,
               decoration: InputDecoration(
                 labelText: 'Preço (€)',
                 prefixIcon: const Icon(Icons.euro),
@@ -154,7 +154,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
             const SizedBox(height: 12),
 
             TextField(
-              controller: _stockController,
+              controller: _controladorEstoque,
               decoration: InputDecoration(
                 labelText: 'Stock Disponível',
                 prefixIcon: const Icon(Icons.inventory),
@@ -182,8 +182,8 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                 ),
                 onPressed: () {
                   final updatedProduct = widget.produto.copyWith(
-                    preco: double.parse(_precoController.text),
-                    quantidade: int.tryParse(_stockController.text) ?? 0,
+                    preco: double.parse(_controladorPreco.text),
+                    quantidade: int.tryParse(_controladorEstoque.text) ?? 0,
                   );
 
                   Navigator.pop(
@@ -413,7 +413,7 @@ class _MyProductDetailScreen extends State<MyProductDetailScreen> {
                     barrierDismissible: false,
                     builder:
                         (context) =>
-                            const Center(child: CircularProgressIndicator()),
+                            const Center(child: CircularProgressIndicator(color: Colors.blueAccent,)),
                   );
 
                   try {

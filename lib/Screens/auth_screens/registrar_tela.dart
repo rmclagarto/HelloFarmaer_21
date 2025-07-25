@@ -36,7 +36,7 @@ class _RegistrarTelaState extends State<RegistrarTela> {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
+        builder: (context) => const Center(child: CircularProgressIndicator(color: Colors.blueAccent,)),
       );
 
       final firebaseUser = await _autenticacao.registarComEmailEPassword(

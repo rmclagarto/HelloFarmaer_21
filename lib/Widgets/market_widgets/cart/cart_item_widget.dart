@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
 
-class CartItemWidget extends StatelessWidget {
+class ItemCarrinhoWidget extends StatelessWidget {
   final Map<String, dynamic> item;
-  final Function(int) onQuantityChanged;
-  final VoidCallback onDelete;
+  final Function(int) aoAlterarQuantidade;
+  final VoidCallback aoRemover;
 
-  const CartItemWidget({
+  const ItemCarrinhoWidget({
     super.key,
     required this.item,
-    required this.onQuantityChanged,
-    required this.onDelete,
+    required this.aoAlterarQuantidade,
+    required this.aoRemover,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool inStock = item['inStock'] ?? true;
+    final bool emStock = item['inStock'] ?? true;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          _buildProductImage(),
+          _imagemProduto(),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeaderRow(),
-                // _buildDescription(),
+                cabecalho(),
                 const SizedBox(height: 4),
-                if (!inStock)
+                if (!emStock)
                   Text(
                     "Fora de stock",
                     style: TextStyle(
@@ -39,7 +38,7 @@ class CartItemWidget extends StatelessWidget {
                     ),
                   ),
                 const SizedBox(height: 8),
-                _buildQuantityAndDeleteRow(inStock),
+                _linhaQuantidadeRemover(emStock),
               ],
             ),
           ),
@@ -48,7 +47,7 @@ class CartItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildProductImage() {
+  Widget _imagemProduto() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Image.asset(
@@ -60,7 +59,7 @@ class CartItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderRow() {
+  Widget cabecalho() {
     double priceDouble = 0.0;
     if (item['price'] is String) {
       priceDouble = double.tryParse(item['price'].replaceAll(',', '.')) ?? 0.0;
@@ -86,25 +85,25 @@ class CartItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildQuantityAndDeleteRow(bool inStock) {
+  Widget _linhaQuantidadeRemover(bool habilitado) {
     return Row(
       children: [
-        _buildQuantitySelector(inStock),
+        _seletorQuantidade(habilitado),
         const Spacer(),
         IconButton(
           icon: const Icon(Icons.delete),
           color: Colors.red[400],
-          onPressed: onDelete,
+          onPressed: aoRemover,
         ),
       ],
     );
   }
 
-  Widget _buildQuantitySelector(bool enabled) {
+  Widget _seletorQuantidade(bool habilitado) {
     return Opacity(
-      opacity: enabled ? 1.0 : 0.5,
+      opacity: habilitado ? 1.0 : 0.5,
       child: IgnorePointer(
-        ignoring: !enabled,
+        ignoring: !habilitado,
         child: Container(
           decoration: BoxDecoration(
             color: Colors.grey[200],
@@ -116,7 +115,7 @@ class CartItemWidget extends StatelessWidget {
                 icon: const Icon(Icons.remove, size: 18),
                 onPressed: () {
                   if (item['quantity'] > 1) {
-                    onQuantityChanged(item['quantity'] - 1);
+                    aoAlterarQuantidade(item['quantity'] - 1);
                   }
                 },
                 padding: EdgeInsets.zero,
@@ -128,9 +127,9 @@ class CartItemWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.add, size: 18),
                 onPressed: () {
-                  final newQty = (item['quantity'] as num).toInt() + 1;
-                  if (newQty <= (item['maxQuantity'] as num).toInt()) {
-                    onQuantityChanged(newQty);
+                  final novaQtd = (item['quantity'] as num).toInt() + 1;
+                  if (novaQtd <= (item['maxQuantity'] as num).toInt()) {
+                    aoAlterarQuantidade(novaQtd);
                   }
                 },
                 padding: EdgeInsets.zero,

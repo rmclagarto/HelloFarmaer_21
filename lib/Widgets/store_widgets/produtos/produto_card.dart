@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Core/imagens.dart';
 import 'package:hellofarmer/Model/produto.dart';
-import 'package:hellofarmer/Screens/store_screens/my_product_detail_screen.dart';
+import 'package:hellofarmer/Screens/store_screens/produto_detalhes_tela.dart';
 
 class ProdutoCard extends StatelessWidget {
   final Produto produto;
@@ -46,7 +46,7 @@ class ProdutoCard extends StatelessWidget {
                 child: SizedBox(
                   width: 80,
                   height: 80,
-                  child: buildProductImage(Imagens.fruta, produto.isAsset),
+                  child: imagemProduto(Imagens.fruta, produto.isAsset),
                 ),
               ),
               const SizedBox(width: 12),
@@ -79,17 +79,17 @@ class ProdutoCard extends StatelessWidget {
     );
   }
 
-  Widget buildProductImage(String imagePath, bool isAsset) {
+  Widget imagemProduto(String caminhoImagem, bool isAsset) {
     if (isAsset) {
       return Image.asset(
-        imagePath,
+        caminhoImagem,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
           return const Icon(Icons.broken_image, color: Colors.grey);
         },
       );
     } else {
-      final file = File(imagePath);
+      final file = File(caminhoImagem);
       return FutureBuilder<bool>(
         future: file.exists(),
         builder: (context, snapshot) {
@@ -104,7 +104,10 @@ class ProdutoCard extends StatelessWidget {
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(strokeWidth: 2),
+              child: CircularProgressIndicator(
+                color: Colors.blueAccent, 
+                strokeWidth: 2
+              ),
             );
           } else {
             return const Icon(Icons.broken_image, color: Colors.grey);

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Core/imagens.dart';
@@ -101,9 +100,9 @@ class _LoginTelaState extends State<LoginTela> {
             if (_isLoading)
               const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: Colors.blueAccent,),
               ),
-            Expanded(child: Center(child: LoginForm(onLogin: _handleLogin))),
+            Expanded(child: Center(child: LoginForm(aoEntrar: _handleLogin))),
           ],
         ),
       ),

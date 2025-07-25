@@ -65,7 +65,7 @@ class HistoricoEncomendasScreen extends StatelessWidget {
         future: _fetchEncomendas(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: Colors.blueAccent,));
           } else if (snapshot.hasError) {
             return Center(child: Text("Erro ao carregar encomendas: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

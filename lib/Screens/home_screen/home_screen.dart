@@ -6,7 +6,7 @@ import 'package:hellofarmer/main.dart';
 import 'package:hellofarmer/Core/cores.dart';
 import 'package:hellofarmer/Widgets/home_widgets/drawer.dart';
 import 'package:hellofarmer/Widgets/home_widgets/map_widget.dart';
-import 'package:hellofarmer/Widgets/home_widgets/button_panel.dart';
+import 'package:hellofarmer/Widgets/home_widgets/painel_inferior.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -39,11 +39,13 @@ class _HomeState extends State<Home> {
 
     data.forEach((key, value){
       final produtoJson = Map<String, dynamic>.from(value);
-    final produto = Produto.fromJson(produtoJson);
-    // Só adiciona se for promovido
-    if (produto.promovido == true) {
-      produtos.add(produto);
-    }
+      final produto = Produto.fromJson(produtoJson);
+
+      // Só adiciona se for promovido
+
+      if (produto.promovido == true) {
+        produtos.add(produto);
+      }
     });
 
     return produtos;
@@ -59,11 +61,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
-
     final user = Provider.of<UtilizadorProvider>(context).utilizador;
     if(user == null){
       return Scaffold(
-        body: Center(child: CircularProgressIndicator(),),
+        body: Center(child: CircularProgressIndicator(color: Colors.blueAccent,),),
       );
     }
 
@@ -78,14 +79,14 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      drawer: AppDrawer(themeNotifier: themeNotifier),
+      drawer: MenuLateral(themeNotifier: themeNotifier),
       body: Stack(
         children: [
           MapWidget(key: _mapKey),
 
-          BottomPanel(
-            ads: _ads,
-            onAdTap: (produto) {
+          PainelInferior(
+            anuncios: _ads,
+            aoTocarNoAnuncio: (produto) {
               _mapKey.currentState?.addRandomMarker(produto);
             },
           ),

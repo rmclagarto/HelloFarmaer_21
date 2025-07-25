@@ -6,13 +6,16 @@ import 'package:hellofarmer/Model/loja.dart';
 
 
 class StoreDetails extends StatelessWidget {
-  final Loja store;
+  final Loja loja;
 
-  const StoreDetails({super.key, required this.store});
+  const StoreDetails({
+    super.key,
+    required this.loja
+  });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final tema = Theme.of(context);
 
     return SingleChildScrollView(
     child:Padding(
@@ -31,7 +34,7 @@ class StoreDetails extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 1. Imagem da loja (destaque)
+                    // 1. Imagem da loja
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
@@ -53,26 +56,25 @@ class StoreDetails extends StatelessWidget {
 
                     const SizedBox(height: 20),
 
-                    // 2. Seção de avaliação (destaque)
-                    _buildRatingSection(context),
+                    // 2. Seção de avaliação
+                    _secaoAvaliacao(context),
 
                     const SizedBox(height: 20),
 
                     // 3. Descrição
                     Text(
-                      store.descricao,
-                      style: theme.textTheme.bodyLarge?.copyWith(height: 1.5),
+                      loja.descricao,
+                      style: tema.textTheme.bodyLarge?.copyWith(height: 1.5),
                     ),
 
                     const SizedBox(height: 24),
 
                     // 4. Contato e endereço
-                    _buildContactInfo(context),
+                    _infoContato(context),
                   ],
                 ),
               ),
             ),
-            // Seção de comentários pode ser adicionada aqui
           ],
         ),
       // ),
@@ -81,13 +83,12 @@ class StoreDetails extends StatelessWidget {
   }
 
   // Widget para a seção de avaliação
-  Widget _buildRatingSection(BuildContext context) {
+  Widget _secaoAvaliacao(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            // Nota em destaque
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
@@ -102,7 +103,7 @@ class StoreDetails extends StatelessWidget {
                   const Icon(Icons.star_rounded, color: Colors.amber, size: 24),
                   const SizedBox(width: 6),
                   Text(
-                    '${store.avaliacoes}/5',
+                    '${loja.avaliacoes}/5',
                     style: Theme.of(
                       context,
                     ).textTheme.bodyLarge?.copyWith(color: Colors.black),
@@ -117,23 +118,23 @@ class StoreDetails extends StatelessWidget {
   }
 
   // Widget para detalhes de contato
-  Widget _buildContactInfo(BuildContext context) {
+  Widget _infoContato(BuildContext context) {
     return Column(
       children: [
-        _buildInfoRow(context, Icons.phone, store.telefone),
+        _linhaInfo(context, Icons.phone, loja.telefone),
         const SizedBox(height: 12),
-        _buildInfoRow(
+        _linhaInfo(
           context,
           Icons.location_on,
-          "${store.endereco['rua']}, ${store.endereco['numero']}\n"
-          "${store.endereco['bairro']}, ${store.endereco['cidade']}",
+          "${loja.endereco['rua']}, ${loja.endereco['numero']}\n"
+          "${loja.endereco['bairro']}, ${loja.endereco['cidade']}",
         ),
       ],
     );
   }
 
   // Widget base para linhas de informação
-  Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
+  Widget _linhaInfo(BuildContext context, IconData icon, String text) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
